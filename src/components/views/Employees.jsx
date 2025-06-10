@@ -1,38 +1,140 @@
-import './Employees.scss';
-import {Card, CardContainer} from '../UI/Card.jsx';
+import "./Employees.scss";
+import { Table, TableRow, TableContainer } from "../UI/DataTable.jsx";
 
 function Employees() {
-  const employeelist= [
-    { "UserID": 275, "UserFirstname": "Sholeh", "UserLastname": "ABBAS", "UserEmail": "K2955214@kingston.ac.uk", "UserRegistered": 0, "UserLevel": 4, "UserYearID": 1, "UserUsertypeID": 2, "UserImageURL": "https://images.generated.photos/evdpMs0ZUOoMA0ACfCy98zzmy347YQxRmrPCWHp3v0g/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/MzUzMTEyLmpwZw.jpg", "UserUsertypeName": "Student", "UserYearName": "2022-23" },
-    { "UserID": 276, "UserFirstname": "Hashim", "UserLastname": "ABDALLAH", "UserEmail": "K1083353@kingston.ac.uk", "UserRegistered": 0, "UserLevel": 4, "UserYearID": 1, "UserUsertypeID": 2, "UserImageURL": "https://images.generated.photos/eL1-OlKDqGf1IaL_b2O8aSj7osDX_eFVHZEoJ0f3ZV0/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/NzYwNjc0LmpwZw.jpg", "UserUsertypeName": "Student", "UserYearName": "2022-23" },
-    { "UserID": 277, "UserFirstname": "Ahmad", "UserLastname": "ABDUL KABEER", "UserEmail": "K2990629@kingston.ac.uk", "UserRegistered": 0, "UserLevel": 4, "UserYearID": 1, "UserUsertypeID": 2, "UserImageURL": "https://images.generated.photos/MisXC_ZEtY_OSQvatKbth6GyUEgjX9eS3hzX7J_9ODI/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/NjQxNDMyLmpwZw.jpg", "UserUsertypeName": "Student", "UserYearName": "2022-23" },
-    { "UserID": 278, "UserFirstname": "Suheyb", "UserLastname": "ABDULQADIR", "UserEmail": "K8536850@kingston.ac.uk", "UserRegistered": 0, "UserLevel": 4, "UserYearID": 1, "UserUsertypeID": 2, "UserImageURL": "https://images.generated.photos/O9bUHzlvamPOMiK9j-hLGhHEf9ywbB7FlKjK8yKGuaw/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/MzM4NzE0LmpwZw.jpg", "UserUsertypeName": "Student", "UserYearName": "2022-23" },
-    { "UserID": 279, "UserFirstname": "Ezubair", "UserLastname": "ABRAHAM", "UserEmail": "K5638915@kingston.ac.uk", "UserRegistered": 0, "UserLevel": 4, "UserYearID": 1, "UserUsertypeID": 2, "UserImageURL": "https://images.generated.photos/BSqXpGXFt93GoCENwTf8D5y3N6o7rMSQ4w14z93bgkI/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/MDcwNDk4LmpwZw.jpg", "UserUsertypeName": "Student", "UserYearName": "2022-23" },
-    { "UserID": 280, "UserFirstname": "Hisham", "UserLastname": "ABUBAKAR", "UserEmail": "K1035263@kingston.ac.uk", "UserRegistered": 0, "UserLevel": 4, "UserYearID": 1, "UserUsertypeID": 2, "UserImageURL": "https://images.generated.photos/4fHOS2cD9Ykbz5pJ_0KQucwvzCMPQTR7-5rGAydjLGo/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/MjM0MjczLmpwZw.jpg", "UserUsertypeName": "Student", "UserYearName": "2022-23" },
-    { "UserID": 281, "UserFirstname": "Mahamud", "UserLastname": "ADEN", "UserEmail": "K2866646@kingston.ac.uk", "UserRegistered": 0, "UserLevel": 4, "UserYearID": 1, "UserUsertypeID": 2, "UserImageURL": "https://images.generated.photos/tcd-7pVoSrwBAW5wxgoTdkSWLacfi6D8Km-EFdUcqSs/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/ODU4OTk2LmpwZw.jpg", "UserUsertypeName": "Student", "UserYearName": "2022-23" },
-    { "UserID": 282, "UserFirstname": "Isaac", "UserLastname": "AFRAZEH", "UserEmail": "K7727337@kingston.ac.uk", "UserRegistered": 0, "UserLevel": 4, "UserYearID": 1, "UserUsertypeID": 2, "UserImageURL": "https://images.generated.photos/FF4ulNLRGGsnEWCSK2hzxQ1kpTUXrQfb2_2BN4CbHj8/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/OTU4NjEzLmpwZw.jpg", "UserUsertypeName": "Student", "UserYearName": "2022-23" },
-    { "UserID": 283, "UserFirstname": "Danish", "UserLastname": "AHMAD", "UserEmail": "K3008749@kingston.ac.uk", "UserRegistered": 0, "UserLevel": 4, "UserYearID": 1, "UserUsertypeID": 2, "UserImageURL": "https://images.generated.photos/-_-hyUefVoOz8qBBv31AeMbBMzZXLcCXiWAneZb0u2U/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/Njg1NDE4LmpwZw.jpg", "UserUsertypeName": "Student", "UserYearName": "2022-23" },
-    { "UserID": 284, "UserFirstname": "Shuja", "UserLastname": "AHMAD", "UserEmail": "K8319360@kingston.ac.uk", "UserRegistered": 0, "UserLevel": 4, "UserYearID": 1, "UserUsertypeID": 2, "UserImageURL": "https://images.generated.photos/vnopGiDivHG6UKp3AgGkY44U3nOfR3lLsWNKdA-KEyQ/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/MjAzMjQyLmpwZw.jpg", "UserUsertypeName": "Student", "UserYearName": "2022-23" }
+  const employeelist = [
+    {
+      UserID: 1,
+      UserFirstname: "Liam",
+      UserLastname: "Roberts",
+      UserDateOfBirth: "1984-05-15",
+      UserGender: "Male",
+      UserRole: "Partner",
+      UserJobDepartment: "Corporate Law",
+      UserTitle: "Senior Partner",
+    },
+    {
+      UserID: 2,
+      UserFirstname: "Emma",
+      UserLastname: "Johnson",
+      UserDateOfBirth: "1990-11-22",
+      UserGender: "Female",
+      UserRole: "Associate",
+      UserJobDepartment: "Litigation",
+      UserTitle: "Associate Lawyer",
+    },
+    {
+      UserID: 3,
+      UserFirstname: "Noah",
+      UserLastname: "Williams",
+      UserDateOfBirth: "1979-03-30",
+      UserGender: "Male",
+      UserRole: "Paralegal",
+      UserJobDepartment: "Intellectual Property",
+      UserTitle: "Senior Paralegal",
+    },
+    {
+      UserID: 4,
+      UserFirstname: "Olivia",
+      UserLastname: "Brown",
+      UserDateOfBirth: "1993-07-12",
+      UserGender: "Female",
+      UserRole: "Associate",
+      UserJobDepartment: "Real Estate",
+      UserTitle: "Junior Associate",
+    },
+    {
+      UserID: 5,
+      UserFirstname: "James",
+      UserLastname: "Jones",
+      UserDateOfBirth: "1975-09-04",
+      UserGender: "Male",
+      UserRole: "Partner",
+      UserJobDepartment: "Litigation",
+      UserTitle: "Managing Partner",
+    },
+    {
+      UserID: 6,
+      UserFirstname: "Ava",
+      UserLastname: "Garcia",
+      UserDateOfBirth: "1992-01-19",
+      UserGender: "Female",
+      UserRole: "Legal Secretary",
+      UserJobDepartment: "Corporate Law",
+      UserTitle: "Senior Secretary",
+    },
+    {
+      UserID: 7,
+      UserFirstname: "William",
+      UserLastname: "Martinez",
+      UserDateOfBirth: "1988-12-10",
+      UserGender: "Male",
+      UserRole: "Associate",
+      UserJobDepartment: "Tax Law",
+      UserTitle: "Associate Lawyer",
+    },
+    {
+      UserID: 8,
+      UserFirstname: "Sophia",
+      UserLastname: "Davis",
+      UserDateOfBirth: "1995-06-05",
+      UserGender: "Female",
+      UserRole: "Paralegal",
+      UserJobDepartment: "Litigation",
+      UserTitle: "Paralegal",
+    },
+    {
+      UserID: 9,
+      UserFirstname: "Benjamin",
+      UserLastname: "Miller",
+      UserDateOfBirth: "1970-02-27",
+      UserGender: "Male",
+      UserRole: "Partner",
+      UserJobDepartment: "Intellectual Property",
+      UserTitle: "Senior Partner",
+    },
+    {
+      UserID: 10,
+      UserFirstname: "Mia",
+      UserLastname: "Wilson",
+      UserDateOfBirth: "1994-08-21",
+      UserGender: "Female",
+      UserRole: "Legal Assistant",
+      UserJobDepartment: "Real Estate",
+      UserTitle: "Legal Assistant",
+    },
   ];
 
   return (
     <>
       <h1>Employee</h1>
-        <CardContainer>
-          {
-            employeelist.map((employee)=>{
-              return (
-                <div className="employeeCard" key={employee.UserEmail}>
-                  <Card>
-                    <p>{employee.UserEmail.substring(0,8)}</p>
-                    <p>{employee.UserFirstname} {employee.UserLastname}</p>
-                    <img src={employee.UserImageURL}/>
-                  </Card>
-                </div>
-              )
-            })
-          }
-        </CardContainer>
+      <TableContainer>
+        <Table>
+          <th>User ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>D.O.B</th>
+          <th>Gender</th>
+          <th>UserRole</th>
+          <th>Department</th>
+          <th>Title</th>
+
+          {employeelist.map((employee) => {
+            return (
+              <TableRow key={employee.UserID}>
+                <td>{employee.UserID}</td>
+                <td>{employee.UserFirstname}</td>
+                <td>{employee.UserLastname}</td>
+                <td>{employee.UserDateOfBirth}</td>
+                <td>{employee.UserGender}</td>
+                <td>{employee.UserRole}</td>
+                <td>{employee.UserJobDepartment}</td>
+                <td>{employee.UserTitle}</td>
+              </TableRow>
+            );
+          })}
+        </Table>
+      </TableContainer>
     </>
   );
 }
