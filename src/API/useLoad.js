@@ -14,8 +14,8 @@ const useLoad = (loadEndpoint) => {
   };
 
   useEffect(() => {
-    loadRecords(loadEndpoint, params);
-  }, [loadEndpoint, params]);
+    loadRecords(loadEndpoint);
+  }, []);
 
   // Return ---------------
   return [records, setRecords, isLoading, loadRecords];
