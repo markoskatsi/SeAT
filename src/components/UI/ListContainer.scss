@@ -1,11 +1,17 @@
-div.tableContainer {
+div.listContainer {
   border: 1px solid lightgray;
   border-radius: 3px;
   padding: 20px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
+  .headerContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: aquamarine;
+    width: 100%;
+  }
 
   table {
     border-collapse: collapse;
