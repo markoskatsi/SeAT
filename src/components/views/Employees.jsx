@@ -16,6 +16,7 @@ function Employees() {
     const response = await fetch(endpoint);
     const result = await response.json();
     setEmployees(result);
+    console.log(result);
   };
 
   useEffect(() => {
@@ -27,9 +28,7 @@ function Employees() {
     "First Name",
     "Last Name",
     "D.O.B",
-    "Gender",
-    "UserRole",
-    "Department",
+    "Role",
     "Title",
   ];
 
@@ -42,16 +41,11 @@ function Employees() {
             return <p key={header}>{header}</p>;
           })}
         </HeaderContainer>
-        {!employees ? (
+        {employees.length == 0 ? (
           <p>Loading records...</p>
         ) : (
           employees.map((employee) => {
-            return (
-              <EmployeeItem
-                employee={employee}
-                key={employee.UserID}
-              ></EmployeeItem>
-            );
+            return <EmployeeItem employee={employee} key={employee.UserID} />;
           })
         )}
       </ListContainer>
