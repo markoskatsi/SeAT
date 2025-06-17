@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./EmployeeForm.scss";
 import Action from "../../UI/Actions.jsx";
+
 const initialEmployee = {
   UserFirstname: "",
   UserLastname: "",
   UserDateofbirth: "",
   UserUsertypeName: "",
   UserRoleName: "",
+  UserRoleID: "",
 };
 
 function EmployeeForm({ onSuccess, onCancel }) {
@@ -20,6 +22,7 @@ function EmployeeForm({ onSuccess, onCancel }) {
       UserDateofbirth: (value) => (value === "" ? null : value),
       UserUsertypeName: (value) => (value === "" ? null : value),
       UserRoleName: (value) => (value === "" ? null : value),
+      UserRoleID: (value) => (value === "0" ? null : value),
     },
     js2html: {
       UserFirstname: (value) => (value === null ? "" : value),
@@ -27,21 +30,25 @@ function EmployeeForm({ onSuccess, onCancel }) {
       UserDateofbirth: (value) => (value === null ? "" : value),
       UserUsertypeName: (value) => (value === null ? "" : value),
       UserRoleName: (value) => (value === null ? "" : value),
+      UserRoleID: (value) => (value === null ? "0" : value),
     },
   };
 
   const apiURL = "https://softwarehub.uk/unibase/seat/api";
   const postEmployeesEndpoint = `${apiURL}/users/employees`;
+  const rolesEndpoint = `${apiURL}/roles`;
 
   // State ------------------------------
 
   const [employee, setEmployee] = useState(initialEmployee);
+  const [roles, setRoles] = useState(null);
 
-  // const apiGet = async (endpoint) => {
-  //   const response = await fetch(endpoint);
-  //   const result = await response.json();
-  //   console.log(result);
-  // };
+  const apiGet = async (endpoint) => {
+    const response = await fetch(endpoint);
+    const result = await response.json();
+    setRoles(result);
+    console.log(result);
+  };
 
   const apiPost = async (endpoint, record) => {
     const request = {
@@ -59,6 +66,10 @@ function EmployeeForm({ onSuccess, onCancel }) {
       : { isSuccess: false, message: result.message };
     console.log(result);
   };
+
+  useEffect(() => {
+    apiGet(rolesEndpoint, setRoles);
+  }, [rolesEndpoint]);
 
   // Handlers ---------------------------
   const handleChange = (event) => {
@@ -113,12 +124,22 @@ function EmployeeForm({ onSuccess, onCancel }) {
 
         <label>
           Role
-          <input
-            type="text"
-            name="UserRoleName"
-            value={conformance.js2html["UserRoleName"](employee.UserRoleName)}
-            onChange={handleChange}
-          />
+          {!roles ? (
+            <p>Loading records...</p>
+          ) : (
+            <select
+              name="UserRoleID"
+              value={conformance.js2html["UserRoleID"](employee.UserRoleID)}
+              onChange={handleChange}
+            >
+              <option value="0">None Selected</option>
+              {roles.map((role) => (
+                <option key={role.RoleID} value={role.RoleID}>
+                  {role.RoleName}
+                </option>
+              ))}
+            </select>
+          )}
         </label>
 
         <label>
