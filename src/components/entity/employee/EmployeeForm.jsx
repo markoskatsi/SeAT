@@ -132,7 +132,6 @@ function EmployeeForm({ onSuccess, onCancel }) {
               value={conformance.js2html["UserRoleID"](employee.UserRoleID)}
               onChange={handleChange}
             >
-              <option value="0">None Selected</option>
               {roles.map((role) => (
                 <option key={role.RoleID} value={role.RoleID}>
                   {role.RoleName}
