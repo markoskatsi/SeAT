@@ -1,6 +1,7 @@
 import "./ListContainer.scss";
 import PropTypes from "prop-types";
 
+
 export function ListContainer(props) {
   return <div className="listContainer">{props.children}</div>;
 }
@@ -9,19 +10,33 @@ export function HeaderContainer(props) {
 }
 
 export function EmployeeItem({ employee }) {
+
+  function formatDate(dateString) {
+    if (!dateString) return "";
+    const newDate = new Date(dateString);
+    return newDate.toISOString().slice(0, 10);
+  }
+
   return (
     <div className="employeeItem">
       <p>{employee.UserFirstname}</p>
       <p>{employee.UserLastname}</p>
-      <p>{employee.UserDateofbirth}</p>
-      {/* <img src={employee.UserImageURL} /> */}
-      {/* <p>{employee.UserUsertypeID}</p>
-      <p>{employee.UserRoleID}</p> */}
+      <p>{formatDate(employee.UserDateofbirth)}</p>
       <p>{employee.UserUsertypeName}</p>
       <p>{employee.UserRoleName}</p>
     </div>
   );
 }
+
+EmployeeItem.propTypes = {
+  employee: PropTypes.shape({
+    UserFirstname: PropTypes.string.isRequired,
+    UserLastname: PropTypes.string.isRequired,
+    UserDateofbirth: PropTypes.string.isRequired,
+    UserUsertypeName: PropTypes.string.isRequired,
+    UserRoleName: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 ListContainer.propTypes = {
   children: PropTypes.node,
