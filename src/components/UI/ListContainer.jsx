@@ -1,4 +1,6 @@
 import "./ListContainer.scss";
+import PropTypes from "prop-types";
+
 export function ListContainer(props) {
   return <div className="listContainer">{props.children}</div>;
 }
@@ -9,7 +11,6 @@ export function HeaderContainer(props) {
 export function EmployeeItem({ employee }) {
   return (
     <div className="employeeItem">
-      <p>{employee.UserID}</p>
       <p>{employee.UserFirstname}</p>
       <p>{employee.UserLastname}</p>
       <p>{employee.UserDateofbirth}</p>
@@ -21,3 +22,11 @@ export function EmployeeItem({ employee }) {
     </div>
   );
 }
+
+ListContainer.propTypes = {
+  children: PropTypes.node,
+};
+
+HeaderContainer.propTypes = {
+  children: PropTypes.node,
+};
