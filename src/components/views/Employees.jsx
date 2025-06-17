@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
 import "./Employees.scss";
+import { EmployeeItem } from "../entity/employee/EmployeeItem.jsx";
 import Action from "../UI/Actions.jsx";
-
-import {
-  ListContainer,
-  HeaderContainer,
-  EmployeeItem,
-} from "../UI/ListContainer.jsx";
+import { ListContainer, HeaderContainer } from "../UI/ListContainer.jsx";
 import EmployeeForm from "../entity/employee/EmployeeForm.jsx";
 
 function Employees() {
