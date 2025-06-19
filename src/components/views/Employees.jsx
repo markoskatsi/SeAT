@@ -7,7 +7,7 @@ import EmployeeForm from "../entity/employee/EmployeeForm.jsx";
 
 function Employees() {
   const apiURL = "https://softwarehub.uk/unibase/seat/api";
-  const employeeListEndpoint = `${apiURL}/users/employees`;
+  const employeeListEndpoint = `${apiURL}/users`;
 
   const [showForm, setShowForm] = useState(false);
   const [employees, setEmployees] = useState([]);

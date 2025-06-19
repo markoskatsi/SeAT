@@ -14,6 +14,7 @@ const initialEmployee = {
   // UserEmail: "",
   UserImageURL: "",
   UserUsertypeID: "",
+  UserEmail: "",
 };
 
 function EmployeeForm({ onSuccess, onCancel }) {
@@ -28,7 +29,7 @@ function EmployeeForm({ onSuccess, onCancel }) {
       UserRoleName: (value) => (value === "" ? null : value),
       UserRoleID: (value) => (value === "0" ? null : value),
       UserImageURL: (value) => (value === "" ? null : value),
-      // UserEmail: (value) => (value === "" ? null : value),
+      UserEmail: (value) => (value === "" ? null : value),
       UserUsertypeID: (value) => (value === "" ? null : value),
     },
     js2html: {
@@ -39,12 +40,12 @@ function EmployeeForm({ onSuccess, onCancel }) {
       UserRoleName: (value) => value ?? "",
       UserRoleID: (value) => value ?? "0",
       UserImageURL: (value) => value ?? "",
-      // UserEmail: (value) => value ?? "",
+      UserEmail: (value) => value ?? "",
       UserUsertypeID: (value) => value ?? "",
     },
   };
   const apiURL = "https://softwarehub.uk/unibase/seat/api";
-  const postEndpoint = `${apiURL}/users`;
+  const postEndpoint = `${apiURL}/users/`;
   const rolesEndpoint = `${apiURL}/roles`;
 
   // State ------------------------------
@@ -93,17 +94,20 @@ function EmployeeForm({ onSuccess, onCancel }) {
     const employeeData = {
       UserFirstname: employee.UserFirstname,
       UserLastname: employee.UserLastname,
-      UserDateofbirth: new Date(employee.UserDateofbirth).toISOString(),
+      UserDateofbirth: employee.UserDateofbirth,
       UserImageURL:
         "https://images.generated.photos/m8Sph5rhjkIsOiVIp4zbvIuFl43F6BWIwhkkY86z2Ms/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/ODU4MTE5LmpwZw.jpg",
       UserUsertypeID: "2",
       UserRoleID: employee.UserRoleID,
+      UserEmail: employee.UserEmail || "no-reply@example.com",
     };
 
     const result = await apiPost(postEndpoint, employeeData);
+    console.log("Submitting employee data:", employeeData);
 
     if (result.isSuccess) {
       onSuccess();
+      setEmployee(initialEmployee);
     } else {
       alert(result.message);
     }
@@ -179,7 +183,7 @@ function EmployeeForm({ onSuccess, onCancel }) {
           />
         </label>
 
-        {/* <label>
+        <label>
           Email
           <input
             type="text"
@@ -187,7 +191,7 @@ function EmployeeForm({ onSuccess, onCancel }) {
             value={conformance.js2html["UserEmail"](employee.UserEmail)}
             onChange={handleChange}
           />
-        </label> */}
+        </label>
 
         <label>
           Image
