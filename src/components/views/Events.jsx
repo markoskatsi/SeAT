@@ -1,8 +1,11 @@
 import { Card, CardContainer } from "../UI/Card.jsx";
 import "./Events.scss";
+import { useState, useEffect } from "react";
+import Action from "../UI/Actions.jsx";
+import EventForm from "../entity/event/EventForm.jsx";
 
 function Events() {
-  const eventlist = [
+  /* const eventlist = [
     {
       EventID: 1,
       EventName: "Christmas Party 2025",
@@ -44,25 +47,70 @@ function Events() {
       EventImageURL:
         "https://images.freeimages.com/images/small-previews/fa1/cable-5-1243077.jpg",
     },
-  ];
+  ]; */
+
+  const apiURL = "https://softwarehub.uk/unibase/seat/api";
+  const eventListEndpoint = `${apiURL}/events`;
+
+  const [showForm, setShowForm] = useState(false);
+  const [events, setEvents] = useState([]);
+
+  const apiGet = async (endpoint) => {
+    const response = await fetch(endpoint);
+    const result = await response.json();
+    setEvents(result);
+    //console.log(result);
+  };
+
+  useEffect(() => {
+    apiGet(eventListEndpoint);
+  }, [eventListEndpoint]);
+
+  const handleAdd = () => setShowForm(true);
+  const handleCancel = () => setShowForm(false);
+  const handleSuccess = () => {
+    handleCancel();
+    apiGet(eventListEndpoint);
+  };
 
   return (
     <>
       <h1>Events</h1>
-      <CardContainer>
-        {eventlist.map((event) => {
-          return (
+
+      <Action.Tray>
+        {!showForm && (
+          <Action.Add showText buttonText="Add new event" onClick={handleAdd} />
+        )}
+      </Action.Tray>
+
+      {showForm && (
+        <EventForm
+          onCancel={handleCancel}
+          onSuccess={handleSuccess}
+          apiURL={apiURL}
+        />
+      )}
+
+      {!events ? (
+        <p>Loading records...</p>
+      ) : events.length === 0 ? (
+        <p>No records found</p>
+      ) : (
+        <CardContainer>
+          {events.map((event) => (
             <div className="eventCard" key={event.EventID}>
               <Card>
                 <h3>{event.EventName}</h3>
                 <p>{event.Description}</p>
-                <p>Date: {new Date(event.Date).toLocaleDateString()}</p>
+                <p>
+                  Date: {new Date(event.EventDatetime).toLocaleDateString()}
+                </p>
                 <img src={event.EventImageURL} alt={event.EventName} />
               </Card>
             </div>
-          );
-        })}
-      </CardContainer>
+          ))}
+        </CardContainer>
+      )}
     </>
   );
 }
