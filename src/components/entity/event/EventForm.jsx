@@ -36,18 +36,17 @@ function EventForm({ onSuccess, onCancel }) {
 
   const apiURL = "https://softwarehub.uk/unibase/seat/api";
   const eventEndpoint = `${apiURL}/events`;
-  //const rolesEndpoint = `${apiURL}/roles`;
+  const eventLocationEndpoint = `${apiURL}/locations`;
 
   // State ------------------------------
 
   const [event, setEvent] = useState(initialEvent);
-  //const [roles, setRoles] = useState(null);
+  const [location, setLocation] = useState([]);
 
-  const apiGet = async (endpoint) => {
+  const apiGet = async (endpoint, setState) => {
     const response = await fetch(endpoint);
     const result = await response.json();
-    setEvent(result);
-    console.log(result);
+    setState(result);
   };
 
   const apiPost = async (endpoint, record) => {
@@ -61,7 +60,6 @@ function EventForm({ onSuccess, onCancel }) {
 
     const response = await fetch(endpoint, request);
     const result = await response.json();
-    //console.log(result);
     return response.status >= 200 && response.status < 300
       ? { isSuccess: true }
       : { isSuccess: false, message: result.message };
@@ -70,6 +68,10 @@ function EventForm({ onSuccess, onCancel }) {
   useEffect(() => {
     apiGet(eventEndpoint, setEvent);
   }, [eventEndpoint]);
+
+  useEffect(() => {
+    apiGet(eventLocationEndpoint, setLocation);
+  }, [eventLocationEndpoint]);
 
   // Handlers ---------------------------
   const handleChange = (e) => {
@@ -145,27 +147,21 @@ function EventForm({ onSuccess, onCancel }) {
         </label>
 
         <label>
-          Event Location ID
-          <input
-            type="text"
+          Event Location
+          <select
             name="EventLocationID"
             value={conformance.js2html["EventLocationID"](
               event.EventLocationID
             )}
             onChange={handleChange}
-          />
-        </label>
-
-        <label>
-          Event Location
-          <input
-            type="text"
-            name="EventLocationName"
-            value={conformance.js2html["EventLocationName"](
-              event.EventLocationName
-            )}
-            onChange={handleChange}
-          />
+          >
+            <option value="">-- Select Location --</option>
+            {location.map((loc) => (
+              <option key={loc.LocationID} value={loc.LocationID}>
+                {loc.LocationName}
+              </option>
+            ))}
+          </select>
         </label>
       </div>
 
