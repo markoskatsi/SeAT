@@ -1,7 +1,34 @@
 header {
-    padding: 0 5px;
-    background: Black;
+  position: relative;
+  padding: 0 5px;
+  background: Black;
 
-    h1 {color: White;}
-    p.welcome { color: LimeGreen;}
+  h1 {
+    color: White;
+  }
+  p.welcome {
+    color: LimeGreen;
+    display: inline-block;
+  }
+
+  div.navItem {
+    position: absolute;
+    color: limegreen;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 1px solid white;
+    padding: 0 5px 0 5px;
+    background-color: rgb(43, 255, 0);
+    border-radius: 5px;
+  }
+
+  div.navItem a {
+    color: rgb(126, 126, 126);
+    text-decoration: none;
+
+    &:hover {
+      color: black;
+    }
+  }
 }
