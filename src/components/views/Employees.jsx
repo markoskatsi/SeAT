@@ -12,6 +12,7 @@ function Employees() {
   const [showForm, setShowForm] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [filteredField, setfilteredField] = useState("");
 
   const apiGet = async (endpoint) => {
     const response = await fetch(endpoint);
@@ -32,12 +33,29 @@ function Employees() {
   };
 
   const filteredEmployees = employees.filter((employee) => {
-    const fullName = `${employee.UserFirstname} ${employee.UserLastname}`.toLowerCase();
-    return (
-      fullName.includes(searchTerm.toLowerCase()) ||
-      (employee.UserUsertypeName && employee.UserUsertypeName.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (employee.UserRoleName && employee.UserRoleName.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
+    const search = searchTerm.toLowerCase();
+    if (!search) return true;
+
+    switch (filteredField) {
+      case "Role":
+        return (
+          employee.UserRoleName && employee.UserRoleName.toLowerCase().includes(search)
+        );
+      case "Title":
+        return (
+          employee.UserUsertypeName && employee.UserUsertypeName.toLowerCase().includes(search)
+        );
+      case "Name":
+        const fullName = `${employee.UserFirstname} ${employee.UserLastname}`.toLowerCase();
+        return fullName.includes(search);
+      default:
+        const full = `${employee.UserFirstname} ${employee.UserLastname}`.toLowerCase();
+        return (
+          full.includes(search) ||
+          (employee.UserUsertypeName && employee.UserUsertypeName.toLowerCase().includes(search)) ||
+          (employee.UserRoleName && employee.UserRoleName.toLowerCase().includes(search))
+        );
+    }
   });
 
   return (
@@ -57,6 +75,17 @@ function Employees() {
       {showForm && (
         <EmployeeForm onCancel={handleCancel} onSuccess={handleSuccess} />
       )}
+      <select
+        value={filteredField}
+        onChange={(e) => setfilteredField(e.target.value)}
+        style={{ marginBottom: "16px", padding: "8px", width: "100%" }}
+      >
+        <option value="">All Fields</option>
+        <option value="name">Name</option>
+        <option value="role">Role</option>
+        <option value="title">Title</option>
+
+      </select>
       <input
         type="text"
         placeholder="Search employees"
@@ -64,6 +93,7 @@ function Employees() {
         onChange={(e) => setSearchTerm(e.target.value)}
         style={{ marginBottom: "16px", padding: "8px", width: "100%" }}
       />
+
       <ListContainer>
         
         <HeaderContainer>
@@ -76,7 +106,7 @@ function Employees() {
         {employees.length === 0 ? (
           <p>Loading records...</p>
         ) : filteredEmployees.length === 0 ? (
-          <p>Loading records...</p>
+          <p>No employees found...</p>
         ) : (
           filteredEmployees.map((employee) => {
             return <EmployeeItem employee={employee} key={employee.UserID} />;
