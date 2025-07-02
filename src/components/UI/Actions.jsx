@@ -50,9 +50,11 @@ Add.propTypes = ActionPropTypes;
 
 export function Add({ onClick, showText = false, buttonText = "Add" }) {
   return (
-    <Action buttonText={buttonText} onClick={onClick} showText={showText}>
-      <Icon.Plus />
-    </Action>
+    <Action
+      buttonText={buttonText}
+      onClick={onClick}
+      showText={showText}
+    ></Action>
   );
 }
 
@@ -60,9 +62,11 @@ Cancel.propTypes = ActionPropTypes;
 
 export function Cancel({ onClick, showText = false, buttonText = "Cancel" }) {
   return (
-    <Action buttonText={buttonText} onClick={onClick} showText={showText}>
-      <Icon.Cross />
-    </Action>
+    <Action
+      buttonText={buttonText}
+      onClick={onClick}
+      showText={showText}
+    ></Action>
   );
 }
 
@@ -74,9 +78,11 @@ export function Collapse({
   buttonText = "Collapse",
 }) {
   return (
-    <Action buttonText={buttonText} onClick={onClick} showText={showText}>
-      <Icon.Collapse />
-    </Action>
+    <Action
+      buttonText={buttonText}
+      onClick={onClick}
+      showText={showText}
+    ></Action>
   );
 }
 
@@ -172,9 +178,11 @@ Submit.propTypes = ActionPropTypes;
 
 export function Submit({ onClick, showText = false, buttonText = "Submit" }) {
   return (
-    <Action buttonText={buttonText} onClick={onClick} showText={showText}>
-      <Icon.Tick />
-    </Action>
+    <Action
+      buttonText={buttonText}
+      onClick={onClick}
+      showText={showText}
+    ></Action>
   );
 }
 

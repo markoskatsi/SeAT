@@ -1,34 +1,40 @@
 header {
   position: relative;
   padding: 0 5px;
-  background: Black;
+  background: #1a3c34;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-  h1 {
-    color: White;
+  .navItems-left {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 22px;
+    width: 100%;
   }
-  p.welcome {
-    color: LimeGreen;
-    display: inline-block;
+  .navItems-right {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 22px;
+    width: 100%;
   }
-
-  div.navItem {
-    position: absolute;
-    color: limegreen;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    border: 1px solid white;
-    padding: 0 5px 0 5px;
-    background-color: rgb(43, 255, 0);
-    border-radius: 5px;
-  }
-
-  div.navItem a {
-    color: rgb(126, 126, 126);
+  .titleNav {
+    font-size: 64px;
+    opacity: 0.8;
+    color: #fff;
     text-decoration: none;
+  }
 
-    &:hover {
-      color: black;
-    }
+  .navItem {
+    padding: 20px;
+    font-size: 16px;
+    opacity: 0.8;
+    color: #fff;
+    text-decoration: none;
+  }
+  .navItem:hover {
+    text-decoration: underline;
   }
 }

@@ -3,32 +3,50 @@ $BorderGrey: LightGrey;
 div.eventForm {
   width: 100%;
   padding: 20px;
-  border: 1px solid $BorderGrey;
-  border-radius: 5px;
+  background: rgba(51, 51, 51, 0.67);
   display: flex;
   flex-direction: column;
   gap: 20px;
   margin-bottom: 20px;
+  border-radius: 10px;
 
   div.formTray {
     width: 100%;
+    display: flex;
+    justify-content: space-around;
+
+    .eventLeft,
+    .eventRight {
+      width: 100%;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+    }
 
     label,
     input,
     select {
       display: block;
       width: 100%;
+      color: #fff;
+      padding: 10px;
+      border: 0;
     }
 
     select,
-    input {
+    input,
+    textArea {
       width: 100%;
+      height: 100%;
       padding: 3px;
       margin: 1px 0;
       font-size: 100%;
-      border-radius: 0px;
-      border: 1px solid $BorderGrey;
-      background: White;
+      border: 0;
+      background: #202020;
+      color: #fff;
 
       &:hover,
       &:focus {
