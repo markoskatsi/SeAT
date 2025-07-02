@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/source-serif-pro": "^5.2.5",
     "@types/prop-types": "^15.7.15",
     "prop-types": "^15.8.1",
     "react": "^19.1.0",

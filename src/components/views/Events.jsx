@@ -5,7 +5,6 @@ import Action from "../UI/Actions.jsx";
 import EventForm from "../entity/event/EventForm.jsx";
 
 function Events() {
-
   const apiURL = "https://softwarehub.uk/unibase/seat/api";
   const eventListEndpoint = `${apiURL}/events`;
 
@@ -36,7 +35,7 @@ function Events() {
 
       <Action.Tray>
         {!showForm && (
-          <Action.Add showText buttonText="Add new event" onClick={handleAdd} />
+          <Action.Add showText buttonText="ADD NEW EVENT" onClick={handleAdd} />
         )}
       </Action.Tray>
 
@@ -57,12 +56,15 @@ function Events() {
           {events.map((event) => (
             <div className="eventCard" key={event.EventID}>
               <Card>
-                <h3>{event.EventName}</h3>
-                <p>{event.Description}</p>
-                <p>
-                  Date: {new Date(event.EventDatetime).toLocaleDateString()}
-                </p>
-                <img src={event.EventImageURL} alt={event.EventName} />
+                <div>
+                  <h3>{event.EventName}</h3>
+                  <p>
+                    This is a Christmas party of Lorem ipsum dolor sit amet,
+                    consectetur adipiscing elit. In lacinia neque ac sapien
+                    tristique pharetra.{" "}
+                  </p>
+                </div>
+                <p>{new Date(event.EventDatetime).toLocaleDateString()}</p>
               </Card>
             </div>
           ))}
