@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./EmployeeForm.scss";
 import Action from "../../UI/Actions.jsx";
+import { employeeConformance } from "../../../utils/employeeConformance.jsx";
+import EmployeeFormFields from "./EmployeeFormFields.jsx";
 
 const initialEmployee = {
   UserFirstname: "",
@@ -18,30 +20,6 @@ const initialEmployee = {
 function EmployeeForm({ onSuccess, onCancel }) {
   // Initialisation --------------------
 
-  const conformance = {
-    html2js: {
-      UserFirstname: (value) => (value === "" ? null : value),
-      UserLastname: (value) => (value === "" ? null : value),
-      UserDateofbirth: (value) => (value === "" ? null : value),
-      UserUsertypeName: (value) => (value === "" ? null : value),
-      UserRoleName: (value) => (value === "" ? null : value),
-      UserRoleID: (value) => (value === "0" ? null : value),
-      UserImageURL: (value) => (value === "" ? null : value),
-      UserEmail: (value) => (value === "" ? null : value),
-      UserUsertypeID: (value) => (value === "" ? null : value),
-    },
-    js2html: {
-      UserFirstname: (value) => value ?? "",
-      UserLastname: (value) => value ?? "",
-      UserDateofbirth: (value) => value ?? "",
-      UserUsertypeName: (value) => value ?? "",
-      UserRoleName: (value) => value ?? "",
-      UserRoleID: (value) => value ?? "0",
-      UserImageURL: (value) => value ?? "",
-      UserEmail: (value) => value ?? "",
-      UserUsertypeID: (value) => value ?? "",
-    },
-  };
   const apiURL = "https://softwarehub.uk/unibase/seat/api";
   const postEndpoint = `${apiURL}/users/`;
   const rolesEndpoint = `${apiURL}/roles`;
@@ -84,7 +62,7 @@ function EmployeeForm({ onSuccess, onCancel }) {
     const { name, value } = e.target;
     setEmployee((prev) => ({
       ...prev,
-      [name]: conformance.html2js[name](value),
+      [name]: employeeConformance.html2js[name](value),
     }));
   };
 
@@ -98,6 +76,7 @@ function EmployeeForm({ onSuccess, onCancel }) {
       UserUsertypeID: "2",
       UserRoleID: employee.UserRoleID,
       UserEmail: employee.UserEmail || "no-reply@example.com",
+      UserGuestofID: null,
     };
 
     const result = await apiPost(postEndpoint, employeeData);
@@ -114,96 +93,11 @@ function EmployeeForm({ onSuccess, onCancel }) {
   // View --------------------------------
   return (
     <div className="employeeForm">
-      <div className="formTray">
-        <div className="employeeLeft">
-          <label>
-            First Name
-            <input
-              type="text"
-              name="UserFirstname"
-              value={conformance.js2html["UserFirstname"](employee.UserFirstname)}
-              onChange={handleChange}
-            />
-          </label>
-          <label>
-            Last Name
-            <input
-              type="text"
-              name="UserLastname"
-              value={conformance.js2html["UserLastname"](employee.UserLastname)}
-              onChange={handleChange}
-            />
-          </label>
-          <label>
-            Date of Birth
-            <input
-              type="date"
-              name="UserDateofbirth"
-              value={conformance.js2html["UserDateofbirth"](employee.UserDateofbirth)}
-              onChange={handleChange}
-            />
-          </label>
-          <label>
-            Role
-            {!roles ? (
-              <p>Loading roles...</p>
-            ) : roles.length === 0 ? (
-              <p>No roles available</p>
-            ) : (
-              <select
-                name="UserRoleID"
-                value={conformance.js2html["UserRoleID"](employee.UserRoleID)}
-                onChange={handleChange}
-              >
-                <option value="0">None selected</option>
-                {roles.map((role) => (
-                  <option key={role.RoleID} value={role.RoleID}>
-                    {role.RoleName}
-                  </option>
-                ))}
-              </select>
-            )}
-          </label>
-          <label>
-            User Type
-            <input
-              type="text"
-              name="UserUsertypeName"
-              value={conformance.js2html["UserUsertypeName"](employee.UserUsertypeName)}
-              onChange={handleChange}
-            />
-          </label>
-        </div>
-        <div className="employeeRight">
-          <label>
-            Email
-            <input
-              type="text"
-              name="UserEmail"
-              value={conformance.js2html["UserEmail"](employee.UserEmail)}
-              onChange={handleChange}
-            />
-          </label>
-          <label>
-            Image URL
-            <input
-              type="text"
-              name="UserImageURL"
-              value={conformance.js2html["UserImageURL"](employee.UserImageURL)}
-              onChange={handleChange}
-            />
-          </label>
-          <label>
-            User Type ID
-            <input
-              type="text"
-              name="UserUsertypeID"
-              value={conformance.js2html["UserUsertypeID"](employee.UserUsertypeID)}
-              onChange={handleChange}
-            />
-          </label>
-        </div>
-      </div>
+      <EmployeeFormFields
+        employee={employee}
+        roles={roles}
+        handleChange={handleChange}
+      />
       <Action.Tray>
         <Action.Submit showText buttonText="ADD EMPLOYEE" onClick={handleSubmit} />
         <Action.Cancel showText buttonText="CANCEL" onClick={onCancel} />
