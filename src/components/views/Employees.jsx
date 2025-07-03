@@ -12,7 +12,7 @@ function Employees() {
   const [showForm, setShowForm] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredField, setfilteredField] = useState("");
+  const [filterField, setFilterField] = useState("");
 
   const apiGet = async (endpoint) => {
     const response = await fetch(endpoint);
@@ -32,11 +32,11 @@ function Employees() {
     apiGet(employeeListEndpoint);
   };
 
-  const filteredEmployees = employees.filter((employee) => {
+  const filterEmployees = employees.filter((employee) => {
     const search = searchTerm.toLowerCase();
     if (!search) return true;
 
-    switch (filteredField) {
+    switch (filterField) {
       case "Role":
         return (
           employee.UserRoleName && employee.UserRoleName.toLowerCase().includes(search)
@@ -76,8 +76,8 @@ function Employees() {
         <EmployeeForm onCancel={handleCancel} onSuccess={handleSuccess} />
       )}
       <select
-        value={filteredField}
-        onChange={(e) => setfilteredField(e.target.value)}
+        value={filterField}
+        onChange={(e) => setFilterField(e.target.value)}
         style={{ marginBottom: "16px", padding: "8px", width: "100%" }}
       >
         <option value="">All Fields</option>
@@ -105,10 +105,10 @@ function Employees() {
         </HeaderContainer>
         {employees.length === 0 ? (
           <p>Loading records...</p>
-        ) : filteredEmployees.length === 0 ? (
+        ) : filterEmployees.length === 0 ? (
           <p>No employees found...</p>
         ) : (
-          filteredEmployees.map((employee) => {
+          filterEmployees.map((employee) => {
             return <EmployeeItem employee={employee} key={employee.UserID} />;
           })
         )}
