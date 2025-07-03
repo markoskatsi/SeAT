@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import "./EventForm.scss";
 import Action from "../../UI/Actions.jsx";
 import { eventConformance } from "../../../utils/eventConformance.jsx";
+import EventFormFields from "./EventFormFields.jsx";
 
 const initialEvent = {
   EventID: "",
@@ -94,58 +95,11 @@ function EventForm({ onSuccess, onCancel }) {
   // View --------------------------------
   return (
     <div className="eventForm">
-      <div className="formTray">
-        <label>
-          Event Name
-          <input
-            type="text"
-            name="EventName"
-            value={eventConformance.js2html["EventName"](event.EventName)}
-            onChange={handleChange}
-          />
-        </label>
-
-        <label>
-          Event Description
-          <input
-            type="text"
-            name="EventDescription"
-            value={eventConformance.js2html["EventDescription"](
-              event.EventDescription
-            )}
-            onChange={handleChange}
-          />
-        </label>
-
-        <label>
-          Event Date
-          <input
-            type="datetime-local" // Change from type="date" to type="datetime-local"
-            name="EventDatetime"
-            value={eventConformance.js2html["EventDatetime"](event.EventDatetime)}
-            onChange={handleChange}
-          />
-        </label>
-
-        <label>
-          Event Location
-          <select
-            name="EventLocationID"
-            value={eventConformance.js2html["EventLocationID"](
-              event.EventLocationID
-            )}
-            onChange={handleChange}
-          >
-            <option value="">-- Select Location --</option>
-            {location.map((loc) => (
-              <option key={loc.LocationID} value={loc.LocationID}>
-                {loc.LocationName}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-
+      <EventFormFields
+        event={event}
+        location={location}
+        handleChange={handleChange}
+      />
       <Action.Tray>
         <Action.Submit showText onClick={handleSubmit} />
         <Action.Cancel showText buttonText="Cancel form" onClick={onCancel} />
