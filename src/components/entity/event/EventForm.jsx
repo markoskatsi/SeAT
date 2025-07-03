@@ -101,8 +101,8 @@ function EventForm({ onSuccess, onCancel }) {
         handleChange={handleChange}
       />
       <Action.Tray>
-        <Action.Submit showText onClick={handleSubmit} />
-        <Action.Cancel showText buttonText="Cancel form" onClick={onCancel} />
+        <Action.Submit showText buttonText="ADD EVENT" onClick={handleSubmit} />
+        <Action.Cancel showText buttonText="CANCEL" onClick={onCancel} />
       </Action.Tray>
     </div>
   );

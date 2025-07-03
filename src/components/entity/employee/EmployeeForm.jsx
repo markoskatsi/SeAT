@@ -12,8 +12,6 @@ const initialEmployee = {
   UserUsertypeName: "",
   UserRoleName: "",
   UserRoleID: "",
-  // Add missing keys:
-  // UserEmail: "",
   UserImageURL: "",
   UserUsertypeID: "",
   UserEmail: "",
@@ -101,8 +99,8 @@ function EmployeeForm({ onSuccess, onCancel }) {
         handleChange={handleChange}
       />
       <Action.Tray>
-        <Action.Submit showText onClick={handleSubmit} />
-        <Action.Cancel showText buttonText="Cancel form" onClick={onCancel} />
+        <Action.Submit showText buttonText="ADD EMPLOYEE" onClick={handleSubmit} />
+        <Action.Cancel showText buttonText="CANCEL" onClick={onCancel} />
       </Action.Tray>
     </div>
   );

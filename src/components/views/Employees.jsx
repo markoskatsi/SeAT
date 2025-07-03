@@ -38,13 +38,11 @@ function Employees() {
 
   return (
     <>
-      <h1>Employee</h1>
-
       <Action.Tray>
         {!showForm && (
           <Action.Add
             showText
-            buttonText="Add new employee"
+            buttonText="ADD NEW EMPLOYEE"
             onClick={handleAdd}
           />
         )}
