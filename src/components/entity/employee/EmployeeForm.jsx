@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./EmployeeForm.scss";
 import Action from "../../UI/Actions.jsx";
+import { employeeConformance } from "../../../utils/employeeConformance.jsx";
 
 const initialEmployee = {
   UserFirstname: "",
@@ -20,30 +21,6 @@ const initialEmployee = {
 function EmployeeForm({ onSuccess, onCancel }) {
   // Initialisation --------------------
 
-  const conformance = {
-    html2js: {
-      UserFirstname: (value) => (value === "" ? null : value),
-      UserLastname: (value) => (value === "" ? null : value),
-      UserDateofbirth: (value) => (value === "" ? null : value),
-      UserUsertypeName: (value) => (value === "" ? null : value),
-      UserRoleName: (value) => (value === "" ? null : value),
-      UserRoleID: (value) => (value === "0" ? null : value),
-      UserImageURL: (value) => (value === "" ? null : value),
-      UserEmail: (value) => (value === "" ? null : value),
-      UserUsertypeID: (value) => (value === "" ? null : value),
-    },
-    js2html: {
-      UserFirstname: (value) => value ?? "",
-      UserLastname: (value) => value ?? "",
-      UserDateofbirth: (value) => value ?? "",
-      UserUsertypeName: (value) => value ?? "",
-      UserRoleName: (value) => value ?? "",
-      UserRoleID: (value) => value ?? "0",
-      UserImageURL: (value) => value ?? "",
-      UserEmail: (value) => value ?? "",
-      UserUsertypeID: (value) => value ?? "",
-    },
-  };
   const apiURL = "https://softwarehub.uk/unibase/seat/api";
   const postEndpoint = `${apiURL}/users/`;
   const rolesEndpoint = `${apiURL}/roles`;
@@ -86,7 +63,7 @@ function EmployeeForm({ onSuccess, onCancel }) {
     const { name, value } = e.target;
     setEmployee((prev) => ({
       ...prev,
-      [name]: conformance.html2js[name](value),
+      [name]: employeeConformance.html2js[name](value),
     }));
   };
 
@@ -100,6 +77,7 @@ function EmployeeForm({ onSuccess, onCancel }) {
       UserUsertypeID: "2",
       UserRoleID: employee.UserRoleID,
       UserEmail: employee.UserEmail || "no-reply@example.com",
+      UserGuestofID: null,
     };
 
     const result = await apiPost(postEndpoint, employeeData);
@@ -122,7 +100,7 @@ function EmployeeForm({ onSuccess, onCancel }) {
           <input
             type="text"
             name="UserFirstname"
-            value={conformance.js2html["UserFirstname"](employee.UserFirstname)}
+            value={employeeConformance.js2html["UserFirstname"](employee.UserFirstname)}
             onChange={handleChange}
           />
         </label>
@@ -132,7 +110,7 @@ function EmployeeForm({ onSuccess, onCancel }) {
           <input
             type="text"
             name="UserLastname"
-            value={conformance.js2html["UserLastname"](employee.UserLastname)}
+            value={employeeConformance.js2html["UserLastname"](employee.UserLastname)}
             onChange={handleChange}
           />
         </label>
@@ -142,7 +120,7 @@ function EmployeeForm({ onSuccess, onCancel }) {
           <input
             type="date"
             name="UserDateofbirth"
-            value={conformance.js2html["UserDateofbirth"](
+            value={employeeConformance.js2html["UserDateofbirth"](
               employee.UserDateofbirth
             )}
             onChange={handleChange}
@@ -158,7 +136,7 @@ function EmployeeForm({ onSuccess, onCancel }) {
           ) : (
             <select
               name="UserRoleID"
-              value={conformance.js2html["UserRoleID"](employee.UserRoleID)}
+              value={employeeConformance.js2html["UserRoleID"](employee.UserRoleID)}
               onChange={handleChange}
             >
               <option value="0">None selected</option>
@@ -176,7 +154,7 @@ function EmployeeForm({ onSuccess, onCancel }) {
           <input
             type="text"
             name="UserUsertypeName"
-            value={conformance.js2html["UserUsertypeName"](
+            value={employeeConformance.js2html["UserUsertypeName"](
               employee.UserUsertypeName
             )}
             onChange={handleChange}
@@ -188,7 +166,7 @@ function EmployeeForm({ onSuccess, onCancel }) {
           <input
             type="text"
             name="UserEmail"
-            value={conformance.js2html["UserEmail"](employee.UserEmail)}
+            value={employeeConformance.js2html["UserEmail"](employee.UserEmail)}
             onChange={handleChange}
           />
         </label>
@@ -198,7 +176,7 @@ function EmployeeForm({ onSuccess, onCancel }) {
           <input
             type="text"
             name="UserImageURL"
-            value={conformance.js2html["UserImageURL"](employee.UserImageURL)}
+            value={employeeConformance.js2html["UserImageURL"](employee.UserImageURL)}
             onChange={handleChange}
           />
         </label>
@@ -208,7 +186,7 @@ function EmployeeForm({ onSuccess, onCancel }) {
           <input
             type="text"
             name="UserUsertypeID"
-            value={conformance.js2html["UserUsertypeID"](
+            value={employeeConformance.js2html["UserUsertypeID"](
               employee.UserUsertypeID
             )}
             onChange={handleChange}
