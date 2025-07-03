@@ -19,10 +19,12 @@ div.listContainer {
   }
   .headerContainer p {
     font-weight: bold;
-    background-color: limegreen;
+    background-color: #1a3c34;
+    color: #fff;
   }
 
   .employeeItem:hover {
-    background-color: rgb(227, 230, 230);
+    background-color: #29423b;
+    color: #fff;
   }
 }
