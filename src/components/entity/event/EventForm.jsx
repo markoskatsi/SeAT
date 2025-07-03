@@ -114,60 +114,63 @@ function EventForm({ onSuccess, onCancel }) {
   return (
     <div className="eventForm">
       <div className="formTray">
-        <label>
-          Event Name
-          <input
-            type="text"
-            name="EventName"
-            value={conformance.js2html["EventName"](event.EventName)}
-            onChange={handleChange}
-          />
-        </label>
+        <div className="eventLeft">
+          <label>
+            <span>Event Name</span>
+            <input
+              type="text"
+              name="EventName"
+              value={conformance.js2html["EventName"](event.EventName)}
+              onChange={handleChange}
+            />
+          </label>
 
-        <label>
-          Event Description
-          <input
-            type="text"
-            name="EventDescription"
-            value={conformance.js2html["EventDescription"](
-              event.EventDescription
-            )}
-            onChange={handleChange}
-          />
-        </label>
+          <label>
+            Event Date
+            <input
+              type="datetime-local" // Change from type="date" to type="datetime-local"
+              name="EventDatetime"
+              value={conformance.js2html["EventDatetime"](event.EventDatetime)}
+              onChange={handleChange}
+            />
+          </label>
 
-        <label>
-          Event Date
-          <input
-            type="datetime-local" // Change from type="date" to type="datetime-local"
-            name="EventDatetime"
-            value={conformance.js2html["EventDatetime"](event.EventDatetime)}
-            onChange={handleChange}
-          />
-        </label>
-
-        <label>
-          Event Location
-          <select
-            name="EventLocationID"
-            value={conformance.js2html["EventLocationID"](
-              event.EventLocationID
-            )}
-            onChange={handleChange}
-          >
-            <option value="">-- Select Location --</option>
-            {location.map((loc) => (
-              <option key={loc.LocationID} value={loc.LocationID}>
-                {loc.LocationName}
-              </option>
-            ))}
-          </select>
-        </label>
+          <label>
+            <span>Event Location</span>
+            <select
+              name="EventLocationID"
+              value={conformance.js2html["EventLocationID"](
+                event.EventLocationID
+              )}
+              onChange={handleChange}
+            >
+              <option value="">-- Select Location --</option>
+              {location.map((loc) => (
+                <option key={loc.LocationID} value={loc.LocationID}>
+                  {loc.LocationName}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <div className="eventRight">
+          <label>
+            Event Description
+            <textArea
+              type="text"
+              name="EventDescription"
+              value={conformance.js2html["EventDescription"](
+                event.EventDescription
+              )}
+              onChange={handleChange}
+            />
+          </label>
+        </div>
       </div>
 
       <Action.Tray>
-        <Action.Submit showText onClick={handleSubmit} />
-        <Action.Cancel showText buttonText="Cancel form" onClick={onCancel} />
+        <Action.Submit showText buttonText="ADD EVENT" onClick={handleSubmit} />
+        <Action.Cancel showText buttonText="CANCEL" onClick={onCancel} />
       </Action.Tray>
     </div>
   );

@@ -7,10 +7,6 @@ function NavBar() {
 
   return (
     <nav>
-      <div className="navItem">
-        <NavLink to="/">Home</NavLink>
-      </div>
-
       {loggedInUser && (
         <>
           <div className="navItem">
@@ -19,6 +15,18 @@ function NavBar() {
           <div className="navItem">
             <NavLink to="/employees">Employees</NavLink>
           </div>
+          <h1>Seat</h1>
+          {!loggedInUser ? (
+            <div className="navItem">
+              <NavLink to="/login">Login</NavLink>
+            </div>
+          ) : (
+            <div className="navItem">
+              <NavLink to="/" onClick={logout}>
+                Logout
+              </NavLink>
+            </div>
+          )}
         </>
       )}
     </nav>
