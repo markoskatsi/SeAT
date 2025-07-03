@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./EventForm.scss";
 import Action from "../../UI/Actions.jsx";
+import { eventConformance } from "../../../utils/eventConformance.jsx";
 
 const initialEvent = {
   EventID: "",
@@ -14,26 +15,6 @@ const initialEvent = {
 
 function EventForm({ onSuccess, onCancel }) {
   // Initialisation --------------------
-
-  const conformance = {
-    html2js: {
-      EventID: (value) => (value === "" ? null : value),
-      EventName: (value) => (value === "" ? null : value),
-      EventDescription: (value) => (value === "" ? null : value),
-      EventDatetime: (value) => (value === "" ? null : value),
-      EventLocationID: (value) => (value === "" ? null : value),
-      EventLocationName: (value) => (value === "0" ? null : value),
-    },
-    js2html: {
-      EventID: (value) => (value === null ? "" : value),
-      EventName: (value) => (value === null ? "" : value),
-      EventDescription: (value) => (value === null ? "" : value),
-      EventDatetime: (value) => (value === null ? "" : value),
-      EventLocationID: (value) => (value === null ? "" : value),
-      EventLocationName: (value) => (value === null ? "0" : value),
-    },
-  };
-
   const apiURL = "https://softwarehub.uk/unibase/seat/api";
   const eventEndpoint = `${apiURL}/events`;
   const eventLocationEndpoint = `${apiURL}/locations`;
@@ -78,7 +59,7 @@ function EventForm({ onSuccess, onCancel }) {
     const { name, value } = e.target;
     setEvent((prev) => ({
       ...prev,
-      [name]: conformance.html2js[name](value),
+      [name]: eventConformance.html2js[name](value),
     }));
   };
 
@@ -119,7 +100,7 @@ function EventForm({ onSuccess, onCancel }) {
           <input
             type="text"
             name="EventName"
-            value={conformance.js2html["EventName"](event.EventName)}
+            value={eventConformance.js2html["EventName"](event.EventName)}
             onChange={handleChange}
           />
         </label>
@@ -129,7 +110,7 @@ function EventForm({ onSuccess, onCancel }) {
           <input
             type="text"
             name="EventDescription"
-            value={conformance.js2html["EventDescription"](
+            value={eventConformance.js2html["EventDescription"](
               event.EventDescription
             )}
             onChange={handleChange}
@@ -141,7 +122,7 @@ function EventForm({ onSuccess, onCancel }) {
           <input
             type="datetime-local" // Change from type="date" to type="datetime-local"
             name="EventDatetime"
-            value={conformance.js2html["EventDatetime"](event.EventDatetime)}
+            value={eventConformance.js2html["EventDatetime"](event.EventDatetime)}
             onChange={handleChange}
           />
         </label>
@@ -150,7 +131,7 @@ function EventForm({ onSuccess, onCancel }) {
           Event Location
           <select
             name="EventLocationID"
-            value={conformance.js2html["EventLocationID"](
+            value={eventConformance.js2html["EventLocationID"](
               event.EventLocationID
             )}
             onChange={handleChange}
