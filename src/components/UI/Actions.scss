@@ -14,9 +14,10 @@ div.ActionTray {
 
 button.Action {
   /* Appearance */
-  height: 36px;
+  height: 58px;
+  width: 373px;
   padding: 5px;
-  background: inherit;
+  background: #1a3c34;
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 12px;
   cursor: pointer;
@@ -31,7 +32,7 @@ button.Action {
     min-width: 50px;
     text-align: center;
     margin-right: 5px;
-    color: rgba(0, 0, 0, 0.3);
+    color: #fff;
   }
 
   img {
