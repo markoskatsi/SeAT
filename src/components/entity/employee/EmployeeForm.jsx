@@ -10,8 +10,6 @@ const initialEmployee = {
   UserUsertypeName: "",
   UserRoleName: "",
   UserRoleID: "",
-  // Add missing keys:
-  // UserEmail: "",
   UserImageURL: "",
   UserUsertypeID: "",
   UserEmail: "",
@@ -117,108 +115,98 @@ function EmployeeForm({ onSuccess, onCancel }) {
   return (
     <div className="employeeForm">
       <div className="formTray">
-        <label>
-          First Name
-          <input
-            type="text"
-            name="UserFirstname"
-            value={conformance.js2html["UserFirstname"](employee.UserFirstname)}
-            onChange={handleChange}
-          />
-        </label>
-
-        <label>
-          Last Name
-          <input
-            type="text"
-            name="UserLastname"
-            value={conformance.js2html["UserLastname"](employee.UserLastname)}
-            onChange={handleChange}
-          />
-        </label>
-
-        <label>
-          Date of Birth
-          <input
-            type="date"
-            name="UserDateofbirth"
-            value={conformance.js2html["UserDateofbirth"](
-              employee.UserDateofbirth
-            )}
-            onChange={handleChange}
-          />
-        </label>
-
-        <label>
-          Role
-          {!roles ? (
-            <p>Loading roles...</p>
-          ) : roles.length === 0 ? (
-            <p>No roles available</p>
-          ) : (
-            <select
-              name="UserRoleID"
-              value={conformance.js2html["UserRoleID"](employee.UserRoleID)}
+        <div className="employeeLeft">
+          <label>
+            First Name
+            <input
+              type="text"
+              name="UserFirstname"
+              value={conformance.js2html["UserFirstname"](employee.UserFirstname)}
               onChange={handleChange}
-            >
-              <option value="0">None selected</option>
-              {roles.map((role) => (
-                <option key={role.RoleID} value={role.RoleID}>
-                  {role.RoleName}
-                </option>
-              ))}
-            </select>
-          )}
-        </label>
-
-        <label>
-          Title
-          <input
-            type="text"
-            name="UserUsertypeName"
-            value={conformance.js2html["UserUsertypeName"](
-              employee.UserUsertypeName
+            />
+          </label>
+          <label>
+            Last Name
+            <input
+              type="text"
+              name="UserLastname"
+              value={conformance.js2html["UserLastname"](employee.UserLastname)}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            Date of Birth
+            <input
+              type="date"
+              name="UserDateofbirth"
+              value={conformance.js2html["UserDateofbirth"](employee.UserDateofbirth)}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            Role
+            {!roles ? (
+              <p>Loading roles...</p>
+            ) : roles.length === 0 ? (
+              <p>No roles available</p>
+            ) : (
+              <select
+                name="UserRoleID"
+                value={conformance.js2html["UserRoleID"](employee.UserRoleID)}
+                onChange={handleChange}
+              >
+                <option value="0">None selected</option>
+                {roles.map((role) => (
+                  <option key={role.RoleID} value={role.RoleID}>
+                    {role.RoleName}
+                  </option>
+                ))}
+              </select>
             )}
-            onChange={handleChange}
-          />
-        </label>
-
-        <label>
-          Email
-          <input
-            type="text"
-            name="UserEmail"
-            value={conformance.js2html["UserEmail"](employee.UserEmail)}
-            onChange={handleChange}
-          />
-        </label>
-
-        <label>
-          Image
-          <input
-            type="text"
-            name="UserImageURL"
-            value={conformance.js2html["UserImageURL"](employee.UserImageURL)}
-            onChange={handleChange}
-          />
-        </label>
-
-        <label>
-          User Type ID
-          <input
-            type="text"
-            name="UserUsertypeID"
-            value={conformance.js2html["UserUsertypeID"](
-              employee.UserUsertypeID
-            )}
-            onChange={handleChange}
-          />
-        </label>
+          </label>
+          <label>
+            User Type
+            <input
+              type="text"
+              name="UserUsertypeName"
+              value={conformance.js2html["UserUsertypeName"](employee.UserUsertypeName)}
+              onChange={handleChange}
+            />
+          </label>
+        </div>
+        <div className="employeeRight">
+          <label>
+            Email
+            <input
+              type="text"
+              name="UserEmail"
+              value={conformance.js2html["UserEmail"](employee.UserEmail)}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            Image URL
+            <input
+              type="text"
+              name="UserImageURL"
+              value={conformance.js2html["UserImageURL"](employee.UserImageURL)}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            User Type ID
+            <input
+              type="text"
+              name="UserUsertypeID"
+              value={conformance.js2html["UserUsertypeID"](employee.UserUsertypeID)}
+              onChange={handleChange}
+            />
+          </label>
+        </div>
       </div>
-
       <Action.Tray>
-        <Action.Submit showText onClick={handleSubmit} />
-        <Action.Cancel showText buttonText="Cancel form" onClick={onCancel} />
+        <Action.Submit showText buttonText="ADD EMPLOYEE" onClick={handleSubmit} />
+        <Action.Cancel showText buttonText="CANCEL" onClick={onCancel} />
       </Action.Tray>
     </div>
   );
