@@ -31,7 +31,6 @@ function Events() {
 
   return (
     <>
-      <h1>Events</h1>
 
       <Action.Tray>
         {!showForm && (
