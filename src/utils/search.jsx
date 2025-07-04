@@ -1,9 +1,16 @@
 import PropTypes from "prop-types";
+import "./search.scss";
 
-function EmployeeSearchBar({ searchTerm, setSearchTerm, filterField, setFilterField }) {
+function EmployeeSearchBar({
+  searchTerm,
+  setSearchTerm,
+  filterField,
+  setFilterField,
+}) {
   return (
     <div style={{ display: "flex", gap: "8px", marginBottom: "16px" }}>
       <select
+        className="filter-select"
         value={filterField}
         onChange={(e) => setFilterField(e.target.value)}
         style={{ padding: "8px" }}
@@ -14,6 +21,7 @@ function EmployeeSearchBar({ searchTerm, setSearchTerm, filterField, setFilterFi
         <option value="type">Type</option>
       </select>
       <input
+        className="search-input"
         type="text"
         placeholder="Search employees"
         value={searchTerm}

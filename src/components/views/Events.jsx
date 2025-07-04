@@ -31,7 +31,6 @@ function Events() {
 
   return (
     <>
-
       <Action.Tray>
         {!showForm && (
           <Action.Add showText buttonText="ADD NEW EVENT" onClick={handleAdd} />
