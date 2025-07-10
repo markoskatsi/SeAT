@@ -20,7 +20,9 @@ function EventFormFields({ event, location, handleChange }) {
           <input
             type="text"
             name="EventDescription"
-            value={eventConformance.js2html["EventDescription"](event.EventDescription)}
+            value={eventConformance.js2html["EventDescription"](
+              event.EventDescription
+            )}
             onChange={handleChange}
           />
         </label>
@@ -31,7 +33,9 @@ function EventFormFields({ event, location, handleChange }) {
           <input
             type="datetime-local"
             name="EventDatetime"
-            value={eventConformance.js2html["EventDatetime"](event.EventDatetime)}
+            value={eventConformance.js2html["EventDatetime"](
+              event.EventDatetime
+            )}
             onChange={handleChange}
           />
         </label>
@@ -40,7 +44,9 @@ function EventFormFields({ event, location, handleChange }) {
           Event Location
           <select
             name="EventLocationID"
-            value={eventConformance.js2html["EventLocationID"](event.EventLocationID)}
+            value={eventConformance.js2html["EventLocationID"](
+              event.EventLocationID
+            )}
             onChange={handleChange}
           >
             <option value="">-- Select Location --</option>

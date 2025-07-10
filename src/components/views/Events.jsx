@@ -5,14 +5,14 @@ import Action from "../UI/Actions.jsx";
 import EventForm from "../entity/event/EventForm.jsx";
 import API from "../api/API.js";
 import apiEndpoints from "../../components/api/apiEndpoints.js";
+import { Link } from "react-router-dom";
 
 function Events() {
   const [showForm, setShowForm] = useState(false);
-  const [events, setEvents] = useState(null); // changed from []
+  const [events, setEvents] = useState(null);
 
   const apiGet = async () => {
     const response = await API.get(apiEndpoints.EVENTS);
-    // Defensive: handle both {isSuccess, result} and plain array
     let result;
     if (response && response.isSuccess) {
       result = response.result;
@@ -58,6 +58,7 @@ function Events() {
       ) : (
         <CardContainer>
           {events.map((event) => (
+            <Link to={`/events/${event.EventID}`} className="eventCardLink" key={event.EventID}>
             <div className="eventCard" key={event.EventID}>
               <Card>
                 <div>
@@ -71,6 +72,7 @@ function Events() {
                 <p>{new Date(event.EventDatetime).toLocaleDateString()}</p>
               </Card>
             </div>
+            </Link>
           ))}
         </CardContainer>
       )}
