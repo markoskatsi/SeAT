@@ -6,32 +6,31 @@ import { ListContainer, HeaderContainer } from "../UI/ListContainer.jsx";
 import EmployeeForm from "../entity/employee/EmployeeForm.jsx";
 import { filterEmployees } from "../../utils/filtering.jsx";
 import EmployeeSearchBar from "../../utils/search.jsx";
+import apiEndpoints from "../../components/api/apiEndpoints.js";
+import API from "../api/API.js";
 
 function Employees() {
-  const apiURL = "https://softwarehub.uk/unibase/seat/api";
-  const employeeListEndpoint = `${apiURL}/users`;
-
   const [showForm, setShowForm] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterField, setFilterField] = useState("");
 
-  const apiGet = async (endpoint) => {
-    const response = await fetch(endpoint);
+  const apiGet = async () => {
+    const response = await API.get(apiEndpoints.USERS);
     const result = await response.json();
     setEmployees(result);
     console.log(result);
   };
 
   useEffect(() => {
-    apiGet(employeeListEndpoint);
-  }, [employeeListEndpoint]);
+    apiGet();
+  }, []);
 
   const handleAdd = () => setShowForm(true);
   const handleCancel = () => setShowForm(false);
   const handleSuccess = () => {
     handleCancel();
-    apiGet(employeeListEndpoint);
+    apiGet();
   };
 
   const filteredEmployees = filterEmployees(employees, searchTerm, filterField);
