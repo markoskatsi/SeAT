@@ -87,7 +87,11 @@ function EmployeeForm({ onSuccess, onCancel }) {
         handleChange={handleChange}
       />
       <Action.Tray>
-        <Action.Submit showText buttonText="ADD EMPLOYEE" onClick={handleSubmit} />
+        <Action.Submit
+          showText
+          buttonText="ADD EMPLOYEE"
+          onClick={handleSubmit}
+        />
         <Action.Cancel showText buttonText="CANCEL" onClick={onCancel} />
       </Action.Tray>
     </div>

@@ -11,6 +11,10 @@ const apiEndpoints = {
   EVENT_LOCATIONS: `${BASE_URL}/locations/`,
   EVENT_BY_LOCATION: (locationId) =>
     `${BASE_URL}/events/locations/${locationId}`,
+
+  ATTENDEES: (eventId) => `${BASE_URL}/attendees`,
+  STATUS: `${BASE_URL}/status`,
+
 };
 
 export default apiEndpoints;

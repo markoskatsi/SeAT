@@ -15,6 +15,9 @@ function NavBar() {
           <div className="navItem">
             <NavLink to="/employees">Employees</NavLink>
           </div>
+          <div className="navItem">
+            <NavLink to="/eventInfo">Event Info</NavLink>
+          </div>
           <h1>Seat</h1>
           {!loggedInUser ? (
             <div className="navItem">
