@@ -8,7 +8,7 @@ const apiEndpoints = {
 
   EVENTS: `${BASE_URL}/events`,
   EVENT_BY_ID: (eventId) => `${BASE_URL}/events/${eventId}`,
-  EVENT_LOCATIONS: `${BASE_URL}/locations/events`,
+  EVENT_LOCATIONS: `${BASE_URL}/locations/`,
   EVENT_BY_LOCATION: (locationId) =>
     `${BASE_URL}/events/locations/${locationId}`,
 };
