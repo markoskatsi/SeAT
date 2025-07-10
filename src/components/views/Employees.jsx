@@ -11,13 +11,20 @@ import API from "../api/API.js";
 
 function Employees() {
   const [showForm, setShowForm] = useState(false);
-  const [employees, setEmployees] = useState([]);
+  const [employees, setEmployees] = useState(null); // changed from []
   const [searchTerm, setSearchTerm] = useState("");
   const [filterField, setFilterField] = useState("");
 
   const apiGet = async () => {
     const response = await API.get(apiEndpoints.USERS);
-    const result = await response.json();
+    let result;
+    if (response && response.isSuccess) {
+      result = response.result;
+    } else if (response && Array.isArray(response)) {
+      result = response;
+    } else {
+      result = [];
+    }
     setEmployees(result);
     console.log(result);
   };
@@ -33,7 +40,7 @@ function Employees() {
     apiGet();
   };
 
-  const filteredEmployees = filterEmployees(employees, searchTerm, filterField);
+  const filteredEmployees = employees ? filterEmployees(employees, searchTerm, filterField) : [];
 
   return (
     <>
@@ -65,7 +72,7 @@ function Employees() {
           <p>Role</p>
           <p>Title</p>
         </HeaderContainer>
-        {employees.length === 0 ? (
+        {employees === null ? (
           <p>Loading records...</p>
         ) : filteredEmployees.length === 0 ? (
           <p>No employees found...</p>
