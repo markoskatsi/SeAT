@@ -8,11 +8,19 @@ import apiEndpoints from "../../components/api/apiEndpoints.js";
 
 function Events() {
   const [showForm, setShowForm] = useState(false);
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState(null); // changed from []
 
   const apiGet = async () => {
     const response = await API.get(apiEndpoints.EVENTS);
-    const result = await response.json();
+    // Defensive: handle both {isSuccess, result} and plain array
+    let result;
+    if (response && response.isSuccess) {
+      result = response.result;
+    } else if (response && Array.isArray(response)) {
+      result = response;
+    } else {
+      result = [];
+    }
     setEvents(result);
     console.log(result);
   };
@@ -43,7 +51,7 @@ function Events() {
         />
       )}
 
-      {!events ? (
+      {events === null ? (
         <p>Loading records...</p>
       ) : events.length === 0 ? (
         <p>No records found</p>
