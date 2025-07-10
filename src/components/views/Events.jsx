@@ -3,30 +3,29 @@ import "./Events.scss";
 import { useState, useEffect } from "react";
 import Action from "../UI/Actions.jsx";
 import EventForm from "../entity/event/EventForm.jsx";
+import API from "../api/API.js";
+import apiEndpoints from "../../components/api/apiEndpoints.js";
 
 function Events() {
-  const apiURL = "https://softwarehub.uk/unibase/seat/api";
-  const eventListEndpoint = `${apiURL}/events`;
-
   const [showForm, setShowForm] = useState(false);
   const [events, setEvents] = useState([]);
 
-  const apiGet = async (endpoint) => {
-    const response = await fetch(endpoint);
+  const apiGet = async () => {
+    const response = await API.get(apiEndpoints.EVENTS);
     const result = await response.json();
     setEvents(result);
-    //console.log(result);
+    console.log(result);
   };
 
   useEffect(() => {
-    apiGet(eventListEndpoint);
-  }, [eventListEndpoint]);
+    apiGet();
+  }, []);
 
   const handleAdd = () => setShowForm(true);
   const handleCancel = () => setShowForm(false);
   const handleSuccess = () => {
     handleCancel();
-    apiGet(eventListEndpoint);
+    apiGet();
   };
 
   return (
@@ -41,7 +40,6 @@ function Events() {
         <EventForm
           onCancel={handleCancel}
           onSuccess={handleSuccess}
-          apiURL={apiURL}
         />
       )}
 
