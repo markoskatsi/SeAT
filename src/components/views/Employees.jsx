@@ -6,7 +6,7 @@ import { ListContainer, HeaderContainer } from "../UI/ListContainer.jsx";
 import EmployeeForm from "../entity/employee/EmployeeForm.jsx";
 import { filterEmployees } from "../../utils/filtering.jsx";
 import EmployeeSearchBar from "../../utils/search.jsx";
-import apiEndpoints from "../../components/api/apiEndpoints.js";
+import apiEndpoints from "../api/apiEndpoints.js";
 import API from "../api/API.js";
 import AttendeeModal from "../entity/guest/AttendeeModal.jsx";
 
