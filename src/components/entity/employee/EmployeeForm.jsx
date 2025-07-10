@@ -29,9 +29,11 @@ function EmployeeForm({ onSuccess, onCancel }) {
 
   const apiGet = async () => {
     const response = await API.get(apiEndpoints.ROLES);
-    const result = await response.json();
-    setRoles(result);
-    console.log(result);
+    if (response.isSuccess) {
+      setRoles(response.result);
+    } else {
+      setRoles([]);
+    }
   };
 
   const apiPost = async (record) => {

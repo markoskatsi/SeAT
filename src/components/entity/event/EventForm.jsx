@@ -24,10 +24,13 @@ function EventForm({ onSuccess, onCancel }) {
   const [location, setLocation] = useState([]);
 
   const apiGetLocations = async () => {
-    const response = await API.get(apiEndpoints.EVENT_LOCATIONS);
-    const result = await response.json();
-    setLocation(result);
-  };
+  const response = await API.get(apiEndpoints.EVENT_LOCATIONS);
+  if (response.isSuccess) {
+    setLocation(response.result);
+  } else {
+    setLocation([]);
+  }
+};
 
   const apiPost = async (record) => {
     const response = await API.post(apiEndpoints.EVENTS, record);
