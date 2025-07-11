@@ -3,30 +3,37 @@ import "./Events.scss";
 import { useState, useEffect } from "react";
 import Action from "../UI/Actions.jsx";
 import EventForm from "../entity/event/EventForm.jsx";
+import API from "../api/API.js";
+import apiEndpoints from "../../components/api/apiEndpoints.js";
+import { Link } from "react-router-dom";
 
 function Events() {
-  const apiURL = "https://softwarehub.uk/unibase/seat/api";
-  const eventListEndpoint = `${apiURL}/events`;
-
   const [showForm, setShowForm] = useState(false);
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState(null);
 
-  const apiGet = async (endpoint) => {
-    const response = await fetch(endpoint);
-    const result = await response.json();
+  const apiGet = async () => {
+    const response = await API.get(apiEndpoints.EVENTS);
+    let result;
+    if (response && response.isSuccess) {
+      result = response.result;
+    } else if (response && Array.isArray(response)) {
+      result = response;
+    } else {
+      result = [];
+    }
     setEvents(result);
-    //console.log(result);
+    console.log(result);
   };
 
   useEffect(() => {
-    apiGet(eventListEndpoint);
-  }, [eventListEndpoint]);
+    apiGet();
+  }, []);
 
   const handleAdd = () => setShowForm(true);
   const handleCancel = () => setShowForm(false);
   const handleSuccess = () => {
     handleCancel();
-    apiGet(eventListEndpoint);
+    apiGet();
   };
 
   return (
@@ -41,17 +48,17 @@ function Events() {
         <EventForm
           onCancel={handleCancel}
           onSuccess={handleSuccess}
-          apiURL={apiURL}
         />
       )}
 
-      {!events ? (
+      {events === null ? (
         <p>Loading records...</p>
       ) : events.length === 0 ? (
         <p>No records found</p>
       ) : (
         <CardContainer>
           {events.map((event) => (
+            <Link to={`/events/${event.EventID}`} className="eventCardLink" key={event.EventID}>
             <div className="eventCard" key={event.EventID}>
               <Card>
                 <div>
@@ -65,6 +72,7 @@ function Events() {
                 <p>{new Date(event.EventDatetime).toLocaleDateString()}</p>
               </Card>
             </div>
+            </Link>
           ))}
         </CardContainer>
       )}

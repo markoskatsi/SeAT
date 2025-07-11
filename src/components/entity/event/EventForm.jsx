@@ -4,6 +4,8 @@ import "./EventForm.scss";
 import Action from "../../UI/Actions.jsx";
 import { eventConformance } from "../../../utils/eventConformance.jsx";
 import EventFormFields from "./EventFormFields.jsx";
+import API from "../../api/API.js";
+import apiEndpoints from "../../api/apiEndpoints.js";
 
 const initialEvent = {
   EventID: "",
@@ -16,44 +18,28 @@ const initialEvent = {
 
 function EventForm({ onSuccess, onCancel }) {
   // Initialisation --------------------
-  const apiURL = "https://softwarehub.uk/unibase/seat/api";
-  const eventEndpoint = `${apiURL}/events`;
-  const eventLocationEndpoint = `${apiURL}/locations`;
 
   // State ------------------------------
-
   const [event, setEvent] = useState(initialEvent);
   const [location, setLocation] = useState([]);
 
-  const apiGet = async (endpoint, setState) => {
-    const response = await fetch(endpoint);
-    const result = await response.json();
-    setState(result);
+  const apiGetLocations = async () => {
+    const response = await API.get(apiEndpoints.EVENT_LOCATIONS);
+    if (response.isSuccess) {
+      setLocation(response.result);
+    } else {
+      setLocation([]);
+    }
   };
 
-  const apiPost = async (endpoint, record) => {
-    const request = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(record),
-    };
-
-    const response = await fetch(endpoint, request);
-    const result = await response.json();
-    return response.status >= 200 && response.status < 300
-      ? { isSuccess: true }
-      : { isSuccess: false, message: result.message };
+  const apiPost = async (record) => {
+    const response = await API.post(apiEndpoints.EVENTS, record);
+    return response;
   };
 
   useEffect(() => {
-    apiGet(eventEndpoint, setEvent);
-  }, [eventEndpoint]);
-
-  useEffect(() => {
-    apiGet(eventLocationEndpoint, setLocation);
-  }, [eventLocationEndpoint]);
+    apiGetLocations();
+  }, []);
 
   // Handlers ---------------------------
   const handleChange = (e) => {
@@ -83,7 +69,7 @@ function EventForm({ onSuccess, onCancel }) {
       return;
     }
 
-    const result = await apiPost(eventEndpoint, eventData);
+    const result = await apiPost(eventData);
 
     if (result.isSuccess) {
       onSuccess();
