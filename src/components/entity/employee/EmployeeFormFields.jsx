@@ -10,7 +10,9 @@ function EmployeeFormFields({ employee, roles, handleChange }) {
           <input
             type="text"
             name="UserFirstname"
-            value={employeeConformance.js2html["UserFirstname"](employee.UserFirstname)}
+            value={employeeConformance.js2html["UserFirstname"](
+              employee.UserFirstname
+            )}
             onChange={handleChange}
           />
         </label>
@@ -19,7 +21,9 @@ function EmployeeFormFields({ employee, roles, handleChange }) {
           <input
             type="text"
             name="UserLastname"
-            value={employeeConformance.js2html["UserLastname"](employee.UserLastname)}
+            value={employeeConformance.js2html["UserLastname"](
+              employee.UserLastname
+            )}
             onChange={handleChange}
           />
         </label>
@@ -28,7 +32,9 @@ function EmployeeFormFields({ employee, roles, handleChange }) {
           <input
             type="date"
             name="UserDateofbirth"
-            value={employeeConformance.js2html["UserDateofbirth"](employee.UserDateofbirth)}
+            value={employeeConformance.js2html["UserDateofbirth"](
+              employee.UserDateofbirth
+            )}
             onChange={handleChange}
           />
         </label>
@@ -41,7 +47,9 @@ function EmployeeFormFields({ employee, roles, handleChange }) {
           ) : (
             <select
               name="UserRoleID"
-              value={employeeConformance.js2html["UserRoleID"](employee.UserRoleID)}
+              value={employeeConformance.js2html["UserRoleID"](
+                employee.UserRoleID
+              )}
               onChange={handleChange}
             >
               <option value="0">None selected</option>
@@ -60,7 +68,9 @@ function EmployeeFormFields({ employee, roles, handleChange }) {
           <input
             type="text"
             name="UserUsertypeName"
-            value={employeeConformance.js2html["UserUsertypeName"](employee.UserUsertypeName)}
+            value={employeeConformance.js2html["UserUsertypeName"](
+              employee.UserUsertypeName
+            )}
             onChange={handleChange}
           />
         </label>
@@ -78,7 +88,9 @@ function EmployeeFormFields({ employee, roles, handleChange }) {
           <input
             type="text"
             name="UserImageURL"
-            value={employeeConformance.js2html["UserImageURL"](employee.UserImageURL)}
+            value={employeeConformance.js2html["UserImageURL"](
+              employee.UserImageURL
+            )}
             onChange={handleChange}
           />
         </label>
@@ -87,7 +99,9 @@ function EmployeeFormFields({ employee, roles, handleChange }) {
           <input
             type="text"
             name="UserUsertypeID"
-            value={employeeConformance.js2html["UserUsertypeID"](employee.UserUsertypeID)}
+            value={employeeConformance.js2html["UserUsertypeID"](
+              employee.UserUsertypeID
+            )}
             onChange={handleChange}
           />
         </label>

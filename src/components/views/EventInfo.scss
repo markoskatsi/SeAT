@@ -1,0 +1,54 @@
+.eventInfo {
+  background: rgba(51, 51, 51, 0.67);
+  color: #fff;
+  padding: 32px;
+  border-radius: 10px;
+  max-width: 600px;
+  margin: 40px auto 20px auto;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+
+  h1 {
+    margin-bottom: 18px;
+    font-size: 2.2em;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  p {
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    opacity: 0.9;
+  }
+}
+
+.attendeesList {
+  background: #222;
+  color: #fff;
+  padding: 24px;
+  border-radius: 10px;
+  max-width: 600px;
+  margin: 0 auto 40px auto;
+
+  h2 {
+    margin-bottom: 14px;
+    font-size: 1.4em;
+    color: #fff;
+  }
+
+  ul {
+    list-style: disc inside;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  li {
+    margin-bottom: 8px;
+    font-size: 1.05em;
+    opacity: 0.95;
+  }
+
+  p {
+    opacity: 0.8;
+    font-style: italic;
+  }
+}

@@ -4,6 +4,8 @@ import "./EmployeeForm.scss";
 import Action from "../../UI/Actions.jsx";
 import { employeeConformance } from "../../../utils/employeeConformance.jsx";
 import EmployeeFormFields from "./EmployeeFormFields.jsx";
+import API from "../../api/API.js";
+import apiEndpoints from "../../api/apiEndpoints.js";
 
 const initialEmployee = {
   UserFirstname: "",
@@ -20,42 +22,28 @@ const initialEmployee = {
 function EmployeeForm({ onSuccess, onCancel }) {
   // Initialisation --------------------
 
-  const apiURL = "https://softwarehub.uk/unibase/seat/api";
-  const postEndpoint = `${apiURL}/users/`;
-  const rolesEndpoint = `${apiURL}/roles`;
-
   // State ------------------------------
 
   const [employee, setEmployee] = useState(initialEmployee);
   const [roles, setRoles] = useState(null);
 
-  const apiGet = async (endpoint) => {
-    const response = await fetch(endpoint);
-    const result = await response.json();
-    setRoles(result);
-    console.log(result);
+  const apiGet = async () => {
+    const response = await API.get(apiEndpoints.ROLES);
+    if (response.isSuccess) {
+      setRoles(response.result);
+    } else {
+      setRoles([]);
+    }
   };
 
-  const apiPost = async (endpoint, record) => {
-    const request = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(record),
-    };
-
-    const response = await fetch(endpoint, request);
-    const result = await response.json();
-    console.log(result);
-    return response.status >= 200 && response.status < 300
-      ? { isSuccess: true }
-      : { isSuccess: false, message: result.message };
+  const apiPost = async (record) => {
+    const response = await API.post(apiEndpoints.USERS, record);
+    return response;
   };
 
   useEffect(() => {
-    apiGet(rolesEndpoint, setRoles);
-  }, [rolesEndpoint]);
+    apiGet();
+  }, []);
 
   // Handlers ---------------------------
   const handleChange = (e) => {
@@ -79,7 +67,7 @@ function EmployeeForm({ onSuccess, onCancel }) {
       UserGuestofID: null,
     };
 
-    const result = await apiPost(postEndpoint, employeeData);
+    const result = await apiPost(employeeData);
     console.log("Submitting employee data:", employeeData);
 
     if (result.isSuccess) {
@@ -99,7 +87,11 @@ function EmployeeForm({ onSuccess, onCancel }) {
         handleChange={handleChange}
       />
       <Action.Tray>
-        <Action.Submit showText buttonText="ADD EMPLOYEE" onClick={handleSubmit} />
+        <Action.Submit
+          showText
+          buttonText="ADD EMPLOYEE"
+          onClick={handleSubmit}
+        />
         <Action.Cancel showText buttonText="CANCEL" onClick={onCancel} />
       </Action.Tray>
     </div>
