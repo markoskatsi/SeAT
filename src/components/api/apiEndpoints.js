@@ -3,6 +3,7 @@ const BASE_URL = "https://softwarehub.uk/unibase/seat/api";
 const apiEndpoints = {
   USERS: `${BASE_URL}/users`,
   ROLES: `${BASE_URL}/roles`,
+  USERTYPES: `${BASE_URL}/usertypes`,
   USER_BY_EMAIL: (email) => `${BASE_URL}/users/email/${email}`,
   USER_BY_ID: (userId) => `${BASE_URL}/users/${userId}`,
 
@@ -14,7 +15,6 @@ const apiEndpoints = {
 
   ATTENDEES: (eventId) => `${BASE_URL}/attendees`,
   STATUS: `${BASE_URL}/status`,
-
 };
 
 export default apiEndpoints;
