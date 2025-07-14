@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import "./EventInfo.scss";
 import API from "../api/API.js";
 import apiEndpoints from "../api/apiEndpoints.js";
+import { HeaderContainer, ListContainer } from "../UI/ListContainer.jsx";
 
 function EventInfo() {
   const { eventId } = useParams();
@@ -51,24 +52,38 @@ function EventInfo() {
       </div>
 
       <div className="attendeesList">
-        <h2>Attendees</h2>
-        {attendees === null ? (
-          <p>Loading attendees...</p>
-        ) : attendees.length === 0 ? (
-          <p>No attendees found</p>
-        ) : (
-          <ul>
-            {attendees.map((attendee) => {
+        <ListContainer>
+          <h2>Attendance</h2>
+          <HeaderContainer>
+            <p>Full Name</p>
+            <p>Attendance Status</p>
+            <p>{" "}</p>
+          </HeaderContainer>
+
+          {attendees === null ? (
+            <p>Loading attendees...</p>
+          ) : attendees.length === 0 ? (
+            <p>No attendees found</p>
+          ) : (
+            attendees.map((attendee) => {
               //if (attendee.AttendeeStatusName === "Confirmed") {
               if (attendee.AttendeeEventName === event.EventName) {
                 return (
-                  <li key={attendee.AttendeeID}>{attendee.AttendeeUserName}</li>
+                  <div className="attendeeItem" key={attendee.AttendeeID}>
+                    <p>{attendee.AttendeeUserName}</p>
+                    <p>{attendee.AttendeeStatusName}</p>
+                    {!attendee.AttendeeUserName.includes("Guest") ? (
+                      <button className="editButton">Edit Plus One</button>
+                    ) : (
+                      <p>{" "}</p>
+                    )}
+                  </div>
                 );
               }
               //}
-            })}
-          </ul>
-        )}
+            })
+          )}
+        </ListContainer>
       </div>
     </>
   );

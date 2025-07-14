@@ -16,7 +16,6 @@ export function EmployeeItem({ employee, onClick }) {
       <p>{employee.UserFirstname}</p>
       <p>{employee.UserLastname}</p>
       <p>{formatDate(employee.UserDateofbirth)}</p>
-      <p>{employee.UserUsertypeName}</p>
       <p>{employee.UserRoleName}</p>
     </div>
   );
