@@ -15,9 +15,6 @@ function Employees() {
   const [employees, setEmployees] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterField, setFilterField] = useState("");
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [showAttendeeModal, setShowAttendeeModal] = useState(false);
-  const [attendeeSuccess, setAttendeeSuccess] = useState(false);
 
   const apiGet = async () => {
     const response = await API.get(apiEndpoints.USERS);
@@ -42,22 +39,6 @@ function Employees() {
   const handleSuccess = () => {
     handleCancel();
     apiGet();
-  };
-
-  const handleEmployeeClick = (employee) => {
-    console.log("Employee clicked:", employee);
-    setSelectedEmployee(employee);
-    setShowAttendeeModal(true);
-    console.log("Modal should be open now");
-  };
-
-  const handleAttendeeModalClose = () => {
-    setShowAttendeeModal(false);
-    setSelectedEmployee(null);
-  };
-
-  const handleAttendeeSuccess = () => {
-    setAttendeeSuccess(true);
   };
 
   const filteredEmployees = employees
@@ -99,23 +80,10 @@ function Employees() {
           <p>No employees found...</p>
         ) : (
           filteredEmployees.map((employee) => {
-            return (
-              <EmployeeItem
-                employee={employee}
-                key={employee.UserID}
-                onClick={handleEmployeeClick}
-              />
-            );
+            return <EmployeeItem employee={employee} key={employee.UserID} />;
           })
         )}
       </ListContainer>
-
-      <AttendeeModal
-        employee={selectedEmployee}
-        isOpen={showAttendeeModal}
-        onClose={handleAttendeeModalClose}
-        onSuccess={handleAttendeeSuccess}
-      />
     </>
   );
 }

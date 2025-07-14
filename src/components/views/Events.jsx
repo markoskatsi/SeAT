@@ -6,9 +6,6 @@ import EventForm from "../entity/event/EventForm.jsx";
 import API from "../api/API.js";
 import apiEndpoints from "../../components/api/apiEndpoints.js";
 import { Link } from "react-router-dom";
-import Actions from "../UI/Actions.jsx";
-import { ListContainer, HeaderContainer } from "../UI/ListContainer.jsx";
-
 function Events() {
   const [showForm, setShowForm] = useState(false);
   const [events, setEvents] = useState(null);

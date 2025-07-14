@@ -3,12 +3,33 @@ import { useEffect, useState } from "react";
 import "./EventInfo.scss";
 import API from "../api/API.js";
 import apiEndpoints from "../api/apiEndpoints.js";
+import AttendeeModal from "../entity/guest/AttendeeModal.jsx";
 import { HeaderContainer, ListContainer } from "../UI/ListContainer.jsx";
 
 function EventInfo() {
   const { eventId } = useParams();
   const [event, setEvent] = useState(null);
   const [attendees, setAttendees] = useState(null);
+
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [showAttendeeModal, setShowAttendeeModal] = useState(false);
+  const [attendeeSuccess, setAttendeeSuccess] = useState(false);
+
+  const handleClick = (attendee) => {
+    console.log("Attendee clicked:", attendee.AttendeeUserName);
+    setSelectedEmployee(attendee);
+    setShowAttendeeModal(true);
+    console.log("Modal should be open now");
+  };
+
+  const handleAttendeeModalClose = () => {
+    setShowAttendeeModal(false);
+    setSelectedEmployee(null);
+  };
+
+  const handleAttendeeSuccess = () => {
+    setAttendeeSuccess(true);
+  };
 
   const apiGetAttendees = async () => {
     const response = await API.get(apiEndpoints.ATTENDEES(eventId));
@@ -57,7 +78,7 @@ function EventInfo() {
           <HeaderContainer>
             <p>Full Name</p>
             <p>Attendance Status</p>
-            <p>{" "}</p>
+            <p> </p>
           </HeaderContainer>
 
           {attendees === null ? (
@@ -71,11 +92,20 @@ function EventInfo() {
                 return (
                   <div className="attendeeItem" key={attendee.AttendeeID}>
                     <p>{attendee.AttendeeUserName}</p>
-                    <p>{attendee.AttendeeStatusName}</p>
+                    <p>
+                      {!attendee.AttendeeStatusName
+                        ? "Unknown"
+                        : attendee.AttendeeStatusName}
+                    </p>
                     {!attendee.AttendeeUserName.includes("Guest") ? (
-                      <button className="editButton">Edit Plus One</button>
+                      <button
+                        className="editButton"
+                        onClick={() => handleClick(attendee)}
+                      >
+                        Edit Plus One
+                      </button>
                     ) : (
-                      <p>{" "}</p>
+                      <p> </p>
                     )}
                   </div>
                 );
@@ -84,6 +114,12 @@ function EventInfo() {
             })
           )}
         </ListContainer>
+        <AttendeeModal
+          attendee={selectedEmployee}
+          isOpen={showAttendeeModal}
+          onClose={handleAttendeeModalClose}
+          onSuccess={handleAttendeeSuccess}
+        />
       </div>
     </>
   );
