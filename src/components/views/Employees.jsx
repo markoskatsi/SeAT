@@ -91,7 +91,6 @@ function Employees() {
           <p>First Name</p>
           <p>Last Name</p>
           <p>D.O.B</p>
-          <p>Type</p>
           <p>Role</p>
         </HeaderContainer>
         {employees === null ? (

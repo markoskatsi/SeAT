@@ -6,13 +6,20 @@ import EventForm from "../entity/event/EventForm.jsx";
 import API from "../api/API.js";
 import apiEndpoints from "../../components/api/apiEndpoints.js";
 import { Link } from "react-router-dom";
+import Actions from "../UI/Actions.jsx";
+import { ListContainer, HeaderContainer } from "../UI/ListContainer.jsx";
 
 function Events() {
   const [showForm, setShowForm] = useState(false);
   const [events, setEvents] = useState(null);
+  const [visibleEvents, setVisibleEvents] = useState(10);
 
-  const apiGet = async () => {
-    const response = await API.get(apiEndpoints.EVENTS);
+  const handleLoadMore = () => {
+    setVisibleEvents((prev) => prev + 10);
+  };
+
+  const loadRecords = async () => {
+    const response = await API.get(`${apiEndpoints.EVENTS}?limit=10`);
     let result;
     if (response && response.isSuccess) {
       result = response.result;
@@ -26,14 +33,14 @@ function Events() {
   };
 
   useEffect(() => {
-    apiGet();
+    loadRecords();
   }, []);
 
   const handleAdd = () => setShowForm(true);
   const handleCancel = () => setShowForm(false);
   const handleSuccess = () => {
     handleCancel();
-    apiGet();
+    loadRecords();
   };
 
   return (
@@ -45,10 +52,7 @@ function Events() {
       </Action.Tray>
 
       {showForm && (
-        <EventForm
-          onCancel={handleCancel}
-          onSuccess={handleSuccess}
-        />
+        <EventForm onCancel={handleCancel} onSuccess={handleSuccess} />
       )}
 
       {events === null ? (
@@ -56,25 +60,30 @@ function Events() {
       ) : events.length === 0 ? (
         <p>No records found</p>
       ) : (
-        <CardContainer>
-          {events.map((event) => (
-            <Link to={`/events/${event.EventID}`} className="eventCardLink" key={event.EventID}>
-            <div className="eventCard" key={event.EventID}>
-              <Card>
-                <div>
-                  <h3>{event.EventName}</h3>
-                  <p>
-                    This is a Christmas party of Lorem ipsum dolor sit amet,
-                    consectetur adipiscing elit. In lacinia neque ac sapien
-                    tristique pharetra.{" "}
-                  </p>
+        <>
+          <CardContainer>
+            {events.slice(0, visibleEvents).map((event) => (
+              <Link
+                to={`/events/${event.EventID}`}
+                className="eventCardLink"
+                key={event.EventID}
+              >
+                <div className="eventCard" key={event.EventID}>
+                  <Card>
+                    <div>
+                      <h3>{event.EventName}</h3>
+                      <p>{event.EventDescription}</p>
+                    </div>
+                    <p>{new Date(event.EventDatetime).toLocaleDateString()}</p>
+                  </Card>
                 </div>
-                <p>{new Date(event.EventDatetime).toLocaleDateString()}</p>
-              </Card>
-            </div>
-            </Link>
-          ))}
-        </CardContainer>
+              </Link>
+            ))}
+          </CardContainer>
+          {visibleEvents < events.length && (
+            <div className="buttonContainer"><button onClick={handleLoadMore}>Load More</button></div>
+          )}
+        </>
       )}
     </>
   );
