@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { employeeConformance } from "../../../utils/employeeConformance.jsx";
 
-function EmployeeFormFields({ employee, roles, handleChange }) {
+function EmployeeFormFields({ employee, roles, userTypes, handleChange }) {
   return (
     <div className="formTray">
       <div className="employeeLeft">
@@ -95,15 +95,27 @@ function EmployeeFormFields({ employee, roles, handleChange }) {
           />
         </label>
         <label>
-          User Type ID
-          <input
-            type="text"
-            name="UserUsertypeID"
-            value={employeeConformance.js2html["UserUsertypeID"](
-              employee.UserUsertypeID
-            )}
-            onChange={handleChange}
-          />
+          User Types
+          {!userTypes ? (
+            <p>Loading user types...</p>
+          ) : userTypes.length === 0 ? (
+            <p>No user types available</p>
+          ) : (
+            <select
+              name="UserUsertypeID"
+              value={employeeConformance.js2html["UserUsertypeID"](
+                employee.UserUsertypeID
+              )}
+              onChange={handleChange}
+            >
+              <option value="0">None selected</option>
+              {userTypes.map((userType) => (
+                <option key={userType.UsertypeID} value={userType.userType}>
+                  {userType.UsertypeName}
+                </option>
+              ))}
+            </select>
+          )}
         </label>
       </div>
     </div>

@@ -6,15 +6,25 @@ div.listContainer {
   flex-wrap: wrap;
   justify-content: center;
   .headerContainer,
-  .employeeItem {
+  .employeeItem,
+  .attendeeItem {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-evenly;
     border-radius: 3px;
     width: 100%;
     p {
-      width: 100%;
+      width: 80%;
       padding: 10px;
+    }
+    .editButton {
+      width: 100%;
+      height: 28px;
+      margin: 10px;
+      background: #1b3630;
+      color: white;
+      border-radius: 10px;
+      box-shadow: none;
     }
   }
   .headerContainer p {
@@ -23,7 +33,8 @@ div.listContainer {
     color: #fff;
   }
 
-  .employeeItem:hover {
+  .employeeItem:hover,
+  .attendeeItem:hover {
     background-color: #29423b;
     color: #fff;
   }

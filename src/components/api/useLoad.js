@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import API from "./API.js";
 
 const useLoad = (endpoint) => {
@@ -10,7 +9,9 @@ const useLoad = (endpoint) => {
   // Methods -------------------------------------
   const loadRecords = async (endpoint) => {
     const response = await API.get(endpoint);
-    response.isSuccess ? setRecords(response.result) : setLoadingMessage(response.message);
+    response.isSuccess
+      ? setRecords(response.result)
+      : setLoadingMessage(response.message);
   };
 
   useEffect(() => {

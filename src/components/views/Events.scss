@@ -1,6 +1,6 @@
 div.eventCard {
-  width: 284px;
-  height: 284px;
+  width: 240px;
+  height: 240px;
 }
 
 h3 {
@@ -11,4 +11,18 @@ h3 {
 p {
   color: #fff;
   opacity: 0.8;
+}
+button {
+  align-items: center;
+  width: 50%;
+  height: 60px;
+  color: white;
+  background: #1a3c34;
+  border-radius: 10px;
+}
+.buttonContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
