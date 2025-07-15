@@ -4,11 +4,36 @@ import "./EventInfo.scss";
 import API from "../api/API.js";
 import apiEndpoints from "../api/apiEndpoints.js";
 import { HeaderContainer, ListContainer } from "../UI/ListContainer.jsx";
+import { filterRecords } from "../../utils/filtering.jsx";
+import SearchBar from "../../utils/search.jsx";
 
 function EventInfo() {
   const { eventId } = useParams();
   const [event, setEvent] = useState(null);
   const [attendees, setAttendees] = useState(null);
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterField, setFilterField] = useState("");
+
+  const attendeeFilterFn = (attendee, search, filterField) => {
+    switch (filterField) {
+      case "name":
+        return (attendee.AttendeeUserName || "").toLowerCase().includes(search);
+      case "status":
+        return (attendee.AttendeeStatusName || "").toLowerCase().includes(search);
+      default:
+        return (
+          (attendee.AttendeeUserName || "").toLowerCase().includes(search) ||
+          (attendee.AttendeeStatusName || "").toLowerCase().includes(search)
+        );
+    }
+  };
+
+  const attendeeFilterOptions = [
+    { value: "", label: "All Fields" },
+    { value: "name", label: "Name" },
+    { value: "status", label: "Status" },
+  ];
 
   const apiGetAttendees = async () => {
     const response = await API.get(apiEndpoints.ATTENDEES(eventId));
@@ -42,6 +67,10 @@ function EventInfo() {
 
   if (!event) return <div>Loading...</div>;
 
+  const filteredAttendees = attendees
+    ? filterRecords(attendees, searchTerm, filterField, attendeeFilterFn)
+    : [];
+
   return (
     <>
       <div className="eventInfo">
@@ -52,6 +81,15 @@ function EventInfo() {
       </div>
 
       <div className="attendeesList">
+        {/* Add SearchBar for attendees */}
+        <SearchBar
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          filterField={filterField}
+          setFilterField={setFilterField}
+          filterOptions={attendeeFilterOptions}
+          placeholder="Search attendees"
+        />
         <ListContainer>
           <h2>Attendance</h2>
           <HeaderContainer>
@@ -62,11 +100,10 @@ function EventInfo() {
 
           {attendees === null ? (
             <p>Loading attendees...</p>
-          ) : attendees.length === 0 ? (
+          ) : filteredAttendees.length === 0 ? (
             <p>No attendees found</p>
           ) : (
-            attendees.map((attendee) => {
-              //if (attendee.AttendeeStatusName === "Confirmed") {
+            filteredAttendees.map((attendee) => {
               if (attendee.AttendeeEventName === event.EventName) {
                 return (
                   <div className="attendeeItem" key={attendee.AttendeeID}>
@@ -80,7 +117,6 @@ function EventInfo() {
                   </div>
                 );
               }
-              //}
             })
           )}
         </ListContainer>
