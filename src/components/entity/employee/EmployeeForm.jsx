@@ -26,13 +26,23 @@ function EmployeeForm({ onSuccess, onCancel }) {
 
   const [employee, setEmployee] = useState(initialEmployee);
   const [roles, setRoles] = useState(null);
+  const [userTypes, setUserTypes] = useState([]);
 
-  const apiGet = async () => {
+  const getRoles = async () => {
     const response = await API.get(apiEndpoints.ROLES);
     if (response.isSuccess) {
       setRoles(response.result);
     } else {
       setRoles([]);
+    }
+  };
+
+  const getUserTypes = async () => {
+    const response = await API.get(apiEndpoints.USERTYPES);
+    if (response.isSuccess) {
+      setUserTypes(response.result);
+    } else {
+      setUserTypes([]);
     }
   };
 
@@ -42,7 +52,8 @@ function EmployeeForm({ onSuccess, onCancel }) {
   };
 
   useEffect(() => {
-    apiGet();
+    getRoles();
+    getUserTypes();
   }, []);
 
   // Handlers ---------------------------
@@ -84,6 +95,7 @@ function EmployeeForm({ onSuccess, onCancel }) {
       <EmployeeFormFields
         employee={employee}
         roles={roles}
+        userTypes={userTypes}
         handleChange={handleChange}
       />
       <Action.Tray>
