@@ -8,11 +8,35 @@ import apiEndpoints from "../../components/api/apiEndpoints.js";
 import { Link } from "react-router-dom";
 import Actions from "../UI/Actions.jsx";
 import { ListContainer, HeaderContainer } from "../UI/ListContainer.jsx";
+import { filterRecords } from "../../utils/filtering.jsx";
+import SearchBar from "../../utils/search.jsx";
 
 function Events() {
   const [showForm, setShowForm] = useState(false);
   const [events, setEvents] = useState(null);
   const [visibleEvents, setVisibleEvents] = useState(10);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterField, setFilterField] = useState("");
+
+  const eventFilterFn = (event, search, filterField) => {
+    switch (filterField) {
+      case "name":
+        return (event.EventName || "").toLowerCase().includes(search);
+      case "location":
+        return (event.EventLocationName || "").toLowerCase().includes(search);
+      default:
+        return (
+          (event.EventName || "").toLowerCase().includes(search) ||
+          (event.EventLocationName || "").toLowerCase().includes(search)
+        );
+    }
+  };
+
+  const eventFilterOptions = [
+    { value: "", label: "All Fields" },
+    { value: "name", label: "Name" },
+    { value: "location", label: "Location" }
+  ];
 
   const handleLoadMore = () => {
     setVisibleEvents((prev) => prev + 10);
@@ -43,6 +67,10 @@ function Events() {
     loadRecords();
   };
 
+  const filteredEvents = events
+    ? filterRecords(events, searchTerm, filterField, eventFilterFn)
+    : [];
+
   return (
     <>
       <Action.Tray>
@@ -55,6 +83,15 @@ function Events() {
         <EventForm onCancel={handleCancel} onSuccess={handleSuccess} />
       )}
 
+      <SearchBar
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        filterField={filterField}
+        setFilterField={setFilterField}
+        filterOptions={eventFilterOptions}
+        placeholder="Search events"
+      />
+
       {events === null ? (
         <p>Loading records...</p>
       ) : events.length === 0 ? (
@@ -62,7 +99,7 @@ function Events() {
       ) : (
         <>
           <CardContainer>
-            {events.slice(0, visibleEvents).map((event) => (
+            {filteredEvents.slice(0, visibleEvents).map((event) => (
               <Link
                 to={`/events/${event.EventID}`}
                 className="eventCardLink"
@@ -81,7 +118,9 @@ function Events() {
             ))}
           </CardContainer>
           {visibleEvents < events.length && (
-            <div className="buttonContainer"><button onClick={handleLoadMore}>Load More</button></div>
+            <div className="buttonContainer">
+              <button onClick={handleLoadMore}>Load More</button>
+            </div>
           )}
         </>
       )}
