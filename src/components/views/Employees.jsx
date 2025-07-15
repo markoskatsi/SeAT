@@ -4,8 +4,8 @@ import { EmployeeItem } from "../entity/employee/EmployeeItem.jsx";
 import Action from "../UI/Actions.jsx";
 import { ListContainer, HeaderContainer } from "../UI/ListContainer.jsx";
 import EmployeeForm from "../entity/employee/EmployeeForm.jsx";
-import { filterEmployees } from "../../utils/filtering.jsx";
-import EmployeeSearchBar from "../../utils/search.jsx";
+import { filterRecords } from "../../utils/filtering.jsx";
+import SearchBar from "../../utils/search.jsx";
 import apiEndpoints from "../api/apiEndpoints.js";
 import API from "../api/API.js";
 import AttendeeModal from "../entity/guest/AttendeeModal.jsx";
@@ -60,8 +60,34 @@ function Employees() {
     setAttendeeSuccess(true);
   };
 
+  const employeeFilterFn = (employee, search, filterField) => {
+    switch (filterField) {
+      case "role":
+        return (employee.UserRoleName || "").toLowerCase().includes(search);
+      case "type":
+        return (employee.UserUsertypeName || "").toLowerCase().includes(search);
+      case "name":
+        const fullName = `${employee.UserFirstname || ""} ${employee.UserLastname || ""}`.toLowerCase();
+        return fullName.includes(search);
+      default:
+        const full = `${employee.UserFirstname || ""} ${employee.UserLastname || ""}`.toLowerCase();
+        return (
+          full.includes(search) ||
+          (employee.UserUsertypeName || "").toLowerCase().includes(search) ||
+          (employee.UserRoleName || "").toLowerCase().includes(search)
+        );
+    }
+  };
+
+  const employeeFilterOptions = [
+    { value: "", label: "All Fields" },
+    { value: "name", label: "Name" },
+    { value: "role", label: "Role" },
+    { value: "type", label: "Type" },
+  ];
+
   const filteredEmployees = employees
-    ? filterEmployees(employees, searchTerm, filterField)
+    ? filterRecords(employees, searchTerm, filterField, employeeFilterFn)
     : [];
 
   return (
@@ -79,11 +105,13 @@ function Employees() {
       {showForm && (
         <EmployeeForm onCancel={handleCancel} onSuccess={handleSuccess} />
       )}
-      <EmployeeSearchBar
+      <SearchBar
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         filterField={filterField}
         setFilterField={setFilterField}
+        filterOptions={employeeFilterOptions}
+        placeholder="Search employees"
       />
 
       <ListContainer>
