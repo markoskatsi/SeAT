@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./EmployeeForm.scss";
 import { employeeConformance } from "../../../utils/employeeConformance.jsx";
@@ -166,7 +165,7 @@ function EmployeeForm({ onSubmit, onCancel, dropdowns }) {
 
 EmployeeForm.propTypes = {
   onCancel: PropTypes.func,
-  onSuccess: PropTypes.func,
+  onSubmit: PropTypes.func,
 };
 
 export default EmployeeForm;

@@ -1,11 +1,7 @@
-import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import Form from "../../UI/Form.jsx";
 import "./EventForm.scss";
-import Action from "../../UI/Actions.jsx";
 import { eventConformance } from "../../../utils/eventConformance.jsx";
-import EventFormFields from "./EventFormFields.jsx";
-import API from "../../api/API.js";
-import apiEndpoints from "../../api/apiEndpoints.js";
 
 const initialEvent = {
   EventID: "",
@@ -16,87 +12,102 @@ const initialEvent = {
   EventLocationName: "",
 };
 
-function EventForm({ onSuccess, onCancel }) {
-  // Initialisation --------------------
+function EventForm({ onSubmit, onCancel, dropdowns }) {
+  const validation = {
+    isValid: {
+      EventID: (id) => Number(id) > 0,
+      EventName: (name) => name && name.length > 1,
+      EventDescription: (desc) => desc && desc.length > 1,
+      EventDatetime: (date) => date,
+      EventLocationID: (id) => id > 0,
+      EventLocationName: (name) => name,
+    },
+    errorMessage: {
+      EventName: "Event name must be at least 2 characters long",
+      EventDescription: "Event description is required",
+      EventDatetime: "Event date is required",
+      EventLocationID: "Event location must be selected",
+    },
+  };
 
   // State ------------------------------
-  const [event, setEvent] = useState(initialEvent);
-  const [location, setLocation] = useState([]);
-
-  const apiGetLocations = async () => {
-    const response = await API.get(apiEndpoints.EVENT_LOCATIONS);
-    if (response.isSuccess) {
-      setLocation(response.result);
-    } else {
-      setLocation([]);
-    }
-  };
-
-  const apiPost = async (record) => {
-    const response = await API.post(apiEndpoints.EVENTS, record);
-    return response;
-  };
-
-  useEffect(() => {
-    apiGetLocations();
-  }, []);
-
-  // Handlers ---------------------------
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEvent((prev) => ({
-      ...prev,
-      [name]: eventConformance.html2js[name](value),
-    }));
-  };
-
-  const handleSubmit = async () => {
-    const eventData = {
-      EventName: event.EventName,
-      EventDescription: event.EventDescription,
-      EventDatetime: new Date(event.EventDatetime).toISOString(),
-      EventLocationID: event.EventLocationID,
-      EventLocationName: event.EventLocationName,
-    };
-
-    if (
-      !eventData.EventName ||
-      !eventData.EventDescription ||
-      !eventData.EventDatetime ||
-      !eventData.EventLocationID
-    ) {
-      alert("Please fill in all required fields");
-      return;
-    }
-
-    const result = await apiPost(eventData);
-
-    if (result.isSuccess) {
-      onSuccess();
-    } else {
-      alert(result.message);
-    }
-  };
+  const [event, errors, handleChange, handleSubmit] = Form.useForm(
+    initialEvent,
+    eventConformance,
+    validation,
+    onSubmit
+  );
 
   // View --------------------------------
+  const locations = dropdowns.locations;
+
   return (
-    <div className="eventForm">
-      <EventFormFields
-        event={event}
-        location={location}
-        handleChange={handleChange}
-      />
-      <Action.Tray>
-        <Action.Submit showText buttonText="ADD EVENT" onClick={handleSubmit} />
-        <Action.Cancel showText buttonText="CANCEL" onClick={onCancel} />
-      </Action.Tray>
-    </div>
+    <Form className="formTray" onSubmit={handleSubmit} onCancel={onCancel}>
+      <div className="eventLeft">
+        <Form.Item label="Event Name" error={errors.EventName}>
+          <input
+            type="text"
+            name="EventName"
+            value={eventConformance.js2html["EventName"](event.EventName)}
+            onChange={handleChange}
+          />
+        </Form.Item>
+
+        <Form.Item label="Event Description" error={errors.EventDescription}>
+          <input
+            type="text"
+            name="EventDescription"
+            value={eventConformance.js2html["EventDescription"](
+              event.EventDescription
+            )}
+            onChange={handleChange}
+          />
+        </Form.Item>
+      </div>
+
+      <div className="eventRight">
+        <Form.Item label="Event Date" error={errors.EventDatetime}>
+          <input
+            type="datetime-local"
+            name="EventDatetime"
+            value={eventConformance.js2html["EventDatetime"](
+              event.EventDatetime
+            )}
+            onChange={handleChange}
+          />
+        </Form.Item>
+
+        <Form.Item label="Event Location" error={errors.EventLocationID}>
+          {!locations.list ? (
+            <p>{locations.loadingMessage}</p>
+          ) : locations.list.length === 0 ? (
+            <p>No locations available</p>
+          ) : (
+            <select
+              name="EventLocationID"
+              value={eventConformance.js2html["EventLocationID"](
+                event.EventLocationID
+              )}
+              onChange={handleChange}
+            >
+              <option value="">-- Select Location --</option>
+              {locations.list.map((loc) => (
+                <option key={loc.LocationID} value={loc.LocationID}>
+                  {loc.LocationName}
+                </option>
+              ))}
+            </select>
+          )}
+        </Form.Item>
+      </div>
+    </Form>
   );
 }
 
 EventForm.propTypes = {
+  onSubmit: PropTypes.func,
   onCancel: PropTypes.func,
-  onSuccess: PropTypes.func,
+
 };
 
 export default EventForm;
