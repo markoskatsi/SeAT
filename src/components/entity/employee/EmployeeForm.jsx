@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./EmployeeForm.scss";
-import Action from "../../UI/Actions.jsx";
 import { employeeConformance } from "../../../utils/employeeConformance.jsx";
-import EmployeeFormFields from "./EmployeeFormFields.jsx";
-import API from "../../api/API.js";
-import apiEndpoints from "../../api/apiEndpoints.js";
+import Form from "../../UI/Form.jsx";
 
 const initialEmployee = {
   UserFirstname: "",
@@ -14,99 +11,156 @@ const initialEmployee = {
   UserUsertypeName: "",
   UserRoleName: "",
   UserRoleID: "",
-  UserImageURL: "",
+  UserImageURL: "https://media.istockphoto.com/id/814423752/photo/eye-of-model-with-colorful-art-make-up-close-up.jpg?s=612x612&w=0&k=20&c=l15OdMWjgCKycMMShP8UK94ELVlEGvt7GmB_esHWPYE=",
   UserUsertypeID: "",
   UserEmail: "",
 };
 
-function EmployeeForm({ onSuccess, onCancel }) {
+function EmployeeForm({ onSubmit, onCancel, dropdowns }) {
   // Initialisation --------------------
+
+  const validation = {
+    isValid: {
+      UserFirstname: (name) => name && name.length > 1,
+      UserLastname: (name) => name && name.length > 1,
+      UserDateofbirth: (date) => date,
+      UserUsertypeName: (name) => name && name.length > 1,
+      UserRoleID: (id) => id > 0,
+      UserUsertypeID: (id) => id > 0,
+      UserEmail: (email) => email && email.includes("@"),
+    },
+    errorMessage: {
+      UserFirstname: "First name must be at least 2 characters long",
+      UserLastname: "Last name must be at least 2 characters long",
+      UserDateofbirth: "Date of birth is required",
+      UserRoleID: "Role must be selected",
+      UserUsertypeID: "User type must be selected",
+      UserEmail: "Email must be a valid email address",
+    },
+  };
 
   // State ------------------------------
 
-  const [employee, setEmployee] = useState(initialEmployee);
-  const [roles, setRoles] = useState(null);
-  const [userTypes, setUserTypes] = useState([]);
-
-  const getRoles = async () => {
-    const response = await API.get(apiEndpoints.ROLES);
-    if (response.isSuccess) {
-      setRoles(response.result);
-    } else {
-      setRoles([]);
-    }
-  };
-
-  const getUserTypes = async () => {
-    const response = await API.get(apiEndpoints.USERTYPES);
-    if (response.isSuccess) {
-      setUserTypes(response.result);
-    } else {
-      setUserTypes([]);
-    }
-  };
-
-  const apiPost = async (record) => {
-    const response = await API.post(apiEndpoints.USERS, record);
-    return response;
-  };
-
-  useEffect(() => {
-    getRoles();
-    getUserTypes();
-  }, []);
+  const [employee, errors, handleChange, handleSubmit] = Form.useForm(
+    initialEmployee,
+    employeeConformance,
+    validation,
+    onSubmit
+  );
 
   // Handlers ---------------------------
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEmployee((prev) => ({
-      ...prev,
-      [name]: employeeConformance.html2js[name](value),
-    }));
-  };
-
-  const handleSubmit = async () => {
-    const employeeData = {
-      UserFirstname: employee.UserFirstname,
-      UserLastname: employee.UserLastname,
-      UserDateofbirth: employee.UserDateofbirth,
-      UserImageURL:
-        "https://images.generated.photos/m8Sph5rhjkIsOiVIp4zbvIuFl43F6BWIwhkkY86z2Ms/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/ODU4MTE5LmpwZw.jpg",
-      UserUsertypeID: "2",
-      UserRoleID: employee.UserRoleID,
-      UserEmail: employee.UserEmail || "no-reply@example.com",
-      UserGuestofID: null,
-    };
-
-    const result = await apiPost(employeeData);
-    console.log("Submitting employee data:", employeeData);
-
-    if (result.isSuccess) {
-      onSuccess();
-      setEmployee(initialEmployee);
-    } else {
-      alert(result.message);
-    }
-  };
-
   // View --------------------------------
+  const roles = dropdowns.roles;
+  const usertypes = dropdowns.usertypes;
   return (
-    <div className="employeeForm">
-      <EmployeeFormFields
-        employee={employee}
-        roles={roles}
-        userTypes={userTypes}
-        handleChange={handleChange}
-      />
-      <Action.Tray>
-        <Action.Submit
-          showText
-          buttonText="ADD EMPLOYEE"
-          onClick={handleSubmit}
-        />
-        <Action.Cancel showText buttonText="CANCEL" onClick={onCancel} />
-      </Action.Tray>
-    </div>
+    <Form className="formTray" onSubmit={handleSubmit} onCancel={onCancel}>
+      <div className="employeeLeft">
+        <Form.Item label="First Name" error={errors.UserFirstname}>
+          <input
+            type="text"
+            name="UserFirstname"
+            value={employeeConformance.js2html["UserFirstname"](
+              employee.UserFirstname
+            )}
+            onChange={handleChange}
+          />
+        </Form.Item>
+        <Form.Item label="Last Name" error={errors.UserLastname}>
+          <input
+            type="text"
+            name="UserLastname"
+            value={employeeConformance.js2html["UserLastname"](
+              employee.UserLastname
+            )}
+            onChange={handleChange}
+          />
+        </Form.Item>
+        <Form.Item label="Date of Birth" error={errors.UserDateofbirth}>
+          <input
+            type="date"
+            name="UserDateofbirth"
+            value={employeeConformance.js2html["UserDateofbirth"](
+              employee.UserDateofbirth
+            )}
+            onChange={handleChange}
+          />
+        </Form.Item>
+        <Form.Item label="Role" error={errors.UserRoleID}>
+          {!roles ? (
+            <p>Loading roles...</p>
+          ) : roles.length === 0 ? (
+            <p>No roles available</p>
+          ) : (
+            <select
+              name="UserRoleID"
+              value={employeeConformance.js2html["UserRoleID"](
+                employee.UserRoleID
+              )}
+              onChange={handleChange}
+            >
+              <option value="0">None selected</option>
+              {roles.list.map((role) => (
+                <option key={role.RoleID} value={role.RoleID}>
+                  {role.RoleName}
+                </option>
+              ))}
+            </select>
+          )}
+        </Form.Item>
+      </div>
+      <div className="employeeRight">
+        <Form.Item label="Title">
+          <input
+            type="text"
+            name="UserUsertypeName"
+            value={employeeConformance.js2html["UserUsertypeName"](
+              employee.UserUsertypeName
+            )}
+            onChange={handleChange}
+          />
+        </Form.Item>
+        <Form.Item label="Email" error={errors.UserEmail}>
+          <input
+            type="text"
+            name="UserEmail"
+            value={employeeConformance.js2html["UserEmail"](employee.UserEmail)}
+            onChange={handleChange}
+          />
+        </Form.Item>
+        <Form.Item label="Image">
+          <input
+            type="text"
+            name="UserImageURL"
+            value={employeeConformance.js2html["UserImageURL"](
+              employee.UserImageURL
+            )}
+            onChange={handleChange}
+          />
+        </Form.Item>
+        <Form.Item label="User Types" error={errors.UserUsertypeID}>
+          {!usertypes.list ? (
+            <p>{usertypes.loadingMessage}</p>
+          ) : usertypes.list.length === 0 ? (
+            <p>No user types available</p>
+          ) : (
+            <select
+              name="UserUsertypeID"
+              value={employeeConformance.js2html["UserUsertypeID"](
+                employee.UserUsertypeID
+              )}
+              onChange={handleChange}
+            >
+              <option value="0">None selected</option>
+              {usertypes.list.map((type) => (
+                <option key={type.UsertypeID} value={type.UsertypeID}>
+                  {type.UsertypeName}
+                </option>
+              ))}
+            </select>
+          )}
+        </Form.Item>
+      </div>
+    </Form>
   );
 }
 

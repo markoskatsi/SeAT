@@ -13,17 +13,56 @@ import useLoad from "../api/useLoad.js";
 
 function Employees() {
   const [showForm, setShowForm] = useState(false);
-  const [employees, setEmployees] = useLoad(apiEndpoints.USERS);
+  const [employees, setEmployees] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterField, setFilterField] = useState("");
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [showAttendeeModal, setShowAttendeeModal] = useState(false);
   const [attendeeSuccess, setAttendeeSuccess] = useState(false);
+  const [roles, loadingRolesMessage] = useLoad(apiEndpoints.ROLES);
+  const [usertypes, loadingUserTypesMessage] = useLoad(apiEndpoints.USERTYPES);
 
   const handleAdd = () => setShowForm(true);
   const handleCancel = () => setShowForm(false);
-  const handleSuccess = () => {
-    handleCancel();
+  const apiGet = async () => {
+    const response = await API.get(apiEndpoints.USERS);
+    let result;
+    if (response && response.isSuccess) {
+      result = response.result;
+    } else if (response && Array.isArray(response)) {
+      result = response;
+    } else {
+      result = [];
+    }
+    setEmployees(result);
+    console.log(result);
+  };
+
+  useEffect(() => {
+    apiGet();
+  }, []);
+
+  const handleSubmit = async (employee) => {
+    const employeeData = {
+      UserFirstname: employee.UserFirstname,
+      UserLastname: employee.UserLastname,
+      UserDateofbirth: employee.UserDateofbirth,
+      UserImageURL:
+        "https://images.generated.photos/m8Sph5rhjkIsOiVIp4zbvIuFl43F6BWIwhkkY86z2Ms/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/ODU4MTE5LmpwZw.jpg",
+      UserUsertypeID: "2",
+      UserRoleID: employee.UserRoleID,
+      UserEmail: employee.UserEmail || "no-reply@example.com",
+      UserGuestofID: null,
+    };
+
+    const result = await API.post(apiEndpoints.USERS, employeeData);
+    console.log("Submitting employee data:", employeeData);
+    if (result.isSuccess) {
+      setShowForm(false);
+      apiGet();
+    } else {
+      alert(result.message || "Failed to add employee");
+    }
   };
 
   const handleEmployeeClick = (employee) => {
@@ -49,10 +88,14 @@ function Employees() {
       case "type":
         return (employee.UserUsertypeName || "").toLowerCase().includes(search);
       case "name":
-        const fullName = `${employee.UserFirstname || ""} ${employee.UserLastname || ""}`.toLowerCase();
+        const fullName = `${employee.UserFirstname || ""} ${
+          employee.UserLastname || ""
+        }`.toLowerCase();
         return fullName.includes(search);
       default:
-        const full = `${employee.UserFirstname || ""} ${employee.UserLastname || ""}`.toLowerCase();
+        const full = `${employee.UserFirstname || ""} ${
+          employee.UserLastname || ""
+        }`.toLowerCase();
         return (
           full.includes(search) ||
           (employee.UserUsertypeName || "").toLowerCase().includes(search) ||
@@ -72,6 +115,17 @@ function Employees() {
     ? filterRecords(employees, searchTerm, filterField, employeeFilterFn)
     : [];
 
+  const dropdowns = {
+    roles: {
+      list: roles,
+      loadingMessage: loadingRolesMessage,
+    },
+    usertypes: {
+      list: usertypes,
+      loadingMessage: loadingUserTypesMessage,
+    },
+  };
+
   return (
     <>
       <Action.Tray>
@@ -85,7 +139,11 @@ function Employees() {
       </Action.Tray>
 
       {showForm && (
-        <EmployeeForm onCancel={handleCancel} onSuccess={handleSuccess} />
+        <EmployeeForm
+          onSubmit={handleSubmit}
+          onCancel={handleCancel}
+          dropdowns={dropdowns}
+        />
       )}
       <SearchBar
         searchTerm={searchTerm}
