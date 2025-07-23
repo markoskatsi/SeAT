@@ -10,10 +10,11 @@ import Actions from "../UI/Actions.jsx";
 import { ListContainer, HeaderContainer } from "../UI/ListContainer.jsx";
 import { filterRecords } from "../../utils/filtering.jsx";
 import SearchBar from "../../utils/search.jsx";
+import useLoad from "../api/useLoad.js";
 
 function Events() {
   const [showForm, setShowForm] = useState(false);
-  const [events, setEvents] = useState(null);
+  const [events, setEvents] = useLoad(apiEndpoints.EVENTS);
   const [visibleEvents, setVisibleEvents] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterField, setFilterField] = useState("");
@@ -41,24 +42,6 @@ function Events() {
   const handleLoadMore = () => {
     setVisibleEvents((prev) => prev + 10);
   };
-
-  const loadRecords = async () => {
-    const response = await API.get(`${apiEndpoints.EVENTS}?limit=10`);
-    let result;
-    if (response && response.isSuccess) {
-      result = response.result;
-    } else if (response && Array.isArray(response)) {
-      result = response;
-    } else {
-      result = [];
-    }
-    setEvents(result);
-    console.log(result);
-  };
-
-  useEffect(() => {
-    loadRecords();
-  }, []);
 
   const handleAdd = () => setShowForm(true);
   const handleCancel = () => setShowForm(false);

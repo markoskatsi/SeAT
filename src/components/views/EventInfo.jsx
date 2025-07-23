@@ -6,11 +6,12 @@ import apiEndpoints from "../api/apiEndpoints.js";
 import { HeaderContainer, ListContainer } from "../UI/ListContainer.jsx";
 import { filterRecords } from "../../utils/filtering.jsx";
 import SearchBar from "../../utils/search.jsx";
+import useLoad from "../api/useLoad.js";
 
 function EventInfo() {
   const { eventId } = useParams();
-  const [event, setEvent] = useState(null);
-  const [attendees, setAttendees] = useState(null);
+  const [event, setEvent] = useLoad(apiEndpoints.EVENT_BY_ID(eventId));
+  const [attendees, setAttendees] = useLoad(apiEndpoints.ATTENDEES(eventId));
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterField, setFilterField] = useState("");
@@ -20,7 +21,9 @@ function EventInfo() {
       case "name":
         return (attendee.AttendeeUserName || "").toLowerCase().includes(search);
       case "status":
-        return (attendee.AttendeeStatusName || "").toLowerCase().includes(search);
+        return (attendee.AttendeeStatusName || "")
+          .toLowerCase()
+          .includes(search);
       default:
         return (
           (attendee.AttendeeUserName || "").toLowerCase().includes(search) ||
@@ -34,24 +37,6 @@ function EventInfo() {
     { value: "name", label: "Name" },
     { value: "status", label: "Status" },
   ];
-
-  const apiGetAttendees = async () => {
-    const response = await API.get(apiEndpoints.ATTENDEES(eventId));
-    let result;
-    if (response && response.isSuccess) {
-      result = response.result;
-    } else if (response && Array.isArray(response)) {
-      result = response;
-    } else {
-      result = [];
-    }
-    setAttendees(result);
-    console.log(result);
-  };
-
-  useEffect(() => {
-    apiGetAttendees();
-  }, [eventId]);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -95,7 +80,7 @@ function EventInfo() {
           <HeaderContainer>
             <p>Full Name</p>
             <p>Attendance Status</p>
-            <p>{" "}</p>
+            <p> </p>
           </HeaderContainer>
 
           {attendees === null ? (
@@ -112,7 +97,7 @@ function EventInfo() {
                     {!attendee.AttendeeUserName.includes("Guest") ? (
                       <button className="editButton">Edit Plus One</button>
                     ) : (
-                      <p>{" "}</p>
+                      <p> </p>
                     )}
                   </div>
                 );
