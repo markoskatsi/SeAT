@@ -9,39 +9,21 @@ import SearchBar from "../../utils/search.jsx";
 import apiEndpoints from "../api/apiEndpoints.js";
 import API from "../api/API.js";
 import AttendeeModal from "../entity/guest/AttendeeModal.jsx";
+import useLoad from "../api/useLoad.js";
 
 function Employees() {
   const [showForm, setShowForm] = useState(false);
-  const [employees, setEmployees] = useState(null);
+  const [employees, setEmployees] = useLoad(apiEndpoints.USERS);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterField, setFilterField] = useState("");
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [showAttendeeModal, setShowAttendeeModal] = useState(false);
   const [attendeeSuccess, setAttendeeSuccess] = useState(false);
 
-  const apiGet = async () => {
-    const response = await API.get(apiEndpoints.USERS);
-    let result;
-    if (response && response.isSuccess) {
-      result = response.result;
-    } else if (response && Array.isArray(response)) {
-      result = response;
-    } else {
-      result = [];
-    }
-    setEmployees(result);
-    console.log(result);
-  };
-
-  useEffect(() => {
-    apiGet();
-  }, []);
-
   const handleAdd = () => setShowForm(true);
   const handleCancel = () => setShowForm(false);
   const handleSuccess = () => {
     handleCancel();
-    apiGet();
   };
 
   const handleEmployeeClick = (employee) => {

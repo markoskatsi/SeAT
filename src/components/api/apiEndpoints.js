@@ -15,6 +15,9 @@ const apiEndpoints = {
 
   ATTENDEES: (eventId) => `${BASE_URL}/attendees`,
   STATUS: `${BASE_URL}/status`,
+  
+  
+
 };
 
 export default apiEndpoints;
