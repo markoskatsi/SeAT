@@ -13,7 +13,7 @@ import useLoad from "../api/useLoad.js";
 
 function Employees() {
   const [showForm, setShowForm] = useState(false);
-  const [employees, setEmployees] = useState(null);
+  const [employees, setEmployees, loadingEmployeesMessage, loadEmployees] = useLoad(apiEndpoints.USERS);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterField, setFilterField] = useState("");
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -24,23 +24,6 @@ function Employees() {
 
   const handleAdd = () => setShowForm(true);
   const handleCancel = () => setShowForm(false);
-  const apiGet = async () => {
-    const response = await API.get(apiEndpoints.USERS);
-    let result;
-    if (response && response.isSuccess) {
-      result = response.result;
-    } else if (response && Array.isArray(response)) {
-      result = response;
-    } else {
-      result = [];
-    }
-    setEmployees(result);
-    console.log(result);
-  };
-
-  useEffect(() => {
-    apiGet();
-  }, []);
 
   const handleSubmit = async (employee) => {
     const employeeData = {
@@ -59,7 +42,7 @@ function Employees() {
     console.log("Submitting employee data:", employeeData);
     if (result.isSuccess) {
       setShowForm(false);
-      apiGet();
+      await loadEmployees(apiEndpoints.USERS);
     } else {
       alert(result.message || "Failed to add employee");
     }
