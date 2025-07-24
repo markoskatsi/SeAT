@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./EmployeeForm.scss";
 import { employeeConformance } from "../../../utils/employeeConformance.jsx";
