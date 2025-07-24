@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import "./EmployeeForm.scss";
 import { employeeConformance } from "../../../utils/employeeConformance.jsx";
 import Form from "../../UI/Form.jsx";
 
@@ -11,7 +10,8 @@ const initialEmployee = {
   UserUsertypeName: "",
   UserRoleName: "",
   UserRoleID: "",
-  UserImageURL: "https://media.istockphoto.com/id/814423752/photo/eye-of-model-with-colorful-art-make-up-close-up.jpg?s=612x612&w=0&k=20&c=l15OdMWjgCKycMMShP8UK94ELVlEGvt7GmB_esHWPYE=",
+  UserImageURL:
+    "https://media.istockphoto.com/id/814423752/photo/eye-of-model-with-colorful-art-make-up-close-up.jpg?s=612x612&w=0&k=20&c=l15OdMWjgCKycMMShP8UK94ELVlEGvt7GmB_esHWPYE=",
   UserUsertypeID: "",
   UserEmail: "",
 };
@@ -53,7 +53,7 @@ function EmployeeForm({ onSubmit, onCancel, dropdowns }) {
   const roles = dropdowns.roles;
   const usertypes = dropdowns.usertypes;
   return (
-    <Form className="formTray" onSubmit={handleSubmit} onCancel={onCancel}>
+    <Form onSubmit={handleSubmit} onCancel={onCancel}>
       <div className="employeeLeft">
         <Form.Item label="First Name" error={errors.UserFirstname}>
           <input
