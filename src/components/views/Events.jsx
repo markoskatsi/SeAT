@@ -14,8 +14,8 @@ import useLoad from "../api/useLoad.js";
 
 function Events() {
   const [showForm, setShowForm] = useState(false);
-  const [events, setEvents] = useLoad(apiEndpoints.EVENTS);
-  const [visibleEvents, setVisibleEvents] = useState(10);
+  const [events, setEvents, loadingEventsMessage, loadEvents] = useLoad(apiEndpoints.EVENTS);
+  const [visibleEvents, setVisibleEvents] = useState(100);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterField, setFilterField] = useState("");
 
@@ -45,9 +45,9 @@ function Events() {
 
   const handleAdd = () => setShowForm(true);
   const handleCancel = () => setShowForm(false);
-  const handleSuccess = () => {
+  const handleSuccess = async () => {
+    await loadEvents(apiEndpoints.EVENTS);
     handleCancel();
-    loadRecords();
   };
 
   const filteredEvents = events
