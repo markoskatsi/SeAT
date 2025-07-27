@@ -3,6 +3,16 @@ div.eventCard {
   height: 240px;
 }
 
+.Action.eventAddButton {
+  width: 240px;
+  height: 240px;
+  border-radius: 5px;
+  background: #333;
+  p {
+    font-size: 60px;
+  }
+}
+
 h3 {
   color: #fff;
   padding-bottom: 22px;

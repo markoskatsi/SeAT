@@ -17,10 +17,12 @@ function Events() {
   const [events, setEvents, loadingEventsMessage, loadEvents] = useLoad(
     apiEndpoints.EVENTS
   );
-  const [visibleEvents, setVisibleEvents] = useState(100);
+  const [visibleEvents, setVisibleEvents] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterField, setFilterField] = useState("");
-  const [locations, loadingLocationsMessage] = useLoad(apiEndpoints.EVENT_LOCATIONS);
+  const [locations, loadingLocationsMessage] = useLoad(
+    apiEndpoints.EVENT_LOCATIONS
+  );
 
   const eventFilterFn = (event, search, filterField) => {
     switch (filterField) {
@@ -79,14 +81,12 @@ function Events() {
 
   return (
     <>
-      <Action.Tray>
-        {!showForm && (
-          <Action.Add showText buttonText="ADD NEW EVENT" onClick={handleAdd} />
-        )}
-      </Action.Tray>
-
       {showForm && (
-        <EventForm onSubmit={handleSubmit} onCancel={handleCancel} dropdowns={dropdowns}/>
+        <EventForm
+          onSubmit={handleSubmit}
+          onCancel={handleCancel}
+          dropdowns={dropdowns}
+        />
       )}
 
       <SearchBar
@@ -105,6 +105,17 @@ function Events() {
       ) : (
         <>
           <CardContainer>
+            {!showForm && (
+              <Action.Tray>
+                <Action.Add
+                  className="eventAddButton"
+                  showText
+                  buttonText="+"
+                  onClick={handleAdd}
+                />
+              </Action.Tray>
+            )}
+
             {filteredEvents.slice(0, visibleEvents).map((event) => (
               <Link
                 to={`/events/${event.EventID}`}

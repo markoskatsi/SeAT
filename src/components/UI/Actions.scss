@@ -27,6 +27,10 @@ button.Action {
   align-items: center;
   gap: 10px;
 
+  .eventAddButton {
+    width: 240px;
+    height: 240px;
+  }
   p {
     flex: 1;
     min-width: 50px;

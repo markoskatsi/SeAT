@@ -6,9 +6,15 @@ import "./Actions.scss";
 // Action Button ///////////////////////////
 // -----------------------------------------
 
-export default function Action({ children, onClick, showText, buttonText }) {
+export default function Action({
+  children,
+  onClick,
+  showText,
+  buttonText,
+  className = "",
+}) {
   return (
-    <button className="Action" onClick={onClick}>
+    <button className={`Action ${className}`} onClick={onClick}>
       {children} {showText && <p>{buttonText}</p>}
     </button>
   );
@@ -48,12 +54,18 @@ const ActionPropTypes = {
 
 Add.propTypes = ActionPropTypes;
 
-export function Add({ onClick, showText = false, buttonText = "Add" }) {
+export function Add({
+  onClick,
+  showText = false,
+  buttonText = "Add",
+  className = "",
+}) {
   return (
     <Action
       buttonText={buttonText}
       onClick={onClick}
       showText={showText}
+      className={className}
     ></Action>
   );
 }
