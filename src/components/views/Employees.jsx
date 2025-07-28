@@ -8,7 +8,6 @@ import { filterRecords } from "../../utils/filtering.jsx";
 import SearchBar from "../../utils/search.jsx";
 import apiEndpoints from "../api/apiEndpoints.js";
 import API from "../api/API.js";
-import AttendeeModal from "../entity/guest/AttendeeModal.jsx";
 import useLoad from "../api/useLoad.js";
 
 function Employees() {
@@ -16,9 +15,6 @@ function Employees() {
   const [employees, setEmployees, loadingEmployeesMessage, loadEmployees] = useLoad(apiEndpoints.USERS);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterField, setFilterField] = useState("");
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [showAttendeeModal, setShowAttendeeModal] = useState(false);
-  const [attendeeSuccess, setAttendeeSuccess] = useState(false);
   const [roles, loadingRolesMessage] = useLoad(apiEndpoints.ROLES);
   const [usertypes, loadingUserTypesMessage] = useLoad(apiEndpoints.USERTYPES);
 
@@ -48,21 +44,6 @@ function Employees() {
     }
   };
 
-  const handleEmployeeClick = (employee) => {
-    console.log("Employee clicked:", employee);
-    setSelectedEmployee(employee);
-    setShowAttendeeModal(true);
-    console.log("Modal should be open now");
-  };
-
-  const handleAttendeeModalClose = () => {
-    setShowAttendeeModal(false);
-    setSelectedEmployee(null);
-  };
-
-  const handleAttendeeSuccess = () => {
-    setAttendeeSuccess(true);
-  };
 
   const employeeFilterFn = (employee, search, filterField) => {
     switch (filterField) {
@@ -154,19 +135,11 @@ function Employees() {
               <EmployeeItem
                 employee={employee}
                 key={employee.UserID}
-                onClick={handleEmployeeClick}
               />
             );
           })
         )}
       </ListContainer>
-
-      <AttendeeModal
-        employee={selectedEmployee}
-        isOpen={showAttendeeModal}
-        onClose={handleAttendeeModalClose}
-        onSuccess={handleAttendeeSuccess}
-      />
     </>
   );
 }
