@@ -102,7 +102,6 @@ function EventInfo() {
           <h2>Attendance</h2>
           <HeaderContainer>
             <p>Full Name</p>
-            <p>Attendance Status</p>
             <p> </p>
           </HeaderContainer>
 
