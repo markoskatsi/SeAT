@@ -43,23 +43,23 @@ function AttendeeModal({ attendee, isOpen, onClose, onSuccess }) {
       UserRoleID: 1,
       UserGuestofID: attendee.AttendeeUserID,
     };
-
-    const newGuest = await API.post(apiEndpoints.USERS, guestUser);
-
-    const guestUserID = newGuest.result[0].UserID;
-
-    const attendeeData = {
-      AttendeeUserID: guestUserID,
-      AttendeeEventID: attendee.AttendeeEventID,
-      AttendeeStatusID: 1,
-    };
-
-    const result = await API.post(apiEndpoints.ATTENDEES(), attendeeData);
-    if (result.isSuccess) {
-      onSuccess();
-      handleClose();
+    const guestResult = await API.post(apiEndpoints.USERS, guestUser);
+    if (guestResult.isSuccess) {
+      const guestUserID = guestResult.result[0].UserID;
+      const attendeeData = {
+        AttendeeUserID: guestUserID,
+        AttendeeEventID: attendee.AttendeeEventID,
+        AttendeeStatusID: 1,
+      };
+      const result = await API.post(apiEndpoints.ATTENDEES(), attendeeData);
+      if (result.isSuccess) {
+        onSuccess();
+        handleClose();
+      } else {
+        alert(result.message);
+      }
     } else {
-      alert(result.message);
+      alert(guestResult.message);
     }
   };
 
