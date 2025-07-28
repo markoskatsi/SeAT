@@ -1,6 +1,5 @@
 import { useAuth } from "../../auth/useAuth";
 import { NavLink } from "react-router-dom";
-import "./NavBar.scss";
 
 function NavBar() {
   const { loggedInUser, logout } = useAuth();

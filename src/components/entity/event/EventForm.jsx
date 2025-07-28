@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-import "./EventForm.scss";
 import { eventConformance } from "../../../utils/eventConformance.jsx";
 import Form from "../../UI/Form.jsx";
 

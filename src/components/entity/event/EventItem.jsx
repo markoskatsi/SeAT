@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-import "./EventItem.scss";
 export function EventItem({ event }) {
   return (
     <div className="eventItem">

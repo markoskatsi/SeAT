@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import "./EmployeeItem.scss";
+
 export function EmployeeItem({ employee, onClick }) {
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString();
