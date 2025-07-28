@@ -3,7 +3,6 @@ export function AttendeeItem({ attendee,  onClick}) {
   return (
     <div className="attendeeItem">
       <p>{attendee.AttendeeUserName}</p>
-      <p>{attendee.AttendeeStatusName}</p>
       {!attendee.AttendeeUserName.includes("Guest") ? (
         <button className="editButton" onClick={() => onClick(attendee)}>
           Edit Plus One
