@@ -1,16 +1,15 @@
 import { Card, CardContainer } from "../UI/Card.jsx";
 import "./Events.scss";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Action from "../UI/Actions.jsx";
 import EventForm from "../entity/event/EventForm.jsx";
 import API from "../api/API.js";
 import apiEndpoints from "../../components/api/apiEndpoints.js";
 import { Link } from "react-router-dom";
-import Actions from "../UI/Actions.jsx";
-import { ListContainer, HeaderContainer } from "../UI/ListContainer.jsx";
 import { filterRecords } from "../../utils/filtering.jsx";
 import SearchBar from "../../utils/search.jsx";
 import useLoad from "../api/useLoad.js";
+import { EventItem } from "../entity/event/EventItem.jsx";
 
 function Events() {
   const [showForm, setShowForm] = useState(false);
@@ -20,7 +19,9 @@ function Events() {
   const [visibleEvents, setVisibleEvents] = useState(100);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterField, setFilterField] = useState("");
-  const [locations, loadingLocationsMessage] = useLoad(apiEndpoints.EVENT_LOCATIONS);
+  const [locations, loadingLocationsMessage] = useLoad(
+    apiEndpoints.EVENT_LOCATIONS
+  );
 
   const eventFilterFn = (event, search, filterField) => {
     switch (filterField) {
@@ -86,7 +87,11 @@ function Events() {
       </Action.Tray>
 
       {showForm && (
-        <EventForm onSubmit={handleSubmit} onCancel={handleCancel} dropdowns={dropdowns}/>
+        <EventForm
+          onSubmit={handleSubmit}
+          onCancel={handleCancel}
+          dropdowns={dropdowns}
+        />
       )}
 
       <SearchBar
@@ -113,11 +118,7 @@ function Events() {
               >
                 <div className="eventCard" key={event.EventID}>
                   <Card>
-                    <div>
-                      <h3>{event.EventName}</h3>
-                      <p>{event.EventDescription}</p>
-                    </div>
-                    <p>{new Date(event.EventDatetime).toLocaleDateString()}</p>
+                    <EventItem event={event} key={event.EventID} />
                   </Card>
                 </div>
               </Link>

@@ -1,0 +1,21 @@
+.eventItem {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  .eventLocationDate{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+
+h3 {
+  color: #fff;
+  padding-bottom: 22px;
+}
+
+p {
+  color: #fff;
+  opacity: 0.8;
+}

@@ -8,6 +8,7 @@ import { filterRecords } from "../../utils/filtering.jsx";
 import SearchBar from "../../utils/search.jsx";
 import useLoad from "../api/useLoad.js";
 import AttendeeModal from "../entity/guest/AttendeeModal.jsx";
+import { AttendeeItem } from "../entity/guest/AttendeeItem.jsx";
 
 function EventInfo() {
   const { eventId } = useParams();
@@ -113,20 +114,11 @@ function EventInfo() {
             filteredAttendees.map((attendee) => {
               if (attendee.AttendeeEventName === event.EventName) {
                 return (
-                  <div className="attendeeItem" key={attendee.AttendeeID}>
-                    <p>{attendee.AttendeeUserName}</p>
-                    <p>{attendee.AttendeeStatusName}</p>
-                    {!attendee.AttendeeUserName.includes("Guest") ? (
-                      <button
-                        className="editButton"
-                        onClick={() => handleClick(attendee)}
-                      >
-                        Edit Plus One
-                      </button>
-                    ) : (
-                      <p> </p>
-                    )}
-                  </div>
+                  <AttendeeItem
+                    attendee={attendee}
+                    key={attendee.AttendeeID}
+                    onClick={() => handleClick(attendee)}
+                  />
                 );
               }
             })
