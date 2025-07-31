@@ -1,23 +1,27 @@
 import { Card, CardContainer } from "../UI/Card.jsx";
 import "./Events.scss";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Action from "../UI/Actions.jsx";
 import EventForm from "../entity/event/EventForm.jsx";
 import API from "../api/API.js";
 import apiEndpoints from "../../components/api/apiEndpoints.js";
 import { Link } from "react-router-dom";
-import Actions from "../UI/Actions.jsx";
-import { ListContainer, HeaderContainer } from "../UI/ListContainer.jsx";
 import { filterRecords } from "../../utils/filtering.jsx";
 import SearchBar from "../../utils/search.jsx";
 import useLoad from "../api/useLoad.js";
+import { EventItem } from "../entity/event/EventItem.jsx";
 
 function Events() {
   const [showForm, setShowForm] = useState(false);
-  const [events, setEvents] = useLoad(apiEndpoints.EVENTS);
-  const [visibleEvents, setVisibleEvents] = useState(10);
+  const [events, setEvents, loadingEventsMessage, loadEvents] = useLoad(
+    apiEndpoints.EVENTS
+  );
+  const [visibleEvents, setVisibleEvents] = useState(100);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterField, setFilterField] = useState("");
+  const [locations, loadingLocationsMessage] = useLoad(
+    apiEndpoints.EVENT_LOCATIONS
+  );
 
   const eventFilterFn = (event, search, filterField) => {
     switch (filterField) {
@@ -36,7 +40,7 @@ function Events() {
   const eventFilterOptions = [
     { value: "", label: "All Fields" },
     { value: "name", label: "Name" },
-    { value: "location", label: "Location" }
+    { value: "location", label: "Location" },
   ];
 
   const handleLoadMore = () => {
@@ -45,14 +49,34 @@ function Events() {
 
   const handleAdd = () => setShowForm(true);
   const handleCancel = () => setShowForm(false);
-  const handleSuccess = () => {
-    handleCancel();
-    loadRecords();
+  const handleSubmit = async (event) => {
+    const eventData = {
+      EventName: event.EventName,
+      EventDescription: event.EventDescription,
+      EventDatetime: event.EventDatetime,
+      EventLocationID: event.EventLocationID,
+    };
+
+    const result = await API.post(apiEndpoints.EVENTS, eventData);
+    console.log("Submitting event data:", eventData);
+    if (result.isSuccess) {
+      setShowForm(false);
+      await loadEvents(apiEndpoints.EVENTS);
+    } else {
+      alert(result.message || "Failed to add event");
+    }
   };
 
   const filteredEvents = events
     ? filterRecords(events, searchTerm, filterField, eventFilterFn)
     : [];
+
+  const dropdowns = {
+    locations: {
+      list: locations,
+      loadingMessage: loadingLocationsMessage,
+    },
+  };
 
   return (
     <>
@@ -63,7 +87,11 @@ function Events() {
       </Action.Tray>
 
       {showForm && (
-        <EventForm onCancel={handleCancel} onSuccess={handleSuccess} />
+        <EventForm
+          onSubmit={handleSubmit}
+          onCancel={handleCancel}
+          dropdowns={dropdowns}
+        />
       )}
 
       <SearchBar
@@ -90,11 +118,7 @@ function Events() {
               >
                 <div className="eventCard" key={event.EventID}>
                   <Card>
-                    <div>
-                      <h3>{event.EventName}</h3>
-                      <p>{event.EventDescription}</p>
-                    </div>
-                    <p>{new Date(event.EventDatetime).toLocaleDateString()}</p>
+                    <EventItem event={event} key={event.EventID} />
                   </Card>
                 </div>
               </Link>

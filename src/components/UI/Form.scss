@@ -1,6 +1,6 @@
 $BorderGrey: LightGrey;
 
-div.employeeForm {
+.form {
   width: 100%;
   padding: 20px;
   background: rgba(51, 51, 51, 0.67);
@@ -10,11 +10,12 @@ div.employeeForm {
   margin-bottom: 20px;
   border-radius: 10px;
 
-  Form.formTray {
+  .FormTray {
     width: 100%;
     display: flex;
     justify-content: space-around;
-
+    flex-direction: column;
+    gap: 20px;
     .employeeLeft,
     .employeeRight {
       width: 100%;

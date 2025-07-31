@@ -7,14 +7,21 @@ import { HeaderContainer, ListContainer } from "../UI/ListContainer.jsx";
 import { filterRecords } from "../../utils/filtering.jsx";
 import SearchBar from "../../utils/search.jsx";
 import useLoad from "../api/useLoad.js";
+import AttendeeModal from "../entity/guest/AttendeeModal.jsx";
+import { AttendeeItem } from "../entity/guest/AttendeeItem.jsx";
 
 function EventInfo() {
   const { eventId } = useParams();
   const [event, setEvent] = useLoad(apiEndpoints.EVENT_BY_ID(eventId));
-  const [attendees, setAttendees] = useLoad(apiEndpoints.ATTENDEES(eventId));
+  const [attendees, setAttendees, loadingAttendeesMessage, loadAttendees] =
+    useLoad(apiEndpoints.ATTENDEES(eventId));
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterField, setFilterField] = useState("");
+
+  const [selectedAttendee, setSelectedAttendee] = useState(null);
+  const [showAttendeeModal, setShowAttendeeModal] = useState(false);
+  const [attendeeSuccess, setAttendeeSuccess] = useState(false);
 
   const attendeeFilterFn = (attendee, search, filterField) => {
     switch (filterField) {
@@ -30,6 +37,22 @@ function EventInfo() {
           (attendee.AttendeeStatusName || "").toLowerCase().includes(search)
         );
     }
+  };
+  const handleClick = (attendee) => {
+    console.log("Attendee clicked:", attendee.AttendeeUserName);
+    setSelectedAttendee(attendee);
+    setShowAttendeeModal(true);
+    console.log("Modal should be open now");
+  };
+
+  const handleAttendeeModalClose = () => {
+    setShowAttendeeModal(false);
+    setSelectedAttendee(null);
+  };
+
+  const handleAttendeeSuccess = async () => {
+    setAttendeeSuccess(true);
+    await loadAttendees(apiEndpoints.ATTENDEES(eventId));
   };
 
   const attendeeFilterOptions = [
@@ -79,7 +102,6 @@ function EventInfo() {
           <h2>Attendance</h2>
           <HeaderContainer>
             <p>Full Name</p>
-            <p>Attendance Status</p>
             <p> </p>
           </HeaderContainer>
 
@@ -91,20 +113,22 @@ function EventInfo() {
             filteredAttendees.map((attendee) => {
               if (attendee.AttendeeEventName === event.EventName) {
                 return (
-                  <div className="attendeeItem" key={attendee.AttendeeID}>
-                    <p>{attendee.AttendeeUserName}</p>
-                    <p>{attendee.AttendeeStatusName}</p>
-                    {!attendee.AttendeeUserName.includes("Guest") ? (
-                      <button className="editButton">Edit Plus One</button>
-                    ) : (
-                      <p> </p>
-                    )}
-                  </div>
+                  <AttendeeItem
+                    attendee={attendee}
+                    key={attendee.AttendeeID}
+                    onClick={() => handleClick(attendee)}
+                  />
                 );
               }
             })
           )}
         </ListContainer>
+        <AttendeeModal
+          attendee={selectedAttendee}
+          isOpen={showAttendeeModal}
+          onClose={handleAttendeeModalClose}
+          onSuccess={handleAttendeeSuccess}
+        />
       </div>
     </>
   );

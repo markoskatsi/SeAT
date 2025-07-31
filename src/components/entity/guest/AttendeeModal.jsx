@@ -5,9 +5,7 @@ import Action from "../../UI/Actions.jsx";
 import API from "../../api/API.js";
 import apiEndpoints from "../../api/apiEndpoints.js";
 
-function AttendeeModal({ employee, isOpen, onClose, onSuccess }) {
-  const [events, setEvents] = useState([]);
-  const [statuses, setStatuses] = useState([]);
+function AttendeeModal({ attendee, isOpen, onClose, onSuccess }) {
   const [selectedEventID, setSelectedEventID] = useState("");
   const [selectedStatusID, setSelectedStatusID] = useState("");
   const [guestFirstName, setGuestFirstName] = useState("");
@@ -17,8 +15,6 @@ function AttendeeModal({ employee, isOpen, onClose, onSuccess }) {
 
   useEffect(() => {
     if (isOpen) {
-      loadEvents();
-      loadStatuses();
       resetForm();
     }
   }, [isOpen]);
@@ -31,108 +27,45 @@ function AttendeeModal({ employee, isOpen, onClose, onSuccess }) {
     setGuestEmail("");
   };
 
-  const loadEvents = async () => {
-    const response = await API.get(apiEndpoints.EVENTS);
-    if (response.isSuccess) {
-      setEvents(response.result);
-    } else {
-      setEvents([]);
-    }
-  };
-
-  const loadStatuses = async () => {
-    const response = await API.get(apiEndpoints.STATUS);
-    if (response.isSuccess) {
-      setStatuses(response.result);
-      const invitedStatus = response.result.find(
-        (status) => status.StatusName.toLowerCase() === "invited"
-      );
-      if (invitedStatus) {
-        setSelectedStatusID(invitedStatus.StatusID.toString());
-      }
-    } else {
-      setStatuses([]);
-    }
-  };
-
-  const handleSubmit = async () => {
-    if (!selectedEventID) {
-      alert("Please select an event");
-      return;
-    }
-    if (!guestFirstName.trim()) {
-      alert("Please enter guest's first name");
-      return;
-    }
-    if (!guestLastName.trim()) {
-      alert("Please enter guest's last name");
-      return;
-    }
-    if (!guestEmail.trim()) {
-      alert("Please enter guest's email");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const guestUserData = {
-        UserFirstname: guestFirstName.trim(),
-        UserLastname: guestLastName.trim(),
-        UserEmail: guestEmail.trim(),
-        UserDateofbirth: new Date().toISOString(),
-        UserImageURL:
-          "https://images.generated.photos/m8Sph5rhjkIsOiVIp4zbvIuFl43F6BWIwhkkY86z2Ms/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/ODU4MTE5LmpwZw.jpg",
-        UserUsertypeID: "3", 
-        UserRoleID: null,
-        UserGuestofID: employee.UserID, 
-      };
-
-      const userResult = await API.post(apiEndpoints.USERS, guestUserData);
-
-      if (!userResult.isSuccess) {
-        alert(userResult.message || "Failed to create guest user");
-        setLoading(false);
-        return;
-      }
-
-      const attendeeData = {
-        AttendeeUserID: userResult.result.UserID || userResult.result.insertId, 
-        AttendeeEventID: parseInt(selectedEventID),
-        AttendeeStatusID: selectedStatusID ? parseInt(selectedStatusID) : null,
-      };
-
-      const attendeeResult = await API.post(
-        apiEndpoints.ATTENDEES,
-        attendeeData
-      );
-
-      if (attendeeResult.isSuccess) {
-        onSuccess();
-        handleClose();
-      } else {
-        alert(attendeeResult.message || "Failed to add guest to event");
-      }
-    } catch (error) {
-      alert("An error occurred while adding the guest");
-      console.error(error);
-    }
-
-    setLoading(false);
-  };
-
   const handleClose = () => {
     resetForm();
     onClose();
   };
 
+  const handleAdd = async () => {
+    const guestUser = {
+      UserFirstname: guestFirstName,
+      UserLastname: guestLastName,
+      UserEmail: guestEmail,
+      UserDateofbirth: "1899-11-30T00:00:00.000Z",
+      UserImageURL: "https://example.com/images/1.jpg",
+      UserUsertypeID: 2,
+      UserRoleID: 1,
+      UserGuestofID: attendee.AttendeeUserID,
+    };
+    const guestResult = await API.post(apiEndpoints.USERS, guestUser);
+    if (guestResult.isSuccess) {
+      const guestUserID = guestResult.result[0].UserID;
+      const attendeeData = {
+        AttendeeUserID: guestUserID,
+        AttendeeEventID: attendee.AttendeeEventID,
+        AttendeeStatusID: 1,
+      };
+      const result = await API.post(apiEndpoints.ATTENDEES(), attendeeData);
+      if (result.isSuccess) {
+        onSuccess();
+        handleClose();
+      } else {
+        alert(result.message);
+      }
+    } else {
+      alert(guestResult.message);
+    }
+  };
+
   if (!isOpen) {
     return null;
   }
-
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString();
-  };
 
   return (
     <div className="modal-overlay" onClick={handleClose}>
@@ -148,14 +81,7 @@ function AttendeeModal({ employee, isOpen, onClose, onSuccess }) {
           <div className="employee-info">
             <h3>Adding Plus One For</h3>
             <p>
-              <strong>Employee:</strong> {employee.UserFirstname}{" "}
-              {employee.UserLastname}
-            </p>
-            <p>
-              <strong>Role:</strong> {employee.UserRoleName || "None"}
-            </p>
-            <p>
-              <strong>Type:</strong> {employee.UserUsertypeName || "None"}
+              <strong>Employee:</strong> {attendee.AttendeeUserName}
             </p>
           </div>
 
@@ -194,40 +120,6 @@ function AttendeeModal({ employee, isOpen, onClose, onSuccess }) {
               />
             </label>
           </div>
-
-          <div className="event-form">
-            <h3>Event Details</h3>
-
-            <label>
-              Select Event *
-              <select
-                value={selectedEventID}
-                onChange={(e) => setSelectedEventID(e.target.value)}
-              >
-                <option value="">-- Select Event --</option>
-                {events.map((event) => (
-                  <option key={event.EventID} value={event.EventID}>
-                    {event.EventName} - {formatDate(event.EventDatetime)}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label>
-              Attendance Status
-              <select
-                value={selectedStatusID}
-                onChange={(e) => setSelectedStatusID(e.target.value)}
-              >
-                <option value="">-- No Status --</option>
-                {statuses.map((status) => (
-                  <option key={status.StatusID} value={status.StatusID}>
-                    {status.StatusName}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
         </div>
 
         <div className="modal-footer">
@@ -235,7 +127,7 @@ function AttendeeModal({ employee, isOpen, onClose, onSuccess }) {
             <Action.Submit
               showText
               buttonText={loading ? "ADDING GUEST..." : "ADD PLUS ONE"}
-              onClick={handleSubmit}
+              onClick={handleAdd}
               disabled={loading}
             />
             <Action.Cancel showText buttonText="CANCEL" onClick={handleClose} />

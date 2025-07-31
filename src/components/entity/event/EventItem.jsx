@@ -3,12 +3,19 @@ import "./EventItem.scss";
 export function EventItem({ event }) {
   return (
     <div className="eventItem">
-      <p>{event.EventID}</p>
-      <p>{event.EventName}</p>
-      <p>{event.EventDescription}</p>
-      <p>{event.EventDatetime}</p>
-      <p>{event.EventLocationID}</p>
-      <p>{event.EventLocationName}</p>
+      <div>
+        <h3>{event.EventName}</h3>
+        <p>{event.EventDescription}</p>
+      </div>
+      <div className="eventLocationDate">
+        <p>{event.EventLocationName}</p>
+        <p>
+          {new Date(event.EventDatetime).toLocaleString([], {
+            dateStyle: "short",
+            timeStyle: "short",
+          })}
+        </p>
+      </div>
     </div>
   );
 }

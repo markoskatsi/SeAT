@@ -8,18 +8,14 @@ import { filterRecords } from "../../utils/filtering.jsx";
 import SearchBar from "../../utils/search.jsx";
 import apiEndpoints from "../api/apiEndpoints.js";
 import API from "../api/API.js";
-import AttendeeModal from "../entity/guest/AttendeeModal.jsx";
 import useLoad from "../api/useLoad.js";
 import Papa from "papaparse";
 
 function Employees() {
   const [showForm, setShowForm] = useState(false);
-  const [employees, setEmployees] = useState(null);
+  const [employees, setEmployees, loadingEmployeesMessage, loadEmployees] = useLoad(apiEndpoints.USERS);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterField, setFilterField] = useState("");
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [showAttendeeModal, setShowAttendeeModal] = useState(false);
-  const [attendeeSuccess, setAttendeeSuccess] = useState(false);
   const [roles, loadingRolesMessage] = useLoad(apiEndpoints.ROLES);
   const [usertypes, loadingUserTypesMessage] = useLoad(apiEndpoints.USERTYPES);
 
@@ -27,23 +23,6 @@ function Employees() {
 
   const handleAdd = () => setShowForm(true);
   const handleCancel = () => setShowForm(false);
-  const apiGet = async () => {
-    const response = await API.get(apiEndpoints.USERS);
-    let result;
-    if (response && response.isSuccess) {
-      result = response.result;
-    } else if (response && Array.isArray(response)) {
-      result = response;
-    } else {
-      result = [];
-    }
-    setEmployees(result);
-    console.log(result);
-  };
-
-  useEffect(() => {
-    apiGet();
-  }, []);
 
   const handleSubmit = async (employee) => {
     const employeeData = {
@@ -62,27 +41,12 @@ function Employees() {
     console.log("Submitting employee data:", employeeData);
     if (result.isSuccess) {
       setShowForm(false);
-      apiGet();
+      await loadEmployees(apiEndpoints.USERS);
     } else {
       alert(result.message || "Failed to add employee");
     }
   };
 
-  const handleEmployeeClick = (employee) => {
-    console.log("Employee clicked:", employee);
-    setSelectedEmployee(employee);
-    setShowAttendeeModal(true);
-    console.log("Modal should be open now");
-  };
-
-  const handleAttendeeModalClose = () => {
-    setShowAttendeeModal(false);
-    setSelectedEmployee(null);
-  };
-
-  const handleAttendeeSuccess = () => {
-    setAttendeeSuccess(true);
-  };
 
   const employeeFilterFn = (employee, search, filterField) => {
     switch (filterField) {
@@ -211,19 +175,11 @@ function Employees() {
               <EmployeeItem
                 employee={employee}
                 key={employee.UserID}
-                onClick={handleEmployeeClick}
               />
             );
           })
         )}
       </ListContainer>
-
-      <AttendeeModal
-        employee={selectedEmployee}
-        isOpen={showAttendeeModal}
-        onClose={handleAttendeeModalClose}
-        onSuccess={handleAttendeeSuccess}
-      />
     </>
   );
 }
