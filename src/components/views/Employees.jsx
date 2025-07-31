@@ -1,22 +1,28 @@
 import { useEffect, useState } from "react";
 import "./Employees.scss";
 import { EmployeeItem } from "../entity/employee/EmployeeItem.jsx";
+import SearchBar from "../../utils/search.jsx";
 import Action from "../UI/Actions.jsx";
 import { ListContainer, HeaderContainer } from "../UI/ListContainer.jsx";
 import EmployeeForm from "../entity/employee/EmployeeForm.jsx";
-import { filterRecords } from "../../utils/filtering.jsx";
-import SearchBar from "../../utils/search.jsx";
 import apiEndpoints from "../api/apiEndpoints.js";
 import API from "../api/API.js";
 import useLoad from "../api/useLoad.js";
+import CSVImportButton from "../../utils/CSVImportButton.jsx";
+import EmployeeCrudler from "../entity/employee/EmployeeCrudler.jsx";
 
 function Employees() {
   const [showForm, setShowForm] = useState(false);
-  const [employees, setEmployees, loadingEmployeesMessage, loadEmployees] = useLoad(apiEndpoints.USERS);
+  const [employees, setEmployees, loadingEmployeesMessage, loadEmployees] =
+    useLoad(apiEndpoints.USERS);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterField, setFilterField] = useState("");
   const [roles, loadingRolesMessage] = useLoad(apiEndpoints.ROLES);
   const [usertypes, loadingUserTypesMessage] = useLoad(apiEndpoints.USERTYPES);
+
+  const handleCSVImport = (data) => {
+    setEmployees(data);
+  };
 
   const handleAdd = () => setShowForm(true);
   const handleCancel = () => setShowForm(false);
@@ -44,8 +50,7 @@ function Employees() {
     }
   };
 
-
-  const employeeFilterFn = (employee, search, filterField) => {
+  /* const employeeFilterFn = (employee, search, filterField) => {
     switch (filterField) {
       case "role":
         return (employee.UserRoleName || "").toLowerCase().includes(search);
@@ -78,6 +83,7 @@ function Employees() {
   const filteredEmployees = employees
     ? filterRecords(employees, searchTerm, filterField, employeeFilterFn)
     : [];
+  */
 
   const dropdowns = {
     roles: {
@@ -100,8 +106,11 @@ function Employees() {
             onClick={handleAdd}
           />
         )}
+        <CSVImportButton
+          onImport={handleCSVImport}
+          buttonText="Import Employees CSV"
+        />
       </Action.Tray>
-
       {showForm && (
         <EmployeeForm
           onSubmit={handleSubmit}
@@ -109,37 +118,16 @@ function Employees() {
           dropdowns={dropdowns}
         />
       )}
-      <SearchBar
+      {/* <SearchBar
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         filterField={filterField}
         setFilterField={setFilterField}
         filterOptions={employeeFilterOptions}
         placeholder="Search employees"
-      />
+      /> */}
 
-      <ListContainer>
-        <HeaderContainer>
-          <p>First Name</p>
-          <p>Last Name</p>
-          <p>D.O.B</p>
-          <p>Role</p>
-        </HeaderContainer>
-        {employees === null ? (
-          <p>Loading records...</p>
-        ) : filteredEmployees.length === 0 ? (
-          <p>No employees found...</p>
-        ) : (
-          filteredEmployees.map((employee) => {
-            return (
-              <EmployeeItem
-                employee={employee}
-                key={employee.UserID}
-              />
-            );
-          })
-        )}
-      </ListContainer>
+      <EmployeeCrudler getEmployeesEndpoint={apiEndpoints.USERS} />
     </>
   );
 }
