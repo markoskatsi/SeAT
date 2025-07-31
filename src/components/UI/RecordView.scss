@@ -1,0 +1,34 @@
+table.viewRecord {
+  width: 100%;
+  border-collapse: collapse;
+
+  tr.viewRecordProperty {
+    td.viewRecordLabel,
+    td.viewRecordValue {
+      padding: 5px 0;
+      min-width: 100px;
+      vertical-align: top;
+    }
+
+    td.viewRecordLabel {
+      white-space: nowrap;
+    }
+
+    &:first-child {
+      td.viewRecordLabel,
+      td.viewRecordValue {
+        padding-top: 0;
+      }
+    }
+    &:last-child {
+      td.viewRecordLabel,
+      td.viewRecordValue {
+        padding-bottom: 0;
+      }
+    }
+
+    td.viewRecordLabel {
+      padding-right: 20px;
+    }
+  }
+}

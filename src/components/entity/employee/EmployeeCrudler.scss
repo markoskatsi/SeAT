@@ -1,0 +1,27 @@
+div.employeeCrudler {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  & > main {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    & > div.employee {
+      position: sticky;
+      top: 40px;
+    }
+
+    @media (width > 750px) {
+      flex-direction: row-reverse;
+      align-items: flex-start;
+      gap: 30px;
+
+      & > div {
+        flex: 1;
+        min-width: 40%;
+      }
+    }
+  }
+}

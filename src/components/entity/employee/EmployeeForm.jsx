@@ -10,7 +10,8 @@ const initialEmployee = {
   UserUsertypeName: "",
   UserRoleName: "",
   UserRoleID: "",
-  UserImageURL: "https://media.istockphoto.com/id/814423752/photo/eye-of-model-with-colorful-art-make-up-close-up.jpg?s=612x612&w=0&k=20&c=l15OdMWjgCKycMMShP8UK94ELVlEGvt7GmB_esHWPYE=",
+  UserImageURL:
+    "https://media.istockphoto.com/id/814423752/photo/eye-of-model-with-colorful-art-make-up-close-up.jpg?s=612x612&w=0&k=20&c=l15OdMWjgCKycMMShP8UK94ELVlEGvt7GmB_esHWPYE=",
   UserUsertypeID: "",
   UserEmail: "",
 };
@@ -49,8 +50,14 @@ function EmployeeForm({ onSubmit, onCancel, dropdowns }) {
 
   // Handlers ---------------------------
   // View --------------------------------
-  const roles = dropdowns.roles;
-  const usertypes = dropdowns.usertypes;
+  const roles = dropdowns.roles || {
+    list: [],
+    loadingMessage: "Loading roles...",
+  };
+  const usertypes = dropdowns.usertypes || {
+    list: [],
+    loadingMessage: "Loading user types...",
+  };
   return (
     <Form className="formTray" onSubmit={handleSubmit} onCancel={onCancel}>
       <div className="employeeLeft">
@@ -85,9 +92,9 @@ function EmployeeForm({ onSubmit, onCancel, dropdowns }) {
           />
         </Form.Item>
         <Form.Item label="Role" error={errors.UserRoleID}>
-          {!roles ? (
-            <p>Loading roles...</p>
-          ) : roles.length === 0 ? (
+          {!roles.list ? (
+            <p>{roles.loadingMessage}</p>
+          ) : roles.list.length === 0 ? (
             <p>No roles available</p>
           ) : (
             <select
