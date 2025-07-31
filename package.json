@@ -12,6 +12,7 @@
   "dependencies": {
     "@fontsource/source-serif-pro": "^5.2.5",
     "@types/prop-types": "^15.7.15",
+    "papaparse": "^5.5.3",
     "prop-types": "^15.8.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

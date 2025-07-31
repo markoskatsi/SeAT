@@ -10,6 +10,7 @@ import apiEndpoints from "../api/apiEndpoints.js";
 import API from "../api/API.js";
 import AttendeeModal from "../entity/guest/AttendeeModal.jsx";
 import useLoad from "../api/useLoad.js";
+import Papa from "papaparse";
 
 function Employees() {
   const [showForm, setShowForm] = useState(false);
@@ -21,6 +22,8 @@ function Employees() {
   const [attendeeSuccess, setAttendeeSuccess] = useState(false);
   const [roles, loadingRolesMessage] = useLoad(apiEndpoints.ROLES);
   const [usertypes, loadingUserTypesMessage] = useLoad(apiEndpoints.USERTYPES);
+
+  const [csvError, setCsvError] = useState(null);
 
   const handleAdd = () => setShowForm(true);
   const handleCancel = () => setShowForm(false);
@@ -126,18 +129,55 @@ function Employees() {
     },
   };
 
+  const handleImportCSV = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        if (results.errors.length) {
+          setCsvError("CSV parsing error.");
+          return;
+        }
+        setEmployees(results.data);
+        setCsvError(null);
+      },
+      error: () => setCsvError("Failed to parse CSV."),
+    });
+  };
+
   return (
     <>
       <Action.Tray>
         {!showForm && (
-          <Action.Add
-            showText
-            buttonText="ADD NEW EMPLOYEE"
-            onClick={handleAdd}
-          />
+          <>
+            <Action.Add
+              showText
+              buttonText="ADD NEW EMPLOYEE"
+              onClick={handleAdd}
+            />
+            <label style={{ marginLeft: "10px" }}>
+              <button
+                type="button"
+                className="Action"
+                style={{ width: "auto", height: "40px" }}
+                onClick={() => document.getElementById("csvInput").click()}
+              >
+                Import CSV
+              </button>
+              <input
+                id="csvInput"
+                type="file"
+                accept=".csv"
+                style={{ display: "none" }}
+                onChange={handleImportCSV}
+              />
+            </label>
+          </>
         )}
       </Action.Tray>
-
+      {csvError && <p style={{ color: "red" }}>{csvError}</p>}
       {showForm && (
         <EmployeeForm
           onSubmit={handleSubmit}
