@@ -1,10 +1,15 @@
 import Papa from "papaparse";
 import PropTypes from "prop-types";
 import { useState } from "react";
+import { useRef } from "react";
 
 function CSVImportButton({ onImport, buttonText = "Import CSV" }) {
   const [error, setError] = useState(null);
+  const fileInputRef = useRef(null);
 
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
   const handleImportCSV = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -27,14 +32,14 @@ function CSVImportButton({ onImport, buttonText = "Import CSV" }) {
     <div>
       <input
         type="file"
+        ref={fileInputRef}
         accept=".csv"
-        style={{ display: "none" }}
-        id="csv-upload"
         onChange={handleImportCSV}
+        style={{ display: "none" }}
       />
-      <label htmlFor="csv-upload">
-        <button>{buttonText}</button>
-      </label>
+      <button type="button" onClick={handleButtonClick}>
+        {buttonText}
+      </button>
       {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
