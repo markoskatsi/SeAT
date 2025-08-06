@@ -2,16 +2,23 @@ div.employeeList {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  position: relative;
 }
 
 div.employeeListItem {
+  &.animate-push {
+    margin-top: 10px;
+    transition: margin-top 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
   border: 1px solid #3d3d3d;
+  width: 100%;
   border-radius: 3px;
   padding: 20px;
   min-width: 200px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
+  flex-grow: 1;
   cursor: pointer;
   transition: background 0.2s;
   &:hover {
@@ -25,4 +32,13 @@ div.employeeListItem {
     width: 100%;
     gap: 10px;
   }
+}
+
+.employeeListItem.selected,
+.employeeListItem.selected:hover {
+  border: 1px solid #fff !important;
+  color: white;
+  border-radius: 5px;
+  background: #29423b;
+  z-index: 1;
 }

@@ -15,7 +15,7 @@ function EmployeeView({ employee, onModify, onDelete, onDismiss }) {
   };
 
   return (
-    <div className="EmployeeView">
+    <div className="employeeView">
       <h3>{`${employee.UserID} ${employee.UserFirstname}`}</h3>
       <RecordView record={employee} labels={labels} />
       <Action.Tray>

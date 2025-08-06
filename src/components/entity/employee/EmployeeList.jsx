@@ -1,16 +1,25 @@
 import "./EmployeeList.scss";
 
-function EmployeeList({ employees, loadingMessage, onSelect }) {
+function EmployeeList({
+  employees,
+  loadingMessage,
+  onSelect,
+  selectedEmployee,
+}) {
   if (!employees) return <EmployeeListMessage message={loadingMessage} />;
   if (employees.length === 0)
     return <EmployeeListMessage message="No records found!" />;
   return (
     <div className="employeeList">
-      {employees.map((employee) => (
+      {employees.map((employee, idx) => (
         <EmployeeListItem
           key={employee.UserID}
           employee={employee}
           onSelect={onSelect}
+          selected={
+            selectedEmployee && selectedEmployee.UserID === employee.UserID
+          }
+          className={idx === 0 && selectedEmployee ? "animate-push" : ""}
         />
       ))}
     </div>
@@ -21,20 +30,17 @@ function EmployeeListMessage({ message }) {
   return <p className="employeeListMessage">{message}</p>;
 }
 
-function EmployeeListItem({ employee, onSelect }) {
+function EmployeeListItem({ employee, onSelect, selected, className = "" }) {
   const handleSelect = () => {
     onSelect(employee);
   };
-  //   const moduleLeader = module.ModuleLeaderID
-  //     ? `${module.ModuleLeaderName} (Module Leader)`
-  //     : "Module leader not assigned";
-
-  //   const moduleLeaderClass = `moduleListLeader ${
-  //     !module.ModuleLeaderID && "moduleListNoLeader"
-  //   }`;
-
   return (
-    <div className="employeeListItem" onClick={handleSelect}>
+    <div
+      className={`employeeListItem${selected ? " selected" : ""}${
+        className ? " " + className : ""
+      }`}
+      onClick={handleSelect}
+    >
       <div className="employeeListDetails">
         <div className="employeeListTitle">
           <p>{employee.UserFirstname || "N/A"}</p>
