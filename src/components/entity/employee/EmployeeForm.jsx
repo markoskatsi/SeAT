@@ -50,14 +50,8 @@ function EmployeeForm({ onSubmit, onCancel, dropdowns }) {
 
   // Handlers ---------------------------
   // View --------------------------------
-  const roles = dropdowns.roles || {
-    list: [],
-    loadingMessage: "Loading roles...",
-  };
-  const usertypes = dropdowns.usertypes || {
-    list: [],
-    loadingMessage: "Loading user types...",
-  };
+  const roles = dropdowns.roles;
+  const usertypes = dropdowns.usertypes;
   return (
     <Form className="formTray" onSubmit={handleSubmit} onCancel={onCancel}>
       <div className="employeeLeft">
@@ -92,9 +86,9 @@ function EmployeeForm({ onSubmit, onCancel, dropdowns }) {
           />
         </Form.Item>
         <Form.Item label="Role" error={errors.UserRoleID}>
-          {!roles.list ? (
-            <p>{roles.loadingMessage}</p>
-          ) : roles.list.length === 0 ? (
+          {!roles ? (
+            <p>Loading roles...</p>
+          ) : roles.length === 0 ? (
             <p>No roles available</p>
           ) : (
             <select

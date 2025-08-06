@@ -164,19 +164,45 @@ function EmployeeCrudler({ getEmployeesEndpoint }) {
         placeholder="Search employees"
       />
       <main>
-        {selectedEmployee && (
-          <EmployeeView
-            employee={selectedEmployee}
-            onModify={openModifyFrom}
-            onDismiss={handleDismiss}
-            onDelete={openDeleteConfirmation}
-          />
-        )}
-        <EmployeeList
-          employees={filteredEmployees}
-          loadingMessage={loadingMessage}
-          onSelect={handleSelect}
-        />
+        <div className="employeeViewListContainer">
+          <div
+            className={`employeeViewAnimated${selectedEmployee ? " show" : ""}`}
+            style={{
+              maxHeight: selectedEmployee ? 500 : 0,
+              opacity: selectedEmployee ? 1 : 0,
+              transform: selectedEmployee
+                ? "translateY(0)"
+                : "translateY(-40px)",
+              transition:
+                "max-height 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.4s, transform 0.5s cubic-bezier(0.4,0,0.2,1)",
+              overflow: "hidden",
+              marginBottom: selectedEmployee ? 24 : 0,
+            }}
+          >
+            {selectedEmployee && (
+              <EmployeeView
+                employee={selectedEmployee}
+                onModify={openModifyFrom}
+                onDismiss={handleDismiss}
+                onDelete={openDeleteConfirmation}
+              />
+            )}
+          </div>
+          <div
+            className="employeeListAnimated"
+            style={{
+              transition: "margin-top 0.5s cubic-bezier(0.4,0,0.2,1)",
+              marginTop: selectedEmployee ? 0 : 0,
+            }}
+          >
+            <EmployeeList
+              employees={filteredEmployees}
+              loadingMessage={loadingMessage}
+              onSelect={handleSelect}
+              selectedEmployee={selectedEmployee}
+            />
+          </div>
+        </div>
       </main>
     </div>
   );

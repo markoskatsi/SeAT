@@ -50,41 +50,6 @@ function Employees() {
     }
   };
 
-  /* const employeeFilterFn = (employee, search, filterField) => {
-    switch (filterField) {
-      case "role":
-        return (employee.UserRoleName || "").toLowerCase().includes(search);
-      case "type":
-        return (employee.UserUsertypeName || "").toLowerCase().includes(search);
-      case "name":
-        const fullName = `${employee.UserFirstname || ""} ${
-          employee.UserLastname || ""
-        }`.toLowerCase();
-        return fullName.includes(search);
-      default:
-        const full = `${employee.UserFirstname || ""} ${
-          employee.UserLastname || ""
-        }`.toLowerCase();
-        return (
-          full.includes(search) ||
-          (employee.UserUsertypeName || "").toLowerCase().includes(search) ||
-          (employee.UserRoleName || "").toLowerCase().includes(search)
-        );
-    }
-  };
-
-  const employeeFilterOptions = [
-    { value: "", label: "All Fields" },
-    { value: "name", label: "Name" },
-    { value: "role", label: "Role" },
-    { value: "type", label: "Type" },
-  ];
-
-  const filteredEmployees = employees
-    ? filterRecords(employees, searchTerm, filterField, employeeFilterFn)
-    : [];
-  */
-
   const dropdowns = {
     roles: {
       list: roles,
@@ -99,13 +64,6 @@ function Employees() {
   return (
     <>
       <Action.Tray>
-        {!showForm && (
-          <Action.Add
-            showText
-            buttonText="ADD NEW EMPLOYEE"
-            onClick={handleAdd}
-          />
-        )}
         <CSVImportButton
           onImport={handleCSVImport}
           buttonText="Import Employees CSV"
@@ -118,14 +76,6 @@ function Employees() {
           dropdowns={dropdowns}
         />
       )}
-      {/* <SearchBar
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        filterField={filterField}
-        setFilterField={setFilterField}
-        filterOptions={employeeFilterOptions}
-        placeholder="Search employees"
-      /> */}
 
       <EmployeeCrudler getEmployeesEndpoint={apiEndpoints.USERS} />
     </>
