@@ -100,12 +100,13 @@ function EmployeeCrudler({ getEmployeesEndpoint }) {
         return (employee.UserRoleName || "").toLowerCase().includes(search);
       case "type":
         return (employee.UserUsertypeName || "").toLowerCase().includes(search);
-      case "name":
+      case "name": {
         const fullName = `${employee.UserFirstname || ""} ${
           employee.UserLastname || ""
         }`.toLowerCase();
         return fullName.includes(search);
-      default:
+      }
+      default: {
         const full = `${employee.UserFirstname || ""} ${
           employee.UserLastname || ""
         }`.toLowerCase();
@@ -114,6 +115,7 @@ function EmployeeCrudler({ getEmployeesEndpoint }) {
           (employee.UserUsertypeName || "").toLowerCase().includes(search) ||
           (employee.UserRoleName || "").toLowerCase().includes(search)
         );
+      }
     }
   };
 
