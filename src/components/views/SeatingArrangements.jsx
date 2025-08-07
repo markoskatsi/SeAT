@@ -4,28 +4,17 @@ import Action from "../UI/Actions.jsx";
 import { ListContainer, HeaderContainer } from "../UI/ListContainer.jsx";
 import { normaliseParticipants, groupParticipantsWithGuests } from "../../utils/employeeConformance.jsx";
 
-function assignSeats(groupedParticipants, tableSize = 8) {
+function assignSeats(groupedParticipants, tableSize = 8, tableShape = "round") {
   const tables = [];
-  let table = [];
-  let seatNumber = 1;
   let tableNumber = 1;
 
-  groupedParticipants.forEach((group, groupIdx) => {
-    // Try to find a table where no one in the group will be adjacent to a previous neighbor
+  groupedParticipants.forEach((group) => {
     let placed = false;
     for (let tIdx = 0; tIdx < tables.length; tIdx++) {
       const candidateTable = tables[tIdx];
-      // Check adjacency with last person in candidateTable and first in group
-      const lastPerson = candidateTable[candidateTable.length - 1];
-      const firstPerson = group[0];
-      if (
-        lastPerson &&
-        lastPerson.previousNeighbors &&
-        lastPerson.previousNeighbors.includes(firstPerson.id)
-      ) {
-        continue; // Skip this table, adjacency conflict
+      if (hasAdjacencyConflict(candidateTable, group, tableShape)) {
+        continue;
       }
-      // Check if adding group would exceed table size
       if (candidateTable.length + group.length <= tableSize) {
         group.forEach((p) => {
           candidateTable.push({
@@ -39,9 +28,8 @@ function assignSeats(groupedParticipants, tableSize = 8) {
       }
     }
     if (!placed) {
-      // Start a new table
-      table = [];
-      seatNumber = 1;
+      let table = [];
+      let seatNumber = 1;
       group.forEach((p) => {
         table.push({
           ...p,
@@ -55,22 +43,51 @@ function assignSeats(groupedParticipants, tableSize = 8) {
     }
   });
 
-  // Remove tables smaller than 6 (except last table if needed)
+  // Remove tables smaller than 6
   for (let i = 0; i < tables.length - 1; i++) {
     if (tables[i].length < 6) {
-      // Move people to next table if possible
       tables[i + 1] = [...tables[i], ...tables[i + 1]];
       tables[i] = [];
     }
   }
-  // Filter out empty tables
   return tables.filter((t) => t.length > 0);
+}
+
+function hasAdjacencyConflict(table, group, tableShape) {
+  if (table.length === 0) return false;
+
+  // Check left adjacency (last person in table with first in group)
+  const lastPerson = table[table.length - 1];
+  const firstPerson = group[0];
+  if (
+    lastPerson.previousNeighbors?.includes(firstPerson.id) ||
+    firstPerson.previousNeighbors?.includes(lastPerson.id)
+  ) {
+    return true;
+  }
+
+  // For round tables, check right adjacency (if table will be full after adding group)
+  if (tableShape === "round" && table.length + group.length === table.length) {
+    const firstTablePerson = table[0];
+    const lastGroupPerson = group[group.length - 1];
+    if (
+      firstTablePerson.previousNeighbors?.includes(lastGroupPerson.id) ||
+      lastGroupPerson.previousNeighbors?.includes(firstTablePerson.id)
+    ) {
+      return true;
+    }
+  }
+
+  // NEED TO CHECK ACROSS FOR RECTANGULAR TABLES
+
+  return false;
 }
 
 function SeatingArrangements() {
   const [participants, setParticipants] = useState([]);
   const [tables, setTables] = useState([]);
   const [tableSize, setTableSize] = useState(8);
+  const [tableShape, setTableShape] = useState("round");
 
   const handleCSVImport = (rawData) => {
     const normalized = normaliseParticipants(rawData);
@@ -80,7 +97,8 @@ function SeatingArrangements() {
   };
 
   const handleArrange = () => {
-    setTables(assignSeats(participants));
+    const grouped = groupParticipantsWithGuests(participants);
+    setTables(assignSeats(grouped, tableSize, tableShape));
   };
 
   return (
@@ -98,6 +116,10 @@ function SeatingArrangements() {
         onChange={e => setTableSize(Number(e.target.value))}
         style={{ marginBottom: "16px" }}
       />
+      <select value={tableShape} onChange={e => setTableShape(e.target.value)}>
+        <option value="round">Round</option>
+        <option value="rectangular">Rectangular</option>
+      </select>
       {tables.map((table, idx) => (
         <div key={idx} style={{ margin: "24px 0", border: "1px solid #ccc", borderRadius: 8, padding: 16 }}>
           <h2>Table {idx + 1}</h2>
