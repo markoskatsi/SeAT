@@ -22,3 +22,47 @@ export const employeeConformance = {
     UserUsertypeID: (value) => value ?? "",
   },
 };
+
+export function normaliseParticipants(rawData) {
+  return rawData.map((row, idx) => ({
+    id: row.UserID || row.id || `p${idx}`,
+    name: `${row.UserFirstname || ""} ${row.UserLastname || ""}`.trim(),
+    role: row.UserRoleName || row.role || "",
+    ageCategory: row.AgeCategory || "",
+    gender: row.Gender || "",
+    isVIP:
+      (row.UserRoleName && row.UserRoleName.toLowerCase().includes("vip")) ||
+      row.isVIP === true ||
+      row.isVIP === "true",
+    guestOf: row.UserGuestofID || row.guestOf || null,
+    previousNeighbors: row.PreviousNeighbors
+      ? String(row.PreviousNeighbors)
+          .split(",")
+          .map((id) => id.trim())
+          .filter(Boolean)
+      : [],
+    ...row,
+  }));
+}
+
+export function groupParticipantsWithGuests(participants) {
+  const guestMap = {};
+  participants.forEach((p) => {
+    if (p.guestOf) {
+      guestMap[p.guestOf] = p;
+    }
+  });
+
+  const grouped = [];
+  participants.forEach((p) => {
+    if (!p.guestOf) {
+      if (guestMap[p.id]) {
+        grouped.push([p, guestMap[p.id]]);
+      } else {
+        grouped.push([p]);
+      }
+    }
+  });
+
+  return grouped;
+}

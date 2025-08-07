@@ -17,6 +17,9 @@ function Header() {
           <NavLink className="navItem" to="/employees">
             Employees
           </NavLink>
+          <NavLink className="navItem" to="/seating">
+            Seating Arrangements
+          </NavLink>
         </div>
       )}
       <h1 className="titleNav">Seat</h1>
