@@ -14,7 +14,7 @@ import "./EmployeeCrudler.scss";
 
 function EmployeeCrudler({ getEmployeesEndpoint }) {
   // Initialisation -------------------------------------
-  const employeesEndpoint = `/users`;
+  const employeesEndpoint = apiEndpoints.USERS;
 
   // State ----------------------------------------------
   const [employees, , loadingMessage, loadEmployees] =

@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { useEffect } from "react";
 import "./EmployeeForm.scss";
 import { employeeConformance } from "../../../utils/employeeConformance.jsx";
 import Form from "../../UI/Form.jsx";
@@ -16,7 +17,12 @@ const initialEmployee = {
   UserEmail: "",
 };
 
-function EmployeeForm({ onSubmit, onCancel, dropdowns }) {
+function EmployeeForm({
+  employee: employeeProp,
+  onSubmit,
+  onCancel,
+  dropdowns,
+}) {
   // Initialisation --------------------
 
   const validation = {
@@ -40,13 +46,14 @@ function EmployeeForm({ onSubmit, onCancel, dropdowns }) {
   };
 
   // State ------------------------------
+  const [employee, errors, handleChange, handleSubmit, setEmployee] =
+    Form.useForm(initialEmployee, employeeConformance, validation, onSubmit);
 
-  const [employee, errors, handleChange, handleSubmit] = Form.useForm(
-    initialEmployee,
-    employeeConformance,
-    validation,
-    onSubmit
-  );
+  useEffect(() => {
+    if (employeeProp) {
+      setEmployee({ ...employeeProp });
+    }
+  }, [employeeProp, setEmployee]);
 
   // Handlers ---------------------------
   // View --------------------------------
