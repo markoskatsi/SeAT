@@ -63,12 +63,6 @@ function Employees() {
 
   return (
     <>
-      <Action.Tray>
-        <CSVImportButton
-          onImport={handleCSVImport}
-          buttonText="Import Employees CSV"
-        />
-      </Action.Tray>
       {showForm && (
         <EmployeeForm
           onSubmit={handleSubmit}
