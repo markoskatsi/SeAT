@@ -7,6 +7,7 @@ import EventInfo from "./components/views/EventInfo.jsx";
 import "./App.scss";
 import Login from "./components/views/Login.jsx";
 import { AuthProvider } from "./auth/useAuth.jsx";
+import SeatingArrangements from "./components/views/SeatingArrangements.jsx";
 
 function App() {
   const loggedInUser = "Markos";
@@ -21,6 +22,7 @@ function App() {
             <Route path="/events/:eventId" element={<EventInfo />} />
             <Route path="/employees" element={<Employees />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/seating" element={<SeatingArrangements />} />
           </Routes>
         </Layout>
       </BrowserRouter>
