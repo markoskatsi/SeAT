@@ -3,6 +3,7 @@ import CSVImportButton from "../../utils/CSVImportButton.jsx";
 import Action from "../UI/Actions.jsx";
 import { ListContainer, HeaderContainer } from "../UI/ListContainer.jsx";
 import { normaliseParticipants, groupParticipantsWithGuests } from "../../utils/employeeConformance.jsx";
+import "./SeatingArrangements.scss";
 
 function assignSeats(groupedParticipants, tableSize = 8, tableShape = "round") {
   const tables = [];
@@ -88,12 +89,17 @@ function SeatingArrangements() {
   const [tables, setTables] = useState([]);
   const [tableSize, setTableSize] = useState(8);
   const [tableShape, setTableShape] = useState("round");
+  const [importStatus, setImportStatus] = useState("");
 
   const handleCSVImport = (rawData) => {
-    const normalized = normaliseParticipants(rawData);
-    const grouped = groupParticipantsWithGuests(normalized);
-    setParticipants(normalized);
-    // setTables(assignSeats(grouped)); // Example usage
+    try {
+      const normalized = normaliseParticipants(rawData);
+      const grouped = groupParticipantsWithGuests(normalized);
+      setParticipants(normalized);
+      setImportStatus(`Imported ${normalized.length} participants.`);
+    } catch (e) {
+      setImportStatus("There was an error importing the CSV.");
+    }
   };
 
   const handleArrange = () => {
@@ -102,26 +108,36 @@ function SeatingArrangements() {
   };
 
   return (
-    <div>
+    <div className="seatingArrangements">
       <h1>Seating Arrangements</h1>
       <CSVImportButton onImport={handleCSVImport} buttonText="Import Seating CSV" />
       <Action.Tray>
         <Action.Add showText buttonText="Arrange Seats" onClick={handleArrange} />
+        <Action.Cancel showText buttonText="Clear Tables" onClick={() => setTables([])} />
       </Action.Tray>
-      <input
-        type="number"
-        min={6}
-        max={20}
-        value={tableSize}
-        onChange={e => setTableSize(Number(e.target.value))}
-        style={{ marginBottom: "16px" }}
-      />
-      <select value={tableShape} onChange={e => setTableShape(e.target.value)}>
-        <option value="round">Round</option>
-        <option value="rectangular">Rectangular</option>
-      </select>
+      <div className="controls">
+        <label>
+          Table Size:
+          <input
+            type="number"
+            min={6}
+            max={20}
+            value={tableSize}
+            onChange={e => setTableSize(Number(e.target.value))}
+          />
+        </label>
+        <label>
+          Table Shape:
+          <select value={tableShape} onChange={e => setTableShape(e.target.value)}>
+            <option value="round">Round</option>
+            <option value="rectangular">Rectangular</option>
+          </select>
+        </label>
+      </div>
+      {importStatus && <p className="importStatus">{importStatus}</p>}
+      {tables.length === 0 && <p className="noTables">No seating arrangement yet. Import participants and click "Arrange Seats".</p>}
       {tables.map((table, idx) => (
-        <div key={idx} style={{ margin: "24px 0", border: "1px solid #ccc", borderRadius: 8, padding: 16 }}>
+        <div key={idx} className="tableBlock">
           <h2>Table {idx + 1}</h2>
           <HeaderContainer>
             <p>Seat</p>
@@ -132,7 +148,7 @@ function SeatingArrangements() {
           </HeaderContainer>
           <ListContainer>
             {table.map((p, seatIdx) => (
-              <div key={seatIdx} style={{ display: "flex", width: "100%" }}>
+              <div key={seatIdx} className="tableRow">
                 <p>{p.seat}</p>
                 <p>{p.UserFirstname} {p.UserLastname}</p>
                 <p>{p.UserRoleName}</p>
