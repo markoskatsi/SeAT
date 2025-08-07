@@ -10,6 +10,7 @@ import EmployeeList from "./EmployeeList.jsx";
 import EmployeeView from "./EmployeeView.jsx";
 import { filterRecords } from "../../../utils/filtering.jsx";
 import SearchBar from "../../../utils/search.jsx";
+import CSVImportButton from "../../../utils/CSVImportButton.jsx";
 import "./EmployeeCrudler.scss";
 
 function EmployeeCrudler({ getEmployeesEndpoint }) {
@@ -156,6 +157,7 @@ function EmployeeCrudler({ getEmployeesEndpoint }) {
           buttonText={"Add a new employee"}
           onClick={openAddFrom}
         />
+        <CSVImportButton />
       </Action.Tray>
       <SearchBar
         searchTerm={searchTerm}
