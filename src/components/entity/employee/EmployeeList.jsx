@@ -13,11 +13,13 @@ function EmployeeList({
     <div className="employeeList">
       {employees.map((employee, idx) => (
         <EmployeeListItem
-          key={employee.UserID}
+          key={employee.ID || idx}
           employee={employee}
           onSelect={onSelect}
           selected={
-            selectedEmployee && selectedEmployee.UserID === employee.UserID
+            selectedEmployee &&
+            (selectedEmployee.ID === employee.ID ||
+              selectedEmployee === employee)
           }
           className={idx === 0 && selectedEmployee ? "animate-push" : ""}
         />
@@ -43,14 +45,12 @@ function EmployeeListItem({ employee, onSelect, selected, className = "" }) {
     >
       <div className="employeeListDetails">
         <div className="employeeListTitle">
-          <p>{employee.UserFirstname || "N/A"}</p>
-          <p>{employee.UserLastname || "N/A"}</p>
-          <p>
-            {employee.UserDateofbirth
-              ? employee.UserDateofbirth.substring(0, 10)
-              : "N/A"}
-          </p>
-          <p>{employee.UserRoleName || "N/A"}</p>
+          <p>{employee.Name || "N/A"}</p>
+          <p>{employee.Title || "N/A"}</p>
+          <p>{employee.Position || "N/A"}</p>
+          <p>{employee.AgeGroup || "N/A"}</p>
+          <p>{employee.PartnerGuestName || ""}</p>
+          <p>{employee.Location || "N/A"}</p>
         </div>
       </div>
     </div>
