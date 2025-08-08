@@ -13,18 +13,12 @@ import SearchBar from "../../../utils/search.jsx";
 import CSVImportButton from "../../../utils/CSVImportButton.jsx";
 import "./EmployeeCrudler.scss";
 
-function EmployeeCrudler({ getEmployeesEndpoint }) {
+function EmployeeCrudler() {
   // Initialisation -------------------------------------
-  const employeesEndpoint = apiEndpoints.USERS;
 
   // State ----------------------------------------------
-  const [employees, , loadingMessage, loadEmployees] =
-    useLoad(getEmployeesEndpoint);
+  const [employees, setEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [roles, , loadingRolesMessage] = useLoad(apiEndpoints.ROLES);
-  const [usertypes, , loadingUsertypesMessage] = useLoad(
-    apiEndpoints.USERTYPES
-  );
   const [showForm, formTitle, openForm, closeForm] = useModal(false);
   const [showAlert, alertContent, openAlert, closeAlert] = useModal(false);
   const [showConfirm, ConfirmContent, openConfirm, closeConfirm] =
@@ -54,77 +48,86 @@ function EmployeeCrudler({ getEmployeesEndpoint }) {
   };
 
   const openDeleteConfirmation = () =>
-    openConfirm(
-      `Are you sure you want to delete Employee ${selectedEmployee.UserFirstname}?`
+    openConfirm(`Are you sure you want to delete ${selectedEmployee.Name}?`);
+
+  const handleAdd = (employee) => {
+    const newEmployee = { ...employee, ID: generateNextId() };
+    setEmployees((prev) => [...prev, newEmployee]);
+    setSelectedEmployee(newEmployee);
+    closeForm();
+    openAlert("Employee added successfully");
+  };
+
+  const handleModify = (employee) => {
+    setEmployees((prev) =>
+      prev.map((e) => (e.ID === employee.ID ? employee : e))
     );
-
-  const handleAdd = async (employee) => {
-    const result = await API.post(employeesEndpoint, employee);
-    checkSuccess(result, "Employee added");
+    setSelectedEmployee(employee);
+    closeForm();
+    openAlert("Employee updated successfully");
   };
 
-  const handleModify = async (employee) => {
-    const putEndpoint = `${employeesEndpoint}/${employee.UserID}`;
-    const result = await API.put(putEndpoint, employee);
-    checkSuccess(result, "Employee Modified");
+  const handleDelete = () => {
+    setEmployees((prev) => prev.filter((e) => e.ID !== selectedEmployee.ID));
+    setSelectedEmployee(null);
+    closeConfirm();
+    openAlert("Employee deleted successfully");
   };
 
-  const handleDelete = async (employee) => {
-    const deleteEndpoint = `${employeesEndpoint}/${employee.UserID}`;
-    const result = await API.delete(deleteEndpoint);
-    checkSuccess(result, "Employee Deleted");
+  const generateNextId = () => {
+    const maxId =
+      employees.length > 0 ? Math.max(...employees.map((e) => e.ID || 0)) : 0;
+    return maxId + 1;
   };
 
-  const checkSuccess = async (result, successMessage) => {
-    if (result.isSuccess) {
-      setSelectedEmployee(result.result ? result.result[0] : null);
-      closeForm();
-      openAlert(successMessage);
-      await loadEmployees(getEmployeesEndpoint);
-    } else openError(result.message);
+  const handleCSVImport = (csvData) => {
+    const importedEmployees = csvData.map((row, index) => ({
+      ID: index + 1,
+      Name: row.Name || "",
+      Title: row.Title || "",
+      Position: row.Position || "",
+      AgeGroup: row["Age Group"] || "",
+      PartnerGuestName: row["Partner/Guest Name"] || "",
+      Location: row.Location || "",
+    }));
+
+    setEmployees(importedEmployees);
+    setSelectedEmployee(null);
+    openAlert(`Imported ${importedEmployees.length} employees`);
   };
   // View -----------------------------------------------
-  const dropdowns = {
-    roles: {
-      list: roles,
-      loadingMessage: loadingRolesMessage,
-    },
-    usertypes: {
-      list: usertypes,
-      loadingMessage: loadingUsertypesMessage,
-    },
-  };
 
   const employeeFilterFn = (employee, search, filterField) => {
     switch (filterField) {
-      case "role":
-        return (employee.UserRoleName || "").toLowerCase().includes(search);
-      case "type":
-        return (employee.UserUsertypeName || "").toLowerCase().includes(search);
-      case "name": {
-        const fullName = `${employee.UserFirstname || ""} ${
-          employee.UserLastname || ""
-        }`.toLowerCase();
-        return fullName.includes(search);
-      }
-      default: {
-        const full = `${employee.UserFirstname || ""} ${
-          employee.UserLastname || ""
-        }`.toLowerCase();
+      case "position":
+        return (employee.Position || "").toLowerCase().includes(search);
+      case "title":
+        return (employee.Title || "").toLowerCase().includes(search);
+      case "name":
+        return (employee.Name || "").toLowerCase().includes(search);
+      case "location":
+        return (employee.Location || "").toLowerCase().includes(search);
+      case "ageGroup":
+        return (employee.AgeGroup || "").toLowerCase().includes(search);
+      default:
         return (
-          full.includes(search) ||
-          (employee.UserUsertypeName || "").toLowerCase().includes(search) ||
-          (employee.UserRoleName || "").toLowerCase().includes(search)
+          (employee.Name || "").toLowerCase().includes(search) ||
+          (employee.Title || "").toLowerCase().includes(search) ||
+          (employee.Position || "").toLowerCase().includes(search) ||
+          (employee.Location || "").toLowerCase().includes(search) ||
+          (employee.AgeGroup || "").toLowerCase().includes(search) ||
+          (employee.PartnerGuestName || "").toLowerCase().includes(search)
         );
-      }
     }
   };
 
   const employeeFilterOptions = [
     { value: "", label: "All Fields" },
     { value: "name", label: "Name" },
-    { value: "role", label: "Role" },
-    { value: "type", label: "Type" },
+    { value: "position", label: "Position" },
+    { value: "title", label: "Title" },
+    { value: "location", label: "Location" },
+    { value: "ageGroup", label: "Age Group" },
   ];
 
   const filteredEmployees = employees
@@ -138,7 +141,6 @@ function EmployeeCrudler({ getEmployeesEndpoint }) {
           employee={selectedEmployee}
           onCancel={closeForm}
           onSubmit={selectedEmployee ? handleModify : handleAdd}
-          dropdowns={dropdowns}
         />
       </Modal>
 
@@ -146,7 +148,7 @@ function EmployeeCrudler({ getEmployeesEndpoint }) {
       <Confirm
         show={showConfirm}
         message={ConfirmContent}
-        onConfirm={() => handleDelete(selectedEmployee)}
+        onConfirm={handleDelete}
         onDismiss={closeConfirm}
       />
       <Error show={showError} message={ErrorContent} onDismiss={closeError} />
@@ -157,7 +159,7 @@ function EmployeeCrudler({ getEmployeesEndpoint }) {
           buttonText={"Add a new employee"}
           onClick={openAddFrom}
         />
-        <CSVImportButton />
+        <CSVImportButton onImport={handleCSVImport} buttonText="Import CSV" />
       </Action.Tray>
       <SearchBar
         searchTerm={searchTerm}
@@ -201,7 +203,7 @@ function EmployeeCrudler({ getEmployeesEndpoint }) {
           >
             <EmployeeList
               employees={filteredEmployees}
-              loadingMessage={loadingMessage}
+              loadingMessage="Loading employees..."
               onSelect={handleSelect}
               selectedEmployee={selectedEmployee}
             />

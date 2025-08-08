@@ -4,19 +4,17 @@ import "./EmployeeView.scss";
 
 function EmployeeView({ employee, onModify, onDelete, onDismiss }) {
   const labels = {
-    UserFirstname: "First name",
-    UserLastname: "Last name",
-    UserDateofbirth: "Date of birth",
-    UserImageURL: "Image URL",
-    UserUsertypeName: "User type",
-    UserRoleName: "Role",
-    UserEmail: "Email",
-    UserGuestofID: "Guest of",
+    Name: "Full Name",
+    Title: "Title",
+    Position: "Position",
+    AgeGroup: "Age Group",
+    PartnerGuestName: "Partner/Guest Name",
+    Location: "Location",
   };
 
   return (
     <div className="employeeView">
-      <h3>{`${employee.UserID} ${employee.UserFirstname}`}</h3>
+      <h3>{employee.Name}</h3>
       <RecordView record={employee} labels={labels} />
       <Action.Tray>
         <Action.Modify showText buttonText={"Modify"} onClick={onModify} />

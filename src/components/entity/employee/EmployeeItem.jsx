@@ -1,10 +1,6 @@
 import PropTypes from "prop-types";
 
 export function EmployeeItem({ employee, onClick }) {
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString();
-  };
-
   const handleClick = () => {
     if (onClick) {
       onClick(employee);
@@ -13,20 +9,24 @@ export function EmployeeItem({ employee, onClick }) {
 
   return (
     <div className="employeeItem" onClick={() => onClick && onClick(employee)}>
-      <p>{employee.UserFirstname}</p>
-      <p>{employee.UserLastname}</p>
-      <p>{formatDate(employee.UserDateofbirth)}</p>
-      <p>{employee.UserRoleName}</p>
+      <p>{employee.Name}</p>
+      <p>{employee.Title}</p>
+      <p>{employee.Position}</p>
+      <p>{employee.AgeGroup}</p>
+      <p>{employee.PartnerGuestName || ""}</p>
+      <p>{employee.Location}</p>
     </div>
   );
 }
+
 EmployeeItem.propTypes = {
   employee: PropTypes.shape({
-    UserFirstname: PropTypes.string.isRequired,
-    UserLastname: PropTypes.string.isRequired,
-    UserDateofbirth: PropTypes.string.isRequired,
-    UserUsertypeName: PropTypes.string.isRequired,
-    UserRoleName: PropTypes.string.isRequired,
+    Name: PropTypes.string.isRequired,
+    Title: PropTypes.string.isRequired,
+    Position: PropTypes.string.isRequired,
+    AgeGroup: PropTypes.string.isRequired,
+    PartnerGuestName: PropTypes.string,
+    Location: PropTypes.string.isRequired,
   }).isRequired,
   onClick: PropTypes.func,
 };

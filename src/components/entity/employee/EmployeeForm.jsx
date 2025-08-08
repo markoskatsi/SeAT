@@ -5,43 +5,32 @@ import { employeeConformance } from "../../../utils/employeeConformance.jsx";
 import Form from "../../UI/Form.jsx";
 
 const initialEmployee = {
-  UserFirstname: "",
-  UserLastname: "",
-  UserDateofbirth: "",
-  UserUsertypeName: "",
-  UserRoleName: "",
-  UserRoleID: "",
-  UserImageURL:
-    "https://media.istockphoto.com/id/814423752/photo/eye-of-model-with-colorful-art-make-up-close-up.jpg?s=612x612&w=0&k=20&c=l15OdMWjgCKycMMShP8UK94ELVlEGvt7GmB_esHWPYE=",
-  UserUsertypeID: "",
-  UserEmail: "",
+  ID: "",
+  Name: "",
+  Title: "",
+  Position: "",
+  AgeGroup: "",
+  PartnerGuestName: "",
+  Location: "",
 };
 
-function EmployeeForm({
-  employee: employeeProp,
-  onSubmit,
-  onCancel,
-  dropdowns,
-}) {
+function EmployeeForm({ employee: employeeProp, onSubmit, onCancel }) {
   // Initialisation --------------------
 
   const validation = {
     isValid: {
-      UserFirstname: (name) => name && name.length > 1,
-      UserLastname: (name) => name && name.length > 1,
-      UserDateofbirth: (date) => date,
-      UserUsertypeName: (name) => name && name.length > 1,
-      UserRoleID: (id) => id > 0,
-      UserUsertypeID: (id) => id > 0,
-      UserEmail: (email) => email && email.includes("@"),
+      Name: (name) => name && name.length > 1,
+      Title: (title) => title && title.length > 1,
+      Position: (position) => position && position.length > 1,
+      AgeGroup: (ageGroup) => ageGroup && ageGroup.length > 0,
+      Location: (location) => location && location.length > 0,
     },
     errorMessage: {
-      UserFirstname: "First name must be at least 2 characters long",
-      UserLastname: "Last name must be at least 2 characters long",
-      UserDateofbirth: "Date of birth is required",
-      UserRoleID: "Role must be selected",
-      UserUsertypeID: "User type must be selected",
-      UserEmail: "Email must be a valid email address",
+      Name: "Name must be at least 2 characters long",
+      Title: "Title is required",
+      Position: "Position is required",
+      AgeGroup: "Age group must be selected",
+      Location: "Location must be selected",
     },
   };
 
@@ -57,114 +46,95 @@ function EmployeeForm({
 
   // Handlers ---------------------------
   // View --------------------------------
-  const roles = dropdowns.roles;
-  const usertypes = dropdowns.usertypes;
+
+  const titleOptions = ["Ms.", "Dr.", "KC", "Mr.", "Sir", "Madam"];
+  const ageGroupOptions = ["18-29", "30-44", "45-59", "60+"];
+  const locationOptions = ["Offshore", "Onshore"];
+
   return (
     <Form className="formTray" onSubmit={handleSubmit} onCancel={onCancel}>
+      <input
+        type="hidden"
+        name="ID"
+        value={employeeConformance.js2html["ID"](employee.ID)}
+        onChange={handleChange}
+      />
+
       <div className="employeeLeft">
-        <Form.Item label="First Name" error={errors.UserFirstname}>
+        <Form.Item label="Full Name" error={errors.Name}>
           <input
             type="text"
-            name="UserFirstname"
-            value={employeeConformance.js2html["UserFirstname"](
-              employee.UserFirstname
-            )}
+            name="Name"
+            value={employeeConformance.js2html["Name"](employee.Name)}
             onChange={handleChange}
           />
         </Form.Item>
-        <Form.Item label="Last Name" error={errors.UserLastname}>
+
+        <Form.Item label="Title" error={errors.Title}>
+          <select
+            name="Title"
+            value={employeeConformance.js2html["Title"](employee.Title)}
+            onChange={handleChange}
+          >
+            <option value="">Select Title</option>
+            {titleOptions.map((title) => (
+              <option key={title} value={title}>
+                {title}
+              </option>
+            ))}
+          </select>
+        </Form.Item>
+
+        <Form.Item label="Position" error={errors.Position}>
           <input
             type="text"
-            name="UserLastname"
-            value={employeeConformance.js2html["UserLastname"](
-              employee.UserLastname
-            )}
+            name="Position"
+            value={employeeConformance.js2html["Position"](employee.Position)}
             onChange={handleChange}
           />
-        </Form.Item>
-        <Form.Item label="Date of Birth" error={errors.UserDateofbirth}>
-          <input
-            type="date"
-            name="UserDateofbirth"
-            value={employeeConformance.js2html["UserDateofbirth"](
-              employee.UserDateofbirth
-            )}
-            onChange={handleChange}
-          />
-        </Form.Item>
-        <Form.Item label="Role" error={errors.UserRoleID}>
-          {!roles ? (
-            <p>Loading roles...</p>
-          ) : roles.length === 0 ? (
-            <p>No roles available</p>
-          ) : (
-            <select
-              name="UserRoleID"
-              value={employeeConformance.js2html["UserRoleID"](
-                employee.UserRoleID
-              )}
-              onChange={handleChange}
-            >
-              <option value="0">None selected</option>
-              {roles.list.map((role) => (
-                <option key={role.RoleID} value={role.RoleID}>
-                  {role.RoleName}
-                </option>
-              ))}
-            </select>
-          )}
         </Form.Item>
       </div>
+
       <div className="employeeRight">
-        <Form.Item label="Title">
+        <Form.Item label="Age Group" error={errors.AgeGroup}>
+          <select
+            name="AgeGroup"
+            value={employeeConformance.js2html["AgeGroup"](employee.AgeGroup)}
+            onChange={handleChange}
+          >
+            <option value="">Select Age Group</option>
+            {ageGroupOptions.map((age) => (
+              <option key={age} value={age}>
+                {age}
+              </option>
+            ))}
+          </select>
+        </Form.Item>
+
+        <Form.Item label="Partner/Guest Name">
           <input
             type="text"
-            name="UserUsertypeName"
-            value={employeeConformance.js2html["UserUsertypeName"](
-              employee.UserUsertypeName
+            name="PartnerGuestName"
+            value={employeeConformance.js2html["PartnerGuestName"](
+              employee.PartnerGuestName
             )}
             onChange={handleChange}
           />
         </Form.Item>
-        <Form.Item label="Email" error={errors.UserEmail}>
-          <input
-            type="text"
-            name="UserEmail"
-            value={employeeConformance.js2html["UserEmail"](employee.UserEmail)}
+
+        <Form.Item label="Location" error={errors.Location}>
+          <select
+            name="Location"
+            value={employeeConformance.js2html["Location"](employee.Location)}
             onChange={handleChange}
-          />
-        </Form.Item>
-        <Form.Item label="Image">
-          <input
-            type="text"
-            name="UserImageURL"
-            value={employeeConformance.js2html["UserImageURL"](
-              employee.UserImageURL
-            )}
-            onChange={handleChange}
-          />
-        </Form.Item>
-        <Form.Item label="User Types" error={errors.UserUsertypeID}>
-          {!usertypes.list ? (
-            <p>{usertypes.loadingMessage}</p>
-          ) : usertypes.list.length === 0 ? (
-            <p>No user types available</p>
-          ) : (
-            <select
-              name="UserUsertypeID"
-              value={employeeConformance.js2html["UserUsertypeID"](
-                employee.UserUsertypeID
-              )}
-              onChange={handleChange}
-            >
-              <option value="0">None selected</option>
-              {usertypes.list.map((type) => (
-                <option key={type.UsertypeID} value={type.UsertypeID}>
-                  {type.UsertypeName}
-                </option>
-              ))}
-            </select>
-          )}
+          >
+            <option value="">Select Location</option>
+            {locationOptions.map((location) => (
+              <option key={location} value={location}>
+                {location}
+              </option>
+            ))}
+          </select>
         </Form.Item>
       </div>
     </Form>
