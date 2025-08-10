@@ -9,7 +9,7 @@ API.delete = (endpoint) => callFetch(endpoint, "DELETE", null);
 
 const callFetch = async (endpoint, method, record) => {
   // Build request object
-  let requestObj = { method: method }; // GET, POST, PUT or DELETE
+  let requestObj = { method: method };
   if (record)
     requestObj = {
       ...requestObj,
@@ -17,16 +17,22 @@ const callFetch = async (endpoint, method, record) => {
       body: JSON.stringify(record),
     };
 
-  // Call the fetch and process the return
   try {
     let result = null;
-    // endpoints are already full URLs
     const endpointAddress = endpoint;
     const response = await fetch(endpointAddress, requestObj);
     if (response.status !== 204) result = await response.json();
-    return response.status >= 200 && response.status < 300
-      ? { isSuccess: true, result }
-      : { isSuccess: false, message: `${result.message}` };
+    if (response.status >= 200 && response.status < 300) {
+      return { isSuccess: true, result };
+    } else {
+      return {
+        isSuccess: false,
+        message:
+          result && result.message ? result.message : response.statusText,
+        response: result,
+        status: response.status,
+      };
+    }
   } catch (error) {
     return { isSuccess: false, message: error.message };
   }

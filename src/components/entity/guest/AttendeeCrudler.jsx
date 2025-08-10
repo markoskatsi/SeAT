@@ -34,13 +34,11 @@ function AttendeeCrudler({ getAttendeesEndpoint, eventId }) {
     setEditAttendee(null);
   };
 
-  // Edit form state
   const [editFirstName, setEditFirstName] = useState("");
   const [editLastName, setEditLastName] = useState("");
   const [editEmail, setEditEmail] = useState("");
   const [editLoading, setEditLoading] = useState(false);
 
-  // Populate fields when modal opens
   useEffect(() => {
     if (showEditModal && editAttendee) {
       setEditFirstName(editAttendee.AttendeeName?.split(" ")[0] || "");
@@ -51,7 +49,7 @@ function AttendeeCrudler({ getAttendeesEndpoint, eventId }) {
 
   const handleEditSave = async () => {
     setEditLoading(true);
-    // Compose updated attendee
+
     const updatedAttendee = {
       ...editAttendee,
       AttendeeName: `${editFirstName} ${editLastName}`.trim(),
@@ -170,6 +168,8 @@ function AttendeeCrudler({ getAttendeesEndpoint, eventId }) {
       <Modal show={showForm} title={formTitle}>
         <AttendeeForm
           attendee={selectedAttendee}
+          eventId={eventId}
+          eventName={"Annual Christmas Party"} // TODO: Replace with dynamic event name if available
           onCancel={closeForm}
           onSubmit={selectedAttendee ? handleModify : handleAdd}
         />
