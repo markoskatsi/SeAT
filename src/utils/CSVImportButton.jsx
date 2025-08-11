@@ -2,7 +2,7 @@ import Papa from "papaparse";
 import PropTypes from "prop-types";
 import { useState, useRef } from "react";
 
-function CSVImportButton({ onImport, buttonText = "Import CSV" }) {
+function CSVImportButton({ onImport }) {
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -29,7 +29,7 @@ function CSVImportButton({ onImport, buttonText = "Import CSV" }) {
           setError("Invalid CSV format");
           return;
         }
-        onImport(results.data);
+        onImport(results.data, file.name);
       },
       error: () => setError("Invalid CSV format"),
     });
@@ -44,7 +44,7 @@ function CSVImportButton({ onImport, buttonText = "Import CSV" }) {
         style={{ display: "none" }}
       />
       <button type="button" onClick={handleFileSelect}>
-        {buttonText}
+        Import CSV
       </button>
       {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
