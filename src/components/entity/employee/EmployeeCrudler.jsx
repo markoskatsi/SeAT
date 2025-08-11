@@ -12,6 +12,7 @@ import { filterRecords } from "../../../utils/filtering.jsx";
 import SearchBar from "../../../utils/search.jsx";
 import CSVImportButton from "../../../utils/CSVImportButton.jsx";
 import "./EmployeeCrudler.scss";
+import CSVExportButton from "../../../utils/CSVExportButton.jsx";
 
 function EmployeeCrudler() {
   // Initialisation -------------------------------------
@@ -24,6 +25,7 @@ function EmployeeCrudler() {
   const [showConfirm, ConfirmContent, openConfirm, closeConfirm] =
     useModal(false);
   const [showError, ErrorContent, openError, closeError] = useModal(false);
+  const [lastImportedFilename, setLastImportedFilename] = useState();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterField, setFilterField] = useState("");
@@ -32,6 +34,7 @@ function EmployeeCrudler() {
 
   const handleSelect = (employee) => {
     setSelectedEmployee(employee);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleDismiss = () => {
@@ -80,7 +83,7 @@ function EmployeeCrudler() {
     return maxId + 1;
   };
 
-  const handleCSVImport = (csvData) => {
+  const handleCSVImport = (csvData, filename) => {
     const importedEmployees = csvData.map((row, index) => ({
       ID: index + 1,
       Name: row.Name || "",
@@ -93,6 +96,7 @@ function EmployeeCrudler() {
 
     setEmployees(importedEmployees);
     setSelectedEmployee(null);
+    setLastImportedFilename(filename);
     openAlert(`Imported ${importedEmployees.length} employees`);
   };
   // View -----------------------------------------------
@@ -159,7 +163,12 @@ function EmployeeCrudler() {
           buttonText={"Add a new employee"}
           onClick={openAddFrom}
         />
-        <CSVImportButton onImport={handleCSVImport} buttonText="Import CSV" />
+        <div className="csv-buttons">
+          <CSVImportButton onImport={handleCSVImport} buttonText="Import CSV" />
+          {lastImportedFilename && (
+            <CSVExportButton data={employees} filename={lastImportedFilename} />
+          )}
+        </div>
       </Action.Tray>
       <SearchBar
         searchTerm={searchTerm}

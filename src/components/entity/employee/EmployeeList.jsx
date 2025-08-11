@@ -1,4 +1,5 @@
 import "./EmployeeList.scss";
+import { ListContainer, HeaderContainer } from "../../UI/ListContainer.jsx";
 
 function EmployeeList({
   employees,
@@ -10,7 +11,15 @@ function EmployeeList({
   if (employees.length === 0)
     return <EmployeeListMessage message="No records found!" />;
   return (
-    <div className="employeeList">
+    <ListContainer>
+      <HeaderContainer>
+        <p>Name</p>
+        <p>Title</p>
+        <p>Position</p>
+        <p>Age Group</p>
+        <p>Partner Name</p>
+        <p>Location</p>
+      </HeaderContainer>
       {employees.map((employee, idx) => (
         <EmployeeListItem
           key={employee.ID || idx}
@@ -24,7 +33,7 @@ function EmployeeList({
           className={idx === 0 && selectedEmployee ? "animate-push" : ""}
         />
       ))}
-    </div>
+    </ListContainer>
   );
 }
 
@@ -38,21 +47,17 @@ function EmployeeListItem({ employee, onSelect, selected, className = "" }) {
   };
   return (
     <div
-      className={`employeeListItem${selected ? " selected" : ""}${
+      className={`employeeItem${selected ? " selected" : ""}${
         className ? " " + className : ""
       }`}
       onClick={handleSelect}
     >
-      <div className="employeeListDetails">
-        <div className="employeeListTitle">
-          <p>{employee.Name || "N/A"}</p>
-          <p>{employee.Title || "N/A"}</p>
-          <p>{employee.Position || "N/A"}</p>
-          <p>{employee.AgeGroup || "N/A"}</p>
-          <p>{employee.PartnerGuestName || ""}</p>
-          <p>{employee.Location || "N/A"}</p>
-        </div>
-      </div>
+      <p>{employee.Name || "N/A"}</p>
+      <p>{employee.Title || "N/A"}</p>
+      <p>{employee.Position || "N/A"}</p>
+      <p>{employee.AgeGroup || "N/A"}</p>
+      <p>{employee.PartnerGuestName || ""}</p>
+      <p>{employee.Location || "N/A"}</p>
     </div>
   );
 }
