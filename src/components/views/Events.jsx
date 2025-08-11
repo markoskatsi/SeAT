@@ -16,7 +16,7 @@ function Events() {
   const [events, setEvents, loadingEventsMessage, loadEvents] = useLoad(
     apiEndpoints.EVENTS
   );
-  const [visibleEvents, setVisibleEvents] = useState(100);
+  const [visibleEvents, setVisibleEvents] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterField, setFilterField] = useState("");
   const [locations, loadingLocationsMessage] = useLoad(
