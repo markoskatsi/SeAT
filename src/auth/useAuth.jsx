@@ -12,7 +12,8 @@ const useAuth = () => {
       );
       if (res.ok) {
         const data = await res.json();
-        setUser(data.user);
+        console.log("Session response:", data);
+        setUser(data.session);
       } else {
         setUser(null);
       }
@@ -61,7 +62,14 @@ const useAuth = () => {
     setUser(null);
   };
 
-  return { user, loading, login, register, logout, refreshUser: fetchUser };
+  return {
+    loggedInUser: user,
+    loading,
+    login,
+    register,
+    logout,
+    refreshUser: fetchUser,
+  };
 };
 
 export default useAuth;
