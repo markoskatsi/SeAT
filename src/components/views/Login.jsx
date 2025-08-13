@@ -1,48 +1,25 @@
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../auth/useAuth.jsx";
-import Action from "../UI/Actions.jsx";
-import "./Login.scss";
+import React, { useState } from "react";
+import LoginForm from "../../auth/LoginForm";
+import RegisterForm from "../../auth/registerForm";
 
-function Login() {
-  // Initialisation -------------------
-  const { login } = useAuth();
-  const navigate = useNavigate();
+export default function Login() {
+  const [showRegister, setShowRegister] = useState(false);
 
-  const admin = {
-    UserID: 2,
-    UserFirstname: "Graeme",
-    UserLastname: "Jones",
-    UserEmail: "G.Jones@kingston.ac.uk",
-    UserDateofbirth: "1965-01-30T00:00:00.000Z",
-    UserImageURL:
-      "https://avatars.githubusercontent.com/u/48164351?s=400&u=70e6fedaa5b9cd794807b73c5748f72af4efc328&v=4",
-    UserUsertypeID: 1,
-    UserRoleID: 1,
-    UserUsertypeName: "Employee",
-    UserRoleName: "None",
-  };
-
-  // State ----------------------------
-  // Handlers -------------------------
-  const handleAdmin = () => {
-    login(admin);
-    navigate("/");
-  };
-
-  // View -----------------------------
-  return (
-    <div className="login">
-      <h1>Welcome Back</h1>
-      <h3>Login To Your Account</h3>
+  if (showRegister) {
+    return (
       <div>
-        <input type="text" placeholder="Email address" />
-        <input type="password" placeholder="Password" />
+        <h2>Register</h2>
+        <RegisterForm />
+        <button onClick={() => setShowRegister(false)}>Back to Login</button>
       </div>
-      <Action.Tray>
-        <Action.Add showText buttonText="Sign In" onClick={handleAdmin} />
-      </Action.Tray>
+    );
+  }
+
+  return (
+    <div>
+      <h2>Login</h2>
+      <LoginForm />
+      <button onClick={() => setShowRegister(true)}>Register</button>
     </div>
   );
 }
-
-export default Login;

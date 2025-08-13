@@ -6,15 +6,13 @@ import Home from "./components/views/Home.jsx";
 import EventInfo from "./components/views/EventInfo.jsx";
 import "./App.scss";
 import Login from "./components/views/Login.jsx";
-import { AuthProvider } from "./auth/useAuth.jsx";
+import { UserProvider } from "./auth/UserContext";
 
 function App() {
-  const loggedInUser = "Markos";
-
   return (
-    <AuthProvider>
+    <UserProvider>
       <BrowserRouter>
-        <Layout loggedInUser={loggedInUser}>
+        <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/events" element={<Events />} />
@@ -24,7 +22,7 @@ function App() {
           </Routes>
         </Layout>
       </BrowserRouter>
-    </AuthProvider>
+    </UserProvider>
   );
 }
 
