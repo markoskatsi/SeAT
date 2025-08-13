@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import InputField from "./inputField";
+import { useUser } from "./UserContext";
 
 export default function LoginForm() {
   const [error, setError] = React.useState({});
@@ -9,30 +10,23 @@ export default function LoginForm() {
     password: "",
   });
   const navigate = useNavigate();
+  const { login, refreshUser } = useUser();
 
   async function onFormSubmit(e) {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/login`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        credentials: "include",
-        body: JSON.stringify(data),
-      });
-
-      const d = await res.json();
-      if (d.error) {
-        console.log("Login error:", d.error);
-        setError(d.error);
+      const success = await login(data.email, data.password);
+      if (success) {
+        await refreshUser();
       } else {
-        console.log("Login successful:", d);
-        navigate("/");
+        setError({
+          type: "form",
+          text: "Login failed. Please check your credentials.",
+        });
       }
     } catch (err) {
-      console.log(err);
+      setError({ type: "form", text: "An error occurred. Please try again." });
     }
   }
 
@@ -45,7 +39,7 @@ export default function LoginForm() {
             title="Email"
             type="email"
             onChange={(e) => setData((d) => ({ ...d, email: e.target.value }))}
-            errorMsg={error.type == "email" ? error.text : undefined}
+            errorMsg={error.type === "email" ? error.text : undefined}
           />
           <InputField
             title="Password"
@@ -53,8 +47,11 @@ export default function LoginForm() {
             onChange={(e) =>
               setData((d) => ({ ...d, password: e.target.value }))
             }
-            errorMsg={error.type == "password" ? error.text : undefined}
+            errorMsg={error.type === "password" ? error.text : undefined}
           />
+          {error.type === "form" && (
+            <div style={{ color: "red" }}>{error.text}</div>
+          )}
           <button className="btn btn-success" type="submit">
             Login
           </button>

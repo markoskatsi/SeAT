@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { UserProvider } from "./auth/UserContext.jsx";
 import Layout from "./components/layout/Layout.jsx";
 import Employees from "./components/views/Employees.jsx";
 import Events from "./components/views/Events.jsx";
@@ -6,7 +7,6 @@ import Home from "./components/views/Home.jsx";
 import EventInfo from "./components/views/EventInfo.jsx";
 import "./App.scss";
 import Login from "./components/views/Login.jsx";
-import { UserProvider } from "./auth/UserContext";
 
 function App() {
   return (
