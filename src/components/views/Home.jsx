@@ -1,15 +1,26 @@
-import { useAuth } from "../../auth/useAuth";
-import Login from "./Login";
-import "./Home.scss";
+import React from "react";
+import { useUser } from "../../auth/UserContext";
 
-function Home() {
-  const { loggedInUser } = useAuth();
+export default function Home() {
+  const { loggedInUser, loading } = useUser();
 
+  if (loading) return <div>Loading...</div>;
+  console.log(loggedInUser);
   return (
-    <div className="home">
-      {loggedInUser ? <h1>Welcome to Seat</h1> : <Login />}
+    <div>
+      <h1>Welcome to SeAT!</h1>
+      {loggedInUser ? (
+        <div>
+          <p>Hello, {loggedInUser.UserFirstname}!</p>
+        </div>
+      ) : (
+        <div>
+          <p>
+            Please <a href="/login">login</a> or{" "}
+            <a href="/register">register</a> to continue.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
-
-export default Home;
