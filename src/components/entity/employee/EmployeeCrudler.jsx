@@ -29,7 +29,10 @@ function EmployeeCrudler() {
   const [showConfirm, ConfirmContent, openConfirm, closeConfirm] =
     useModal(false);
   const [showError, ErrorContent, openError, closeError] = useModal(false);
-  const [lastImportedFilename, setLastImportedFilename] = useState();
+  const [lastImportedFilename, setLastImportedFilename] = useState(() => {
+    const storedFilename = localStorage.getItem("lastImportedFilename");
+    return storedFilename ? JSON.parse(storedFilename) : [];
+  });
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterField, setFilterField] = useState("");
@@ -106,6 +109,7 @@ function EmployeeCrudler() {
     localStorage.setItem("employees", JSON.stringify(importedEmployees));
     setSelectedEmployee(null);
     setLastImportedFilename(filename);
+    localStorage.setItem("lastImportedFilename", JSON.stringify(filename));
     openAlert(`Imported ${importedEmployees.length} employees`);
   };
   // View -----------------------------------------------
