@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import InputField from "./inputField";
 import { useUser } from "./UserContext";
 import "./LoginForm.scss";
@@ -54,10 +54,16 @@ export default function LoginForm() {
           {error.type === "form" && (
             <div style={{ color: "red" }}>{error.text}</div>
           )}
-          <button className="btn btn-success" type="submit">
+          <button className="loginButton" type="submit">
             Login
           </button>
         </form>
+        <p>
+          Don't have an account?{" "}
+          <NavLink className="navItem" to="/register">
+            Click Here
+          </NavLink>
+        </p>
       </div>
     </div>
   );

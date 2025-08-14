@@ -1,7 +1,7 @@
 .containerInputField {
   display: flex;
   justify-content: center;
-  gap: 5px;
+  gap: 10px;
   width: 100%;
   height: 100%;
   flex-direction: column;
@@ -17,7 +17,8 @@
     color: #fff;
     background: #202020;
     mix-blend-mode: color-dodge;
-    box-shadow: 0 4px 4.9px 0 rgba(185, 185, 185, 0.25);
+    border: 1px solid #504d4dee;
+    border-radius: 10px;
   }
   .input-group {
     display: flex;
