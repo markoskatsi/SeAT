@@ -160,7 +160,7 @@ function EmployeeCrudler() {
       <Action.Tray>
         <Action.Add
           showText
-          buttonText={"Add a new employee"}
+          buttonText={"ADD NEW EMPLOYEE"}
           onClick={openAddFrom}
         />
         <div className="csv-buttons">
