@@ -8,6 +8,7 @@ $BorderGrey: LightGrey;
   gap: 20px;
   margin-bottom: 20px;
   border-radius: 10px;
+  border: 1px solid rgba(128, 128, 128, 0.3);
 
   .FormTray {
     width: 100%;
@@ -15,6 +16,7 @@ $BorderGrey: LightGrey;
     justify-content: space-around;
     flex-direction: column;
     gap: 20px;
+    margin-left: 10px;
     .employeeLeft,
     .employeeRight {
       width: 100%;
@@ -33,7 +35,8 @@ $BorderGrey: LightGrey;
       display: block;
       width: 100%;
       color: #fff;
-      padding: 10px;
+      padding-bottom: 5px;
+      padding-top: 10px;
       border: 0;
     }
 
@@ -46,8 +49,10 @@ $BorderGrey: LightGrey;
       margin: 1px 0;
       font-size: 100%;
       border: 0;
-      background: #202020;
+      background: #333333;
       color: #fff;
+      border-radius: 10px;
+      padding: 5px;
 
       &:hover,
       &:focus {
