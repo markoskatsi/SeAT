@@ -1,6 +1,7 @@
 import Papa from "papaparse";
 import PropTypes from "prop-types";
 import { useState, useRef } from "react";
+import "./CSVImportButton.scss";
 
 function CSVImportButton({ onImport }) {
   const [error, setError] = useState(null);

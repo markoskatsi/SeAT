@@ -1,0 +1,10 @@
+button {
+  min-width: 120px;
+  padding: 8px 16px;
+  transition: background-color 0.2s ease;
+  border: none;
+
+  &:hover {
+    background-color: rgba(3, 129, 56, 0.1);
+  }
+}
