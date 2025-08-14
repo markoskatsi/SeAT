@@ -110,9 +110,11 @@ Dismiss.propTypes = ActionPropTypes;
 
 export function Dismiss({ onClick, showText = false, buttonText = "Dismiss" }) {
   return (
-    <Action buttonText={buttonText} onClick={onClick} showText={showText}>
-      <Icon.Cross />
-    </Action>
+    <Action
+      buttonText={buttonText}
+      onClick={onClick}
+      showText={showText}
+    ></Action>
   );
 }
 
