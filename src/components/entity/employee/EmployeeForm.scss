@@ -8,13 +8,12 @@ div.employeeForm {
   gap: 20px;
   margin-bottom: 20px;
   border-radius: 10px;
-  
 
   Form.formTray {
     width: 100%;
     display: flex;
     justify-content: space-around;
-
+    border: none;
     .employeeLeft,
     .employeeRight {
       width: 100%;
