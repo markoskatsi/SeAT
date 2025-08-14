@@ -19,6 +19,7 @@ export default function LoginForm() {
       const success = await login(data.email, data.password);
       if (success) {
         await refreshUser();
+        navigate("/");
       } else {
         setError({
           type: "form",
@@ -28,7 +29,7 @@ export default function LoginForm() {
     } catch (err) {
       setError({ type: "form", text: "An error occurred. Please try again." });
     }
-  }
+  } 
 
   return (
     <div className="card">

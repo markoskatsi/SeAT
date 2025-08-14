@@ -1,0 +1,33 @@
+.containerInputField {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  .form-label {
+    color: #fff;
+    padding-top: 20px;
+  }
+  .form-control {
+    width: 331px;
+    height: 35px;
+    color: #fff;
+    background: #202020;
+    mix-blend-mode: color-dodge;
+    box-shadow: 0 4px 4.9px 0 rgba(185, 185, 185, 0.25);
+  }
+  .input-group {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+
+    #password {
+      width: 100%;
+    }
+  }
+}
