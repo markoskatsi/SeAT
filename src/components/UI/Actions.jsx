@@ -90,9 +90,11 @@ Close.propTypes = ActionPropTypes;
 
 export function Close({ onClick, showText = false, buttonText = "Close" }) {
   return (
-    <Action buttonText={buttonText} onClick={onClick} showText={showText}>
-      <Icon.Cross />
-    </Action>
+    <Action
+      buttonText={buttonText}
+      onClick={onClick}
+      showText={showText}
+    ></Action>
   );
 }
 
@@ -100,9 +102,11 @@ Delete.propTypes = ActionPropTypes;
 
 export function Delete({ onClick, showText = false, buttonText = "Delete" }) {
   return (
-    <Action buttonText={buttonText} onClick={onClick} showText={showText}>
-      <Icon.Trash />
-    </Action>
+    <Action
+      buttonText={buttonText}
+      onClick={onClick}
+      showText={showText}
+    ></Action>
   );
 }
 
@@ -122,9 +126,11 @@ Expand.propTypes = ActionPropTypes;
 
 export function Expand({ onClick, showText = false, buttonText = "Expand" }) {
   return (
-    <Action buttonText={buttonText} onClick={onClick} showText={showText}>
-      <Icon.Expand />
-    </Action>
+    <Action
+      buttonText={buttonText}
+      onClick={onClick}
+      showText={showText}
+    ></Action>
   );
 }
 
@@ -136,9 +142,11 @@ export function Favourites({
   buttonText = "List favourites",
 }) {
   return (
-    <Action buttonText={buttonText} onClick={onClick} showText={showText}>
-      <Icon.RedHeart />
-    </Action>
+    <Action
+      buttonText={buttonText}
+      onClick={onClick}
+      showText={showText}
+    ></Action>
   );
 }
 
@@ -150,9 +158,11 @@ export function ListAll({
   buttonText = "List all",
 }) {
   return (
-    <Action buttonText={buttonText} onClick={onClick} showText={showText}>
-      <Icon.List />
-    </Action>
+    <Action
+      buttonText={buttonText}
+      onClick={onClick}
+      showText={showText}
+    ></Action>
   );
 }
 
@@ -160,9 +170,11 @@ Modify.propTypes = ActionPropTypes;
 
 export function Modify({ onClick, showText = false, buttonText = "Modify" }) {
   return (
-    <Action buttonText={buttonText} onClick={onClick} showText={showText}>
-      <Icon.Pen />
-    </Action>
+    <Action
+      buttonText={buttonText}
+      onClick={onClick}
+      showText={showText}
+    ></Action>
   );
 }
 
@@ -170,9 +182,11 @@ No.propTypes = ActionPropTypes;
 
 export function No({ onClick, showText = false, buttonText = "No" }) {
   return (
-    <Action buttonText={buttonText} onClick={onClick} showText={showText}>
-      <Icon.Cross />
-    </Action>
+    <Action
+      buttonText={buttonText}
+      onClick={onClick}
+      showText={showText}
+    ></Action>
   );
 }
 
@@ -196,9 +210,11 @@ export function Subscribe({
   buttonText = "Subscribe",
 }) {
   return (
-    <Action buttonText={buttonText} onClick={onClick} showText={showText}>
-      <Icon.Tick />
-    </Action>
+    <Action
+      buttonText={buttonText}
+      onClick={onClick}
+      showText={showText}
+    ></Action>
   );
 }
 
@@ -206,9 +222,11 @@ Yes.propTypes = ActionPropTypes;
 
 export function Yes({ onClick, showText = false, buttonText = "Yes" }) {
   return (
-    <Action buttonText={buttonText} onClick={onClick} showText={showText}>
-      <Icon.Tick />
-    </Action>
+    <Action
+      buttonText={buttonText}
+      onClick={onClick}
+      showText={showText}
+    ></Action>
   );
 }
 
