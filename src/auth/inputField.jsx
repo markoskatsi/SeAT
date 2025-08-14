@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "./inputField.scss";
 
 export default function InputField({
   title,
@@ -16,7 +17,7 @@ export default function InputField({
   const [hidden, setHidden] = useState(false);
 
   return (
-    <div className="mb-3">
+    <div className="containerInputField">
       <label htmlFor={name} className="form-label">
         {title}:
       </label>
@@ -37,9 +38,19 @@ export default function InputField({
             className="input-group-text"
           >
             {hidden ? (
-              <FontAwesomeIcon icon={faEye} width={15} height={15} />
+              <FontAwesomeIcon
+                icon={faEye}
+                width={15}
+                height={15}
+                color="#fff"
+              />
             ) : (
-              <FontAwesomeIcon icon={faEyeSlash} width={15} height={15} />
+              <FontAwesomeIcon
+                icon={faEyeSlash}
+                width={15}
+                height={15}
+                color="#fff"
+              />
             )}
           </a>
         ) : null}
