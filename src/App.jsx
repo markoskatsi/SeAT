@@ -6,6 +6,7 @@ import Events from "./components/views/Events.jsx";
 import Home from "./components/views/Home.jsx";
 import EventInfo from "./components/views/EventInfo.jsx";
 import RegisterForm from "./auth/registerForm.jsx";
+import LoginForm from "./auth/LoginForm.jsx";
 import "./App.scss";
 import Login from "./components/views/Login.jsx";
 
@@ -19,7 +20,7 @@ function App() {
             <Route path="/events" element={<Events />} />
             <Route path="/events/:eventId" element={<EventInfo />} />
             <Route path="/employees" element={<Employees />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<LoginForm />} />
             <Route path="/register" element={<RegisterForm />} />
           </Routes>
         </Layout>

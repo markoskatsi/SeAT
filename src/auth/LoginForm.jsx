@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import InputField from "./inputField";
 import { useUser } from "./UserContext";
+import "./LoginForm.scss";
 
 export default function LoginForm() {
   const [error, setError] = React.useState({});
@@ -29,12 +30,12 @@ export default function LoginForm() {
     } catch (err) {
       setError({ type: "form", text: "An error occurred. Please try again." });
     }
-  } 
+  }
 
   return (
     <div className="card">
       <div className="card-body">
-        <h5 className="card-title">Login form</h5>
+        <h1 className="card-title">Login</h1>
         <form onSubmit={onFormSubmit}>
           <InputField
             title="Email"

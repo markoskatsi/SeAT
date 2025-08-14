@@ -8,18 +8,15 @@ export default function Login() {
   if (showRegister) {
     return (
       <div>
-        <h2>Register</h2>
         <RegisterForm />
-        <button onClick={() => setShowRegister(false)}>Back to Login</button>
       </div>
     );
   }
 
   return (
     <div>
-      <h2>Login</h2>
       <LoginForm />
-      <button onClick={() => setShowRegister(true)}>Register</button>
+      <button onClick={() => setShowRegister(true)}>Sign Up</button>
     </div>
   );
 }

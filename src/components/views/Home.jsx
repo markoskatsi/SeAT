@@ -20,7 +20,7 @@ export default function Home() {
             Login
           </NavLink>
           <NavLink className="navItem" to="/register">
-            Register
+            Sign Up
           </NavLink>
         </div>
       )}
