@@ -178,7 +178,7 @@ function EmployeeCrudler() {
         filterOptions={employeeFilterOptions}
         placeholder="Search employees"
       />
-      <main>
+      <div className="employeeCrudlerContainer">
         <div className="employeeViewListContainer">
           <div
             className={`employeeViewAnimated${selectedEmployee ? " show" : ""}`}
@@ -218,7 +218,7 @@ function EmployeeCrudler() {
             />
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
