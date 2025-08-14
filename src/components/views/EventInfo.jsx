@@ -30,7 +30,6 @@ function EventInfo() {
       <p>Date: {new Date(event.EventDatetime).toLocaleString()}</p>
       <p>Location: {event.EventLocationName}</p>
       <AttendeeCrudler
-        getAttendeesEndpoint={apiEndpoints.ATTENDEES}
         eventId={Number(eventId)}
       />
     </div>

@@ -8,6 +8,7 @@ import Action from "../../UI/Actions.jsx";
 import EmployeeForm from "./EmployeeForm.jsx";
 import EmployeeList from "./EmployeeList.jsx";
 import EmployeeView from "./EmployeeView.jsx";
+import { useEffect } from "react";
 import { filterRecords } from "../../../utils/filtering.jsx";
 import SearchBar from "../../../utils/search.jsx";
 import CSVImportButton from "../../../utils/CSVImportButton.jsx";
@@ -18,7 +19,10 @@ function EmployeeCrudler() {
   // Initialisation -------------------------------------
 
   // State ----------------------------------------------
-  const [employees, setEmployees] = useState([]);
+  const [employees, setEmployees] = useState(() => {
+    const storedEmployees = localStorage.getItem("employees");
+    return storedEmployees ? JSON.parse(storedEmployees) : [];
+  });
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [showForm, formTitle, openForm, closeForm] = useModal(false);
   const [showAlert, alertContent, openAlert, closeAlert] = useModal(false);
@@ -83,6 +87,10 @@ function EmployeeCrudler() {
     return maxId + 1;
   };
 
+  useEffect(() => {
+    localStorage.setItem("employees", JSON.stringify(employees));
+  }, [employees]);
+
   const handleCSVImport = (csvData, filename) => {
     const importedEmployees = csvData.map((row, index) => ({
       ID: index + 1,
@@ -95,6 +103,7 @@ function EmployeeCrudler() {
     }));
 
     setEmployees(importedEmployees);
+    localStorage.setItem("employees", JSON.stringify(importedEmployees));
     setSelectedEmployee(null);
     setLastImportedFilename(filename);
     openAlert(`Imported ${importedEmployees.length} employees`);
