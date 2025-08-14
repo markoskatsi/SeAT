@@ -165,18 +165,17 @@ function AttendeeCrudler(eventId) {
   const handleUserImport = () => {
     const storedUsers = localStorage.getItem("employees");
     if (storedUsers) {
-      try {
         const users = JSON.parse(storedUsers);
 
         // Convert users to attendees format
-        const attendeesFromUsers = users.map((user) => ({
-          AttendeeID: attendees.length + users.indexOf(user) + 1,
+        const attendeesFromUsers = users.map((user, index) => ({
+          AttendeeID: attendees.length + index + 1,
           AttendeeName: user.Name || "",
-          AttendeeEmail: "", 
           AttendeeEventID: eventId,
-          AttendeeStatusID: 1, 
+          AttendeeStatusID: 1,
           AttendeeUserName: user.Name || "",
-          AttendeeTitle: user.Title || user.Position || "",
+          AttendeeTitle: user.Title || "",
+          AttendeePosition: user.Position || "",
           AttendeeLocation: user.Location || "",
           AttendeeAgeGroup: user.AgeGroup || "",
           AttendeePartnerGuestName: user.PartnerGuestName || "",
@@ -184,12 +183,9 @@ function AttendeeCrudler(eventId) {
 
         setAttendees(attendeesFromUsers);
         openAlert(`Imported ${attendeesFromUsers.length} users as attendees`);
-      } catch (error) {
-        openError("Failed to import users");
+      } else {
+        openError("No CSV file has been imported");
       }
-    } else {
-      openError("No users found in local storage");
-    }
   };
 
   return (
