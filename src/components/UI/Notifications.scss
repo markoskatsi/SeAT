@@ -1,6 +1,6 @@
 div.notificationAlert {
   header {
-    background-color: DodgerBlue !important;
+    background-color: #0e201c !important;
   }
 }
 
@@ -19,7 +19,14 @@ div.notificationError {
 div.notificationAlert,
 div.notificationConfirm,
 div.notificationError {
-  main p {
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  p {
     min-width: 200px;
     text-align: center;
   }
