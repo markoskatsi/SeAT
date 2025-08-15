@@ -95,9 +95,9 @@ export default function RegisterForm() {
             />
           </div>
           &nbsp;
-          <div className="form-check d-flex justify-content-center mb-5">
+          <div className="checkbox-container">
             <input
-              className="form-check-input me-2"
+              className="form-check-input"
               type="checkbox"
               value=""
               id="T&S"
