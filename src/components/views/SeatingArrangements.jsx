@@ -5,85 +5,6 @@ import { ListContainer, HeaderContainer } from "../UI/ListContainer.jsx";
 import { normaliseParticipants, groupParticipantsWithGuests } from "../../utils/employeeConformance.jsx";
 import "./SeatingArrangements.scss";
 
-function assignSeats(groupedParticipants, tableSize = 8, tableShape = "round") {
-  const tables = [];
-  let tableNumber = 1;
-
-  groupedParticipants.forEach((group) => {
-    let placed = false;
-    for (let tIdx = 0; tIdx < tables.length; tIdx++) {
-      const candidateTable = tables[tIdx];
-      if (hasAdjacencyConflict(candidateTable, group, tableShape)) {
-        continue;
-      }
-      if (candidateTable.length + group.length <= tableSize) {
-        group.forEach((p) => {
-          candidateTable.push({
-            ...p,
-            seat: candidateTable.length + 1,
-            table: tIdx + 1,
-          });
-        });
-        placed = true;
-        break;
-      }
-    }
-    if (!placed) {
-      let table = [];
-      let seatNumber = 1;
-      group.forEach((p) => {
-        table.push({
-          ...p,
-          seat: seatNumber,
-          table: tableNumber,
-        });
-        seatNumber++;
-      });
-      tables.push(table);
-      tableNumber++;
-    }
-  });
-
-  // Remove tables smaller than 6
-  for (let i = 0; i < tables.length - 1; i++) {
-    if (tables[i].length < 6) {
-      tables[i + 1] = [...tables[i], ...tables[i + 1]];
-      tables[i] = [];
-    }
-  }
-  return tables.filter((t) => t.length > 0);
-}
-
-function hasAdjacencyConflict(table, group, tableShape) {
-  if (table.length === 0) return false;
-
-  // Check left adjacency (last person in table with first in group)
-  const lastPerson = table[table.length - 1];
-  const firstPerson = group[0];
-  if (
-    lastPerson.previousNeighbors?.includes(firstPerson.id) ||
-    firstPerson.previousNeighbors?.includes(lastPerson.id)
-  ) {
-    return true;
-  }
-
-  // For round tables, check right adjacency (if table will be full after adding group)
-  if (tableShape === "round" && table.length + group.length === table.length) {
-    const firstTablePerson = table[0];
-    const lastGroupPerson = group[group.length - 1];
-    if (
-      firstTablePerson.previousNeighbors?.includes(lastGroupPerson.id) ||
-      lastGroupPerson.previousNeighbors?.includes(firstTablePerson.id)
-    ) {
-      return true;
-    }
-  }
-
-  // NEED TO CHECK ACROSS FOR RECTANGULAR TABLES
-
-  return false;
-}
-
 function SeatingArrangements() {
   const [participants, setParticipants] = useState([]);
   const [tables, setTables] = useState([]);
@@ -164,3 +85,82 @@ function SeatingArrangements() {
 }
 
 export default SeatingArrangements;
+
+function assignSeats(groupedParticipants, tableSize = 8, tableShape = "round") {
+  const tables = [];
+  let tableNumber = 1;
+
+  groupedParticipants.forEach((group) => {
+    let placed = false;
+    for (let tIdx = 0; tIdx < tables.length; tIdx++) {
+      const candidateTable = tables[tIdx];
+      if (hasAdjacencyConflict(candidateTable, group, tableShape)) {
+        continue;
+      }
+      if (candidateTable.length + group.length <= tableSize) {
+        group.forEach((p) => {
+          candidateTable.push({
+            ...p,
+            seat: candidateTable.length + 1,
+            table: tIdx + 1,
+          });
+        });
+        placed = true;
+        break;
+      }
+    }
+    if (!placed) {
+      let table = [];
+      let seatNumber = 1;
+      group.forEach((p) => {
+        table.push({
+          ...p,
+          seat: seatNumber,
+          table: tableNumber,
+        });
+        seatNumber++;
+      });
+      tables.push(table);
+      tableNumber++;
+    }
+  });
+
+  // Remove tables smaller than 6
+  for (let i = 0; i < tables.length - 1; i++) {
+    if (tables[i].length < 6) {
+      tables[i + 1] = [...tables[i], ...tables[i + 1]];
+      tables[i] = [];
+    }
+  }
+  return tables.filter((t) => t.length > 0);
+}
+
+function hasAdjacencyConflict(table, group, tableShape) {
+  if (table.length === 0) return false;
+
+  // Check left adjacency (last person in table with first in group)
+  const lastPerson = table[table.length - 1];
+  const firstPerson = group[0];
+  if (
+    lastPerson.previousNeighbors?.includes(firstPerson.id) ||
+    firstPerson.previousNeighbors?.includes(lastPerson.id)
+  ) {
+    return true;
+  }
+
+  // For round tables, check right adjacency (if table will be full after adding group)
+  if (tableShape === "round" && table.length + group.length === table.length) {
+    const firstTablePerson = table[0];
+    const lastGroupPerson = group[group.length - 1];
+    if (
+      firstTablePerson.previousNeighbors?.includes(lastGroupPerson.id) ||
+      lastGroupPerson.previousNeighbors?.includes(firstTablePerson.id)
+    ) {
+      return true;
+    }
+  }
+
+  // NEED TO CHECK ACROSS FOR RECTANGULAR TABLES
+
+  return false;
+}
