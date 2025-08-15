@@ -13,8 +13,9 @@ import SearchBar from "../../../utils/search.jsx";
 import CSVImportButton from "../../../utils/CSVImportButton.jsx";
 import "./AttendeeCrudler.scss";
 
-function AttendeeCrudler({ getAttendeesEndpoint, eventId }) {
+function AttendeeCrudler(eventId) {
   // Status options for dropdown
+  const [attendees, setAttendees] = useState([]);
   const [statusOptions, setStatusOptions] = useState([]);
   useEffect(() => {
     API.get(apiEndpoints.STATUS).then((res) => {
@@ -59,8 +60,6 @@ function AttendeeCrudler({ getAttendeesEndpoint, eventId }) {
     setEditLoading(false);
     closeEditModal();
   };
-  const [attendees, , loadingMessage, loadAttendees] =
-    useLoad(getAttendeesEndpoint);
 
   const [selectedAttendee, setSelectedAttendeeRaw] = useState(null);
   const setSelectedAttendee = (attendee) => {
@@ -163,13 +162,39 @@ function AttendeeCrudler({ getAttendeesEndpoint, eventId }) {
     } else openError(result.message);
   };
 
+  const handleUserImport = () => {
+    const storedUsers = localStorage.getItem("employees");
+    if (storedUsers) {
+        const users = JSON.parse(storedUsers);
+
+        // Convert users to attendees format
+        const attendeesFromUsers = users.map((user, index) => ({
+          AttendeeID: attendees.length + index + 1,
+          AttendeeName: user.Name || "",
+          AttendeeEventID: eventId,
+          AttendeeStatusID: 1,
+          AttendeeUserName: user.Name || "",
+          AttendeeTitle: user.Title || "",
+          AttendeePosition: user.Position || "",
+          AttendeeLocation: user.Location || "",
+          AttendeeAgeGroup: user.AgeGroup || "",
+          AttendeePartnerGuestName: user.PartnerGuestName || "",
+        }));
+
+        setAttendees(attendeesFromUsers);
+        openAlert(`Imported ${attendeesFromUsers.length} users as attendees`);
+      } else {
+        openError("No CSV file has been imported");
+      }
+  };
+
   return (
     <div className="attendeeCrudler">
       <Modal show={showForm} title={formTitle}>
         <AttendeeForm
           attendee={selectedAttendee}
           eventId={eventId}
-          eventName={"Annual Christmas Party"} // TODO: Replace with dynamic event name if available
+          eventName={"Annual Christmas Party"}
           onCancel={closeForm}
           onSubmit={selectedAttendee ? handleModify : handleAdd}
         />
@@ -190,7 +215,7 @@ function AttendeeCrudler({ getAttendeesEndpoint, eventId }) {
           buttonText={"Add a new attendee"}
           onClick={openAddForm}
         />
-        <CSVImportButton />
+        <button onClick={handleUserImport}>Import Users</button>
       </Action.Tray>
       <SearchBar
         searchTerm={searchTerm}
@@ -234,7 +259,6 @@ function AttendeeCrudler({ getAttendeesEndpoint, eventId }) {
           >
             <AttendeeList
               attendees={searchedAttendees}
-              loadingMessage={loadingMessage}
               onSelect={setSelectedAttendee}
               selectedAttendee={selectedAttendee}
             />
@@ -294,4 +318,5 @@ function AttendeeCrudler({ getAttendeesEndpoint, eventId }) {
     </div>
   );
 }
+
 export default AttendeeCrudler;
