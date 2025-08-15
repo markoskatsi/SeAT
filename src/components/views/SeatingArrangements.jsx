@@ -93,10 +93,10 @@ function SeatingArrangements() {
 
   const handleCSVImport = (rawData) => {
     try {
-      const normalized = normaliseParticipants(rawData);
-      const grouped = groupParticipantsWithGuests(normalized);
-      setParticipants(normalized);
-      setImportStatus(`Imported ${normalized.length} participants.`);
+      const normalised = normaliseParticipants(rawData);
+      const grouped = groupParticipantsWithGuests(normalised);
+      setParticipants(normalised);
+      setImportStatus(`Imported ${normalised.length} participants.`);
     } catch (e) {
       setImportStatus("There was an error importing the CSV.");
     }
