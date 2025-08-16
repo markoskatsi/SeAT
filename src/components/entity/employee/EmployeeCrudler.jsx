@@ -60,6 +60,8 @@ function EmployeeCrudler() {
   const openDeleteConfirmation = () =>
     openConfirm(`Are you sure you want to delete ${selectedEmployee.Name}?`);
 
+  // CSV CRUDL OPERATIONS
+
   const handleAdd = (employee) => {
     const newEmployee = { ...employee, ID: generateNextId() };
     setEmployees((prev) => [...prev, newEmployee]);

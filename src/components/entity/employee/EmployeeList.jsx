@@ -17,7 +17,7 @@ function EmployeeList({
         <p>Title</p>
         <p>Position</p>
         <p>Age Group</p>
-        <p>Partner Name</p>
+        <p>Plus One</p>
         <p>Location</p>
       </HeaderContainer>
       {employees.map((employee, idx) => (

@@ -162,31 +162,57 @@ function AttendeeCrudler(eventId) {
     } else openError(result.message);
   };
 
-  const handleUserImport = () => {
+  const handleUserImport = (attendees) => {
     const storedUsers = localStorage.getItem("employees");
     if (storedUsers) {
-        const users = JSON.parse(storedUsers);
+      const users = JSON.parse(storedUsers);
 
-        // Convert users to attendees format
-        const attendeesFromUsers = users.map((user, index) => ({
-          AttendeeID: attendees.length + index + 1,
-          AttendeeName: user.Name || "",
-          AttendeeEventID: eventId,
-          AttendeeStatusID: 1,
-          AttendeeUserName: user.Name || "",
-          AttendeeTitle: user.Title || "",
-          AttendeePosition: user.Position || "",
-          AttendeeLocation: user.Location || "",
-          AttendeeAgeGroup: user.AgeGroup || "",
-          AttendeePartnerGuestName: user.PartnerGuestName || "",
-        }));
-
-        setAttendees(attendeesFromUsers);
-        openAlert(`Imported ${attendeesFromUsers.length} users as attendees`);
-      } else {
-        openError("No CSV file has been imported");
-      }
+      // Convert users to attendees format
+      const attendeesFromUsers = users.map((user, index) => ({
+        AttendeeID: attendees.length + index + 1,
+        AttendeeName: user.Name || "",
+        AttendeeEventID: eventId,
+        AttendeeStatusID: 1,
+        AttendeeUserName: user.Name || "",
+        AttendeeTitle: user.Title || "",
+        AttendeePosition: user.Position || "",
+        AttendeeLocation: user.Location || "",
+        AttendeeAgeGroup: user.AgeGroup || "",
+        AttendeePartnerGuestName: user.PartnerGuestName || "",
+      }));
+      setAttendees(attendeesFromUsers);
+      openAlert(`Imported ${attendeesFromUsers.length} users as attendees`);
+    } else {
+      openError("No CSV file has been imported");
+    }
   };
+
+  const handleUserSave = () => {
+    const storedUsers = localStorage.getItem("employees");
+    if (storedUsers) {
+      const users = JSON.parse(storedUsers);
+
+      // Convert users to attendees format
+      const attendeesFromUsers = users.map((user, index) => ({
+        AttendeeID: attendees.length + index + 1,
+        AttendeeName: user.Name || "",
+        AttendeeEventID: eventId,
+        AttendeeStatusID: 1,
+        AttendeeUserName: user.Name || "",
+        AttendeeTitle: user.Title || "",
+        AttendeePosition: user.Position || "",
+        AttendeeLocation: user.Location || "",
+        AttendeeAgeGroup: user.AgeGroup || "",
+        AttendeePartnerGuestName: user.PartnerGuestName || "",
+      }));
+      setAttendees(attendeesFromUsers);
+      openAlert(`Imported ${attendeesFromUsers.length} users as attendees`);
+    } else {
+      openError("No CSV file has been imported");
+    }
+  };
+
+  //ADD BUTTON TO POST CSV TO BACKEND
 
   return (
     <div className="attendeeCrudler">
@@ -210,12 +236,16 @@ function AttendeeCrudler(eventId) {
       <Error show={showError} message={ErrorContent} onDismiss={closeError} />
 
       <Action.Tray>
-        <Action.Add
+        <Action.Import
           showText
-          buttonText={"Add a new attendee"}
-          onClick={openAddForm}
+          buttonText={"Import Attendees"}
+          onClick={handleUserImport}
         />
-        <button onClick={handleUserImport}>Import Users</button>
+        <Action.Save
+          showText
+          buttonText={"Save Attendees"}
+          onClick={handleUserSave}
+        />
       </Action.Tray>
       <SearchBar
         searchTerm={searchTerm}
