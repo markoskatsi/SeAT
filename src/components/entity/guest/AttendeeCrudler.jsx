@@ -12,11 +12,116 @@ import { filterRecords } from "../../../utils/filtering.jsx";
 import SearchBar from "../../../utils/search.jsx";
 import CSVImportButton from "../../../utils/CSVImportButton.jsx";
 import "./AttendeeCrudler.scss";
+import AttendeeTableContainer from "./AttendeeTableContainer.jsx";
+
+export const sampleAttendees = [
+  {
+    ID: 1,
+    AttendeeName: "Alice Johnson",
+    AttendeeTitle: "Dr.",
+    AttendeePosition: "Research Scientist",
+    AttendeeAgeGroup: "30-39",
+    AttendeePartnerGuestName: "Mark Johnson",
+    AttendeeLocation: "New York",
+    AttendeeSeat: "A1",
+  },
+  {
+    ID: 2,
+    AttendeeName: "Bob Smith",
+    AttendeeTitle: "Mr.",
+    AttendeePosition: "Software Engineer",
+    AttendeeAgeGroup: "20-29",
+    AttendeePartnerGuestName: "",
+    AttendeeLocation: "San Francisco",
+    AttendeeSeat: "A2",
+  },
+  {
+    ID: 3,
+    AttendeeName: "Carla Gomez",
+    AttendeeTitle: "Ms.",
+    AttendeePosition: "Product Manager",
+    AttendeeAgeGroup: "30-39",
+    AttendeePartnerGuestName: "",
+    AttendeeLocation: "Los Angeles",
+    AttendeeSeat: "A2",
+  },
+  {
+    ID: 4,
+    AttendeeName: "David Lee",
+    AttendeeTitle: "Mr.",
+    AttendeePosition: "UX Designer",
+    AttendeeAgeGroup: "20-29",
+    AttendeePartnerGuestName: "Anna Lee",
+    AttendeeLocation: "Chicago",
+    AttendeeSeat: "A2",
+  },
+  {
+    ID: 5,
+    AttendeeName: "Eva Brown",
+    AttendeeTitle: "Dr.",
+    AttendeePosition: "Physician",
+    AttendeeAgeGroup: "40-49",
+    AttendeePartnerGuestName: "",
+    AttendeeLocation: "Boston",
+    AttendeeSeat: "B1",
+  },
+  {
+    ID: 6,
+    AttendeeName: "Frank Wilson",
+    AttendeeTitle: "Mr.",
+    AttendeePosition: "Financial Analyst",
+    AttendeeAgeGroup: "30-39",
+    AttendeePartnerGuestName: "Lucy Wilson",
+    AttendeeLocation: "Miami",
+    AttendeeSeat: "B1",
+  },
+  {
+    ID: 7,
+    AttendeeName: "Grace Kim",
+    AttendeeTitle: "Ms.",
+    AttendeePosition: "Marketing Specialist",
+    AttendeeAgeGroup: "20-29",
+    AttendeePartnerGuestName: "",
+    AttendeeLocation: "Seattle",
+    AttendeeSeat: "B2",
+  },
+  {
+    ID: 8,
+    AttendeeName: "Henry Adams",
+    AttendeeTitle: "Mr.",
+    AttendeePosition: "Lawyer",
+    AttendeeAgeGroup: "40-49",
+    AttendeePartnerGuestName: "Sophia Adams",
+    AttendeeLocation: "Houston",
+    AttendeeSeat: "B2",
+  },
+  {
+    ID: 9,
+    AttendeeName: "Irene Chen",
+    AttendeeTitle: "Dr.",
+    AttendeePosition: "Professor",
+    AttendeeAgeGroup: "50-59",
+    AttendeePartnerGuestName: "",
+    AttendeeLocation: "Philadelphia",
+    AttendeeSeat: "C1",
+  },
+  {
+    ID: 10,
+    AttendeeName: "Jack Thompson",
+    AttendeeTitle: "Mr.",
+    AttendeePosition: "Entrepreneur",
+    AttendeeAgeGroup: "30-39",
+    AttendeePartnerGuestName: "",
+    AttendeeLocation: "Denver",
+    AttendeeSeat: "C1",
+  },
+];
 
 function AttendeeCrudler(eventId) {
   // Status options for dropdown
   const [attendees, setAttendees] = useState([]);
   const [statusOptions, setStatusOptions] = useState([]);
+
   useEffect(() => {
     API.get(apiEndpoints.STATUS).then((res) => {
       if (res.isSuccess) setStatusOptions(res.result);
@@ -293,7 +398,8 @@ function AttendeeCrudler(eventId) {
               selectedAttendee={selectedAttendee}
             />
           </div>
-        </div>
+        </div>{" "}
+        <AttendeeTableContainer attendees={sampleAttendees} />
       </main>
       {showEditModal && editAttendee && (
         <Modal show={true} title="Edit Attendee Status">
