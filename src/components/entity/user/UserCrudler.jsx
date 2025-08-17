@@ -5,25 +5,25 @@ import API from "../../api/API.js";
 import apiEndpoints from "../../api/apiEndpoints.js";
 import { Alert, Confirm, Error } from "../../UI/Notifications.jsx";
 import Action from "../../UI/Actions.jsx";
-import EmployeeForm from "./EmployeeForm.jsx";
-import EmployeeList from "./EmployeeList.jsx";
-import EmployeeView from "./EmployeeView.jsx";
+import UserForm from "./UserForm.jsx";
+import UserList from "./UserList.jsx";
+import UserView from "./UserView.jsx";
 import { useEffect } from "react";
 import { filterRecords } from "../../../utils/filtering.jsx";
 import SearchBar from "../../../utils/search.jsx";
 import CSVImportButton from "../../../utils/CSVImportButton.jsx";
-import "./EmployeeCrudler.scss";
+import "./UserCrudler.scss";
 import CSVExportButton from "../../../utils/CSVExportButton.jsx";
 
-function EmployeeCrudler() {
+function UserCrudler() {
   // Initialisation -------------------------------------
 
   // State ----------------------------------------------
-  const [employees, setEmployees] = useState(() => {
-    const storedEmployees = localStorage.getItem("employees");
-    return storedEmployees ? JSON.parse(storedEmployees) : [];
+  const [users, setUsers] = useState(() => {
+    const storedUsers = localStorage.getItem("users");
+    return storedUsers ? JSON.parse(storedUsers) : [];
   });
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [showForm, formTitle, openForm, closeForm] = useModal(false);
   const [showAlert, alertContent, openAlert, closeAlert] = useModal(false);
   const [showConfirm, ConfirmContent, openConfirm, closeConfirm] =
@@ -39,63 +39,63 @@ function EmployeeCrudler() {
 
   // Handlers -------------------------------------------
 
-  const handleSelect = (employee) => {
-    setSelectedEmployee(employee);
+  const handleSelect = (user) => {
+    setSelectedUser(user);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleDismiss = () => {
-    setSelectedEmployee(null);
+    setSelectedUser(null);
   };
 
   const openAddFrom = () => {
     handleDismiss();
-    openForm("Add an Employee");
+    openForm("Add a User");
   };
 
   const openModifyFrom = () => {
-    openForm("Edit Employee");
+    openForm("Edit User");
   };
 
   const openDeleteConfirmation = () =>
-    openConfirm(`Are you sure you want to delete ${selectedEmployee.Name}?`);
+    openConfirm(`Are you sure you want to delete ${selectedUser.Name}?`);
 
-  const handleAdd = (employee) => {
-    const newEmployee = { ...employee, ID: generateNextId() };
-    setEmployees((prev) => [...prev, newEmployee]);
-    setSelectedEmployee(newEmployee);
+  const handleAdd = (user) => {
+    const newUser = { ...user, ID: generateNextId() };
+    setUsers((prev) => [...prev, newUser]);
+    setSelectedUser(newUser);
     closeForm();
-    openAlert("Employee added successfully");
+    openAlert("User added successfully");
   };
 
-  const handleModify = (employee) => {
-    setEmployees((prev) =>
-      prev.map((e) => (e.ID === employee.ID ? employee : e))
+  const handleModify = (user) => {
+    setUsers((prev) =>
+      prev.map((e) => (e.ID === user.ID ? user : e))
     );
-    setSelectedEmployee(employee);
+    setSelectedUser(user);
     closeForm();
-    openAlert("Employee updated successfully");
+    openAlert("User updated successfully");
   };
 
   const handleDelete = () => {
-    setEmployees((prev) => prev.filter((e) => e.ID !== selectedEmployee.ID));
-    setSelectedEmployee(null);
+    setUsers((prev) => prev.filter((e) => e.ID !== selectedUser.ID));
+    setSelectedUser(null);
     closeConfirm();
-    openAlert("Employee deleted successfully");
+    openAlert("User deleted successfully");
   };
 
   const generateNextId = () => {
     const maxId =
-      employees.length > 0 ? Math.max(...employees.map((e) => e.ID || 0)) : 0;
+      users.length > 0 ? Math.max(...users.map((e) => e.ID || 0)) : 0;
     return maxId + 1;
   };
 
   useEffect(() => {
-    localStorage.setItem("employees", JSON.stringify(employees));
-  }, [employees]);
+    localStorage.setItem("users", JSON.stringify(users));
+  }, [users]);
 
   const handleCSVImport = (csvData, filename) => {
-    const importedEmployees = csvData.map((row, index) => ({
+    const importedUsers = csvData.map((row, index) => ({
       ID: index + 1,
       Name: row.Name || "",
       Title: row.Title || "",
@@ -105,40 +105,40 @@ function EmployeeCrudler() {
       Location: row.Location || "",
     }));
 
-    setEmployees(importedEmployees);
-    localStorage.setItem("employees", JSON.stringify(importedEmployees));
-    setSelectedEmployee(null);
+    setUsers(importedUsers);
+    localStorage.setItem("users", JSON.stringify(importedUsers));
+    setSelectedUser(null);
     setLastImportedFilename(filename);
     localStorage.setItem("lastImportedFilename", JSON.stringify(filename));
-    openAlert(`Imported ${importedEmployees.length} employees`);
+    openAlert(`Imported ${importedUsers.length} users`);
   };
   // View -----------------------------------------------
 
-  const employeeFilterFn = (employee, search, filterField) => {
+  const userFilterFn = (user, search, filterField) => {
     switch (filterField) {
       case "position":
-        return (employee.Position || "").toLowerCase().includes(search);
+        return (user.Position || "").toLowerCase().includes(search);
       case "title":
-        return (employee.Title || "").toLowerCase().includes(search);
+        return (user.Title || "").toLowerCase().includes(search);
       case "name":
-        return (employee.Name || "").toLowerCase().includes(search);
+        return (user.Name || "").toLowerCase().includes(search);
       case "location":
-        return (employee.Location || "").toLowerCase().includes(search);
+        return (user.Location || "").toLowerCase().includes(search);
       case "ageGroup":
-        return (employee.AgeGroup || "").toLowerCase().includes(search);
+        return (user.AgeGroup || "").toLowerCase().includes(search);
       default:
         return (
-          (employee.Name || "").toLowerCase().includes(search) ||
-          (employee.Title || "").toLowerCase().includes(search) ||
-          (employee.Position || "").toLowerCase().includes(search) ||
-          (employee.Location || "").toLowerCase().includes(search) ||
-          (employee.AgeGroup || "").toLowerCase().includes(search) ||
-          (employee.PartnerGuestName || "").toLowerCase().includes(search)
+          (user.Name || "").toLowerCase().includes(search) ||
+          (user.Title || "").toLowerCase().includes(search) ||
+          (user.Position || "").toLowerCase().includes(search) ||
+          (user.Location || "").toLowerCase().includes(search) ||
+          (user.AgeGroup || "").toLowerCase().includes(search) ||
+          (user.PartnerGuestName || "").toLowerCase().includes(search)
         );
     }
   };
 
-  const employeeFilterOptions = [
+  const userFilterOptions = [
     { value: "", label: "All Fields" },
     { value: "name", label: "Name" },
     { value: "position", label: "Position" },
@@ -147,17 +147,17 @@ function EmployeeCrudler() {
     { value: "ageGroup", label: "Age Group" },
   ];
 
-  const filteredEmployees = employees
-    ? filterRecords(employees, searchTerm, filterField, employeeFilterFn)
+  const filteredUsers = users
+    ? filterRecords(users, searchTerm, filterField, userFilterFn)
     : [];
 
   return (
-    <div className="employeeCrudler">
+    <div className="userCrudler">
       <Modal show={showForm} title={formTitle}>
-        <EmployeeForm
-          employee={selectedEmployee}
+        <UserForm
+          user={selectedUser}
           onCancel={closeForm}
-          onSubmit={selectedEmployee ? handleModify : handleAdd}
+          onSubmit={selectedUser ? handleModify : handleAdd}
         />
       </Modal>
 
@@ -173,13 +173,13 @@ function EmployeeCrudler() {
       <Action.Tray>
         <Action.Add
           showText
-          buttonText={"ADD NEW EMPLOYEE"}
+          buttonText={"ADD NEW USER"}
           onClick={openAddFrom}
         />
         <div className="csv-buttons">
           <CSVImportButton onImport={handleCSVImport} buttonText="Import CSV" />
           {lastImportedFilename && (
-            <CSVExportButton data={employees} filename={lastImportedFilename} />
+            <CSVExportButton data={users} filename={lastImportedFilename} />
           )}
         </div>
       </Action.Tray>
@@ -188,28 +188,28 @@ function EmployeeCrudler() {
         setSearchTerm={setSearchTerm}
         filterField={filterField}
         setFilterField={setFilterField}
-        filterOptions={employeeFilterOptions}
-        placeholder="Search employees"
+        filterOptions={userFilterOptions}
+        placeholder="Search users"
       />
-      <div className="employeeCrudlerContainer">
-        <div className="employeeViewListContainer">
+      <div className="userCrudlerContainer">
+        <div className="userViewListContainer">
           <div
-            className={`employeeViewAnimated${selectedEmployee ? " show" : ""}`}
+            className={`userViewAnimated${selectedUser ? " show" : ""}`}
             style={{
-              maxHeight: selectedEmployee ? 500 : 0,
-              opacity: selectedEmployee ? 1 : 0,
-              transform: selectedEmployee
+              maxHeight: selectedUser ? 500 : 0,
+              opacity: selectedUser ? 1 : 0,
+              transform: selectedUser
                 ? "translateY(0)"
                 : "translateY(-40px)",
               transition:
                 "max-height 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.4s, transform 0.5s cubic-bezier(0.4,0,0.2,1)",
               overflow: "hidden",
-              marginBottom: selectedEmployee ? 24 : 0,
+              marginBottom: selectedUser ? 24 : 0,
             }}
           >
-            {selectedEmployee && (
-              <EmployeeView
-                employee={selectedEmployee}
+            {selectedUser && (
+              <UserView
+                user={selectedUser}
                 onModify={openModifyFrom}
                 onDismiss={handleDismiss}
                 onDelete={openDeleteConfirmation}
@@ -217,17 +217,17 @@ function EmployeeCrudler() {
             )}
           </div>
           <div
-            className="employeeListAnimated"
+            className="userListAnimated"
             style={{
               transition: "margin-top 0.5s cubic-bezier(0.4,0,0.2,1)",
-              marginTop: selectedEmployee ? 0 : 0,
+              marginTop: selectedUser ? 0 : 0,
             }}
           >
-            <EmployeeList
-              employees={filteredEmployees}
-              loadingMessage="Loading employees..."
+            <UserList
+              users={filteredUsers}
+              loadingMessage="Loading users..."
               onSelect={handleSelect}
-              selectedEmployee={selectedEmployee}
+              selectedUser={selectedUser}
             />
           </div>
         </div>
@@ -236,4 +236,4 @@ function EmployeeCrudler() {
   );
 }
 
-export default EmployeeCrudler;
+export default UserCrudler;

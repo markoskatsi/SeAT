@@ -15,7 +15,7 @@ function NavBar() {
         <NavLink to="/events">Events</NavLink>
       </div>
       <div className="navItem">
-        <NavLink to="/employees">Employees</NavLink>
+        <NavLink to="/users">Users</NavLink>
       </div>
       <div className="navItem">
         <NavLink to="/eventInfo">Event Info</NavLink>

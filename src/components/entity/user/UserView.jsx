@@ -1,8 +1,8 @@
 import Action from "../../UI/Actions.jsx";
 import RecordView from "../../UI/RecordView.jsx";
-import "./EmployeeView.scss";
+import "./UserView.scss";
 
-function EmployeeView({ employee, onModify, onDelete, onDismiss }) {
+function UserView({ user, onModify, onDelete, onDismiss }) {
   const labels = {
     Name: "Full Name",
     Title: "Title",
@@ -13,9 +13,9 @@ function EmployeeView({ employee, onModify, onDelete, onDismiss }) {
   };
 
   return (
-    <div className="employeeView">
-      <h3>{employee.Name}</h3>
-      <RecordView record={employee} labels={labels} />
+    <div className="userView">
+      <h3>{user.Name}</h3>
+      <RecordView record={user} labels={labels} />
       <Action.Tray>
         <Action.Modify showText buttonText={"Modify"} onClick={onModify} />
         <Action.Delete showText buttonText={"Delete"} onClick={onDelete} />
@@ -25,4 +25,4 @@ function EmployeeView({ employee, onModify, onDelete, onDismiss }) {
   );
 }
 
-export default EmployeeView;
+export default UserView;
