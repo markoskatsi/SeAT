@@ -3,7 +3,7 @@ import './Footer.scss';
 function Footer() {
   return(
     <footer>
-        <p className="thankyou">Thank you for using this system!</p>
+        <p className="thankyou">© SeAT</p>
       </footer>
   );
 }

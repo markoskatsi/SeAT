@@ -1,4 +1,4 @@
-export const employeeConformance = {
+export const userConformance = {
   html2js: {
     ID: (value) => (value === "" ? null : value),
     Name: (value) => (value === "" ? null : value),

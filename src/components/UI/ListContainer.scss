@@ -7,7 +7,7 @@ div.listContainer {
   width: 100%;
   justify-content: center;
   .headerContainer,
-  .employeeItem,
+  .userItem,
   .attendeeItem {
     display: flex;
     flex-direction: row;
@@ -34,7 +34,7 @@ div.listContainer {
     color: #fff;
   }
 
-  .employeeItem:hover,
+  .userItem:hover,
   .attendeeItem:hover {
     background-color: #29423b;
     color: #fff;

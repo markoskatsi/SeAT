@@ -1,4 +1,4 @@
-div.employeeCrudler {
+div.userCrudler {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -8,23 +8,23 @@ div.employeeCrudler {
     flex-direction: column;
     gap: 20px;
 
-    & > div.employee {
+    & > div.user {
       position: sticky;
       top: 40px;
     }
   }
 }
-.employeeList {
+.userList {
   width: 100%;
 }
 
-.employeeViewListContainer {
+.userViewListContainer {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-.employeeViewAnimated {
+.userViewAnimated {
   max-height: 0;
   opacity: 0;
   transform: translateY(-40px);
@@ -33,18 +33,18 @@ div.employeeCrudler {
     transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   margin-bottom: 0;
 }
-.employeeViewAnimated.show {
+.userViewAnimated.show {
   max-height: 500px;
   opacity: 1;
   transform: translateY(0);
   margin-bottom: 24px;
 }
 
-.employeeListAnimated {
+.userListAnimated {
   transition: margin-top 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.employeeView {
+.userView {
   margin-bottom: 20px;
   transition: margin-bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }

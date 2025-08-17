@@ -1,26 +1,26 @@
 import PropTypes from "prop-types";
 
-export function EmployeeItem({ employee, onClick }) {
+export function UserItem({ user, onClick }) {
   const handleClick = () => {
     if (onClick) {
-      onClick(employee);
+      onClick(user);
     }
   };
 
   return (
-    <div className="employeeItem" onClick={() => onClick && onClick(employee)}>
-      <p>{employee.Name}</p>
-      <p>{employee.Title}</p>
-      <p>{employee.Position}</p>
-      <p>{employee.AgeGroup}</p>
-      <p>{employee.PartnerGuestName || ""}</p>
-      <p>{employee.Location}</p>
+    <div className="userItem" onClick={() => onClick && onClick(user)}>
+      <p>{user.Name}</p>
+      <p>{user.Title}</p>
+      <p>{user.Position}</p>
+      <p>{user.AgeGroup}</p>
+      <p>{user.PartnerGuestName || ""}</p>
+      <p>{user.Location}</p>
     </div>
   );
 }
 
-EmployeeItem.propTypes = {
-  employee: PropTypes.shape({
+UserItem.propTypes = {
+  user: PropTypes.shape({
     Name: PropTypes.string.isRequired,
     Title: PropTypes.string.isRequired,
     Position: PropTypes.string.isRequired,

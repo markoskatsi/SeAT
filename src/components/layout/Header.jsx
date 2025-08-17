@@ -14,8 +14,8 @@ function Header() {
           <NavLink className="navItem" to="/events">
             Events
           </NavLink>
-          <NavLink className="navItem" to="/employees">
-            Employees
+          <NavLink className="navItem" to="/users">
+            Users
           </NavLink>
         </div>
       )}
