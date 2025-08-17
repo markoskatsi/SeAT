@@ -13,7 +13,7 @@ import SearchBar from "../../../utils/search.jsx";
 import CSVImportButton from "../../../utils/CSVImportButton.jsx";
 import "./AttendeeCrudler.scss";
 
-function AttendeeCrudler(eventId) {
+function AttendeeCrudler({ eventId }) {
   // Status options for dropdown
   const [attendees, setAttendees] = useState([]);
   const [statusOptions, setStatusOptions] = useState([]);
@@ -88,6 +88,9 @@ function AttendeeCrudler(eventId) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterField, setFilterField] = useState("");
 
+  const getAttendeesEndpoint = apiEndpoints.ATTENDEES;
+  const [loadAttendees] = useLoad(getAttendeesEndpoint, setAttendees);
+  
   const filteredAttendees = attendees
     ? attendees.filter((a) => String(a.AttendeeEventID) === String(eventId))
     : [];
@@ -163,7 +166,7 @@ function AttendeeCrudler(eventId) {
   };
 
   const handleUserImport = () => {
-    const storedUsers = localStorage.getItem("employees");
+    const storedUsers = localStorage.getItem("users");
     if (storedUsers) {
         const users = JSON.parse(storedUsers);
 
@@ -184,7 +187,7 @@ function AttendeeCrudler(eventId) {
         setAttendees(attendeesFromUsers);
         openAlert(`Imported ${attendeesFromUsers.length} users as attendees`);
       } else {
-        openError("No CSV file has been imported");
+        openError("No users found to import");
       }
   };
 
