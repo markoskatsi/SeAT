@@ -178,7 +178,7 @@ function UserCrudler() {
         />
         <div className="csv-buttons">
           <CSVImportButton onImport={handleCSVImport} buttonText="Import CSV" />
-          {lastImportedFilename && (
+          {users && users.length > 0 && (
             <CSVExportButton data={users} filename={lastImportedFilename} />
           )}
         </div>
