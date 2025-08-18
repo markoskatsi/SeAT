@@ -60,6 +60,8 @@ const useAuth = () => {
       credentials: "include",
     });
     setUser(null);
+    localStorage.clear();
+    window.location.reload();
   };
 
   return {
