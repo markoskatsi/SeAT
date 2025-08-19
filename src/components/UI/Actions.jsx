@@ -45,6 +45,39 @@ const ActionPropTypes = {
   showText: PropTypes.bool,
   buttonText: PropTypes.string,
 };
+Generic.propTypes = ActionPropTypes;
+export function Generic({ onClick, showText = false, buttonText = "Generic" }) {
+  return (
+    <Action
+      buttonText={buttonText}
+      onClick={onClick}
+      showText={showText}
+    ></Action>
+  );
+}
+Import.propTypes = ActionPropTypes;
+
+export function Import({ onClick, showText = false, buttonText = "Import" }) {
+  return (
+    <Action
+      buttonText={buttonText}
+      onClick={onClick}
+      showText={showText}
+    ></Action>
+  );
+}
+
+Save.propTypes = ActionPropTypes;
+
+export function Save({ onClick, showText = false, buttonText = "Save" }) {
+  return (
+    <Action
+      buttonText={buttonText}
+      onClick={onClick}
+      showText={showText}
+    ></Action>
+  );
+}
 
 Add.propTypes = ActionPropTypes;
 
@@ -261,7 +294,10 @@ Action.Favourites = Favourites;
 Action.ListAll = ListAll;
 Action.Modify = Modify;
 Action.No = No;
+Action.Import = Import;
 Action.Submit = Submit;
 Action.Subscribe = Subscribe;
 Action.Yes = Yes;
 Action.Unsubscribe = Unsubscribe;
+Action.Generic = Generic;
+Action.Save = Save;
