@@ -24,14 +24,19 @@ function EventInfo() {
   if (!event) return <div>Loading...</div>;
 
   return (
-    <div className="eventInfo">
-      <h1>{event.EventName}</h1>
-      <p>{event.EventDescription}</p>
-      <p>Date: {new Date(event.EventDatetime).toLocaleString()}</p>
-      <p>Location: {event.EventLocationName}</p>
-      <AttendeeCrudler
-        eventId={Number(eventId)}
-      />
+    <div>
+      <div className="eventInfo">
+        <div className="left">
+          <h1>{event.EventName}</h1>
+          <p>{event.EventDescription}</p>
+        </div>
+        <div className="right">
+          <p>Date: {new Date(event.EventDatetime).toLocaleString()}</p>
+          <p>Location: {event.EventLocationName}</p>
+        </div>
+      </div>
+
+      <AttendeeCrudler eventId={Number(eventId)} />
     </div>
   );
 }
