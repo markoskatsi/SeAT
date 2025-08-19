@@ -82,33 +82,40 @@ const SeatingView = ({ eventId }) => {
           onClick={handleUserSave}
         />
       </Action.Tray>
-      <form method="post" onSubmit={handleSubmit}>
-        <div>
-          <p>Number Of People In Each Table:</p>
-          <select
-            value={size}
-            onChange={(e) => setSize(Number(e.target.value))}
-          >
-            {tableOptions().map((num) => (
-              <option key={num} value={num}>
-                {num}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button type="submit" className="applyButton" onClick={handleSubmit}>
-          Apply
-        </button>
-      </form>
+
       <div className="tablesContainer">
         {tables.length > 0 ? (
-          tables.map((table, index) => (
-            <AttendeeTable
-              key={index}
-              attendees={table}
-              tableNumber={index + 1}
-            />
-          ))
+          <>
+            <form method="post" onSubmit={handleSubmit}>
+              <div>
+                <p>Number Of People In Each Table:</p>
+                <select
+                  value={size}
+                  onChange={(e) => setSize(Number(e.target.value))}
+                >
+                  {tableOptions().map((num) => (
+                    <option key={num} value={num}>
+                      {num}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <button
+                type="submit"
+                className="applyButton"
+                onClick={handleSubmit}
+              >
+                Apply
+              </button>
+            </form>
+            {tables.map((table, index) => (
+              <AttendeeTable
+                key={index}
+                attendees={table}
+                tableNumber={index + 1}
+              />
+            ))}
+          </>
         ) : (
           <p>
             No attendees found. Please import a CSV file on the "Manage CSV
