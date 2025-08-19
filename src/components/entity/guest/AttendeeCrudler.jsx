@@ -90,7 +90,7 @@ function AttendeeCrudler({ eventId }) {
 
   const getAttendeesEndpoint = apiEndpoints.ATTENDEES;
   const [loadAttendees] = useLoad(getAttendeesEndpoint, setAttendees);
-  
+
   const filteredAttendees = attendees
     ? attendees.filter((a) => String(a.AttendeeEventID) === String(eventId))
     : [];
@@ -164,31 +164,34 @@ function AttendeeCrudler({ eventId }) {
       await loadAttendees(getAttendeesEndpoint);
     } else openError(result.message);
   };
+  const handleUserSave = async () => {};
 
   const handleUserImport = () => {
     const storedUsers = localStorage.getItem("users");
-    if (storedUsers) {
-        const users = JSON.parse(storedUsers);
+    if (storedUsers.length === 0) {
+      const users = JSON.parse(storedUsers);
 
-        // Convert users to attendees format
-        const attendeesFromUsers = users.map((user, index) => ({
-          AttendeeID: attendees.length + index + 1,
-          AttendeeName: user.Name || "",
-          AttendeeEventID: eventId,
-          AttendeeStatusID: 1,
-          AttendeeUserName: user.Name || "",
-          AttendeeTitle: user.Title || "",
-          AttendeePosition: user.Position || "",
-          AttendeeLocation: user.Location || "",
-          AttendeeAgeGroup: user.AgeGroup || "",
-          AttendeePartnerGuestName: user.PartnerGuestName || "",
-        }));
+      // Convert users to attendees format
+      const attendeesFromUsers = users.map((user, index) => ({
+        AttendeeID: attendees.length + index + 1,
+        AttendeeName: user.Name || "",
+        AttendeeEventID: eventId,
+        AttendeeStatusID: 1,
+        AttendeeUserName: user.Name || "",
+        AttendeeTitle: user.Title || "",
+        AttendeePosition: user.Position || "",
+        AttendeeLocation: user.Location || "",
+        AttendeeAgeGroup: user.AgeGroup || "",
+        AttendeePartnerGuestName: user.PartnerGuestName || "",
+      }));
 
-        setAttendees(attendeesFromUsers);
-        openAlert(`Imported ${attendeesFromUsers.length} users as attendees`);
-      } else {
-        openError("No users found to import");
-      }
+      setAttendees(attendeesFromUsers);
+      openAlert(`Imported ${attendeesFromUsers.length} entries as attendees.`);
+    } else {
+      openError(
+        "No CSV data available. Import a CSV file from the ‘Manage CSV Data’ page."
+      );
+    }
   };
 
   return (
@@ -213,12 +216,16 @@ function AttendeeCrudler({ eventId }) {
       <Error show={showError} message={ErrorContent} onDismiss={closeError} />
 
       <Action.Tray>
-        <Action.Add
+        <Action.Import
           showText
-          buttonText={"Add a new attendee"}
-          onClick={openAddForm}
+          buttonText={"Import CSV Data"}
+          onClick={handleUserImport}
         />
-        <button onClick={handleUserImport}>Import Users</button>
+        <Action.Save
+          showText
+          buttonText={"Save Attendees"}
+          onClick={handleUserSave}
+        />
       </Action.Tray>
       <SearchBar
         searchTerm={searchTerm}
