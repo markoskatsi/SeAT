@@ -64,6 +64,7 @@ function UserCrudler() {
     const newUser = { ...user, ID: generateNextId() };
     setUsers((prev) => [...prev, newUser]);
     setSelectedUser(newUser);
+    console.log("User added:", newUser);
     closeForm();
     openAlert("User added successfully");
   };

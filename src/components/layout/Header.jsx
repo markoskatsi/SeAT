@@ -19,7 +19,7 @@ function Header() {
           </NavLink>
         </div>
       )}
-      <h1 className="titleNav">Seat</h1>
+      <h1 className="titleNav">SeAT</h1>
       {loggedInUser && (
         <div className="navItems-right">
           <NavLink className="navItem" to="/" onClick={logout}>
