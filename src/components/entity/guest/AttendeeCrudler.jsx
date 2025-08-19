@@ -168,8 +168,21 @@ function AttendeeCrudler({ eventId }) {
 
   const handleUserImport = () => {
     const storedUsers = localStorage.getItem("users");
-    if (storedUsers.length === 0) {
+
+    if (!storedUsers) {
+      openError(
+        "No CSV data available. Import a CSV file from the ‘Manage CSV Data’ page."
+      );
+      return;
+    }
+
+    try {
       const users = JSON.parse(storedUsers);
+
+      if (users.length === 0) {
+        openError("No users found in storage.");
+        return;
+      }
 
       // Convert users to attendees format
       const attendeesFromUsers = users.map((user, index) => ({
@@ -187,10 +200,9 @@ function AttendeeCrudler({ eventId }) {
 
       setAttendees(attendeesFromUsers);
       openAlert(`Imported ${attendeesFromUsers.length} entries as attendees.`);
-    } else {
-      openError(
-        "No CSV data available. Import a CSV file from the ‘Manage CSV Data’ page."
-      );
+    } catch (err) {
+      console.error("Failed to parse users:", err);
+      openError("Corrupted user data in localStorage.");
     }
   };
 
