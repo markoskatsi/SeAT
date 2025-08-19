@@ -4,6 +4,7 @@ import "./EventInfo.scss";
 import API from "../api/API.js";
 import apiEndpoints from "../api/apiEndpoints.js";
 import AttendeeCrudler from "../entity/guest/AttendeeCrudler.jsx";
+import SeatingView from "../entity/seating/seatingView.jsx";
 
 function EventInfo() {
   const { eventId } = useParams();
@@ -35,8 +36,7 @@ function EventInfo() {
           <p>Location: {event.EventLocationName}</p>
         </div>
       </div>
-
-      <AttendeeCrudler eventId={Number(eventId)} />
+      <SeatingView eventId={event.eventId} />
     </div>
   );
 }

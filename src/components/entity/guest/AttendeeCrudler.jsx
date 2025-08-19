@@ -17,6 +17,7 @@ function AttendeeCrudler({ eventId }) {
   // Status options for dropdown
   const [attendees, setAttendees] = useState([]);
   const [statusOptions, setStatusOptions] = useState([]);
+  
   useEffect(() => {
     API.get(apiEndpoints.STATUS).then((res) => {
       if (res.isSuccess) setStatusOptions(res.result);
