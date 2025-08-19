@@ -50,11 +50,11 @@ function UserCrudler() {
 
   const openAddFrom = () => {
     handleDismiss();
-    openForm("Add a User");
+    openForm("Add an Entry");
   };
 
   const openModifyFrom = () => {
-    openForm("Edit User");
+    openForm("Edit Entry");
   };
 
   const openDeleteConfirmation = () =>
@@ -69,9 +69,7 @@ function UserCrudler() {
   };
 
   const handleModify = (user) => {
-    setUsers((prev) =>
-      prev.map((e) => (e.ID === user.ID ? user : e))
-    );
+    setUsers((prev) => prev.map((e) => (e.ID === user.ID ? user : e)));
     setSelectedUser(user);
     closeForm();
     openAlert("User updated successfully");
@@ -173,7 +171,7 @@ function UserCrudler() {
       <Action.Tray>
         <Action.Add
           showText
-          buttonText={"ADD NEW USER"}
+          buttonText={"ADD NEW ENTRY"}
           onClick={openAddFrom}
         />
         <div className="csv-buttons">
@@ -198,9 +196,7 @@ function UserCrudler() {
             style={{
               maxHeight: selectedUser ? 500 : 0,
               opacity: selectedUser ? 1 : 0,
-              transform: selectedUser
-                ? "translateY(0)"
-                : "translateY(-40px)",
+              transform: selectedUser ? "translateY(0)" : "translateY(-40px)",
               transition:
                 "max-height 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.4s, transform 0.5s cubic-bezier(0.4,0,0.2,1)",
               overflow: "hidden",

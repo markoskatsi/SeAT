@@ -15,7 +15,7 @@ function Header() {
             Events
           </NavLink>
           <NavLink className="navItem" to="/users">
-            Users
+            Manage CSV Data
           </NavLink>
         </div>
       )}
