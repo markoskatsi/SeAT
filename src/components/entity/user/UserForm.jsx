@@ -7,7 +7,6 @@ import Form from "../../UI/Form.jsx";
 const initialUser = {
   ID: "",
   Name: "",
-  Title: "",
   Position: "",
   AgeGroup: "",
   PartnerGuestName: "",
@@ -20,14 +19,12 @@ function UserForm({ user: userProp, onSubmit, onCancel }) {
   const validation = {
     isValid: {
       Name: (name) => name && name.length > 1,
-      Title: (title) => title && title.length > 1,
       Position: (position) => position && position.length > 1,
       AgeGroup: (ageGroup) => ageGroup && ageGroup.length > 0,
       Location: (location) => location && location.length > 0,
     },
     errorMessage: {
       Name: "Name must be at least 2 characters long",
-      Title: "Title is required",
       Position: "Position is required",
       AgeGroup: "Age group must be selected",
       Location: "Location must be selected",
@@ -35,8 +32,12 @@ function UserForm({ user: userProp, onSubmit, onCancel }) {
   };
 
   // State ------------------------------
-  const [user, errors, handleChange, handleSubmit, setUser] =
-    Form.useForm(initialUser, userConformance, validation, onSubmit);
+  const [user, errors, handleChange, handleSubmit, setUser] = Form.useForm(
+    initialUser,
+    userConformance,
+    validation,
+    onSubmit
+  );
 
   useEffect(() => {
     if (userProp) {
@@ -47,7 +48,6 @@ function UserForm({ user: userProp, onSubmit, onCancel }) {
   // Handlers ---------------------------
   // View --------------------------------
 
-  const titleOptions = ["Ms.", "Dr.", "KC", "Mr.", "Sir", "Madam"];
   const ageGroupOptions = ["18-29", "30-44", "45-59", "60+"];
   const locationOptions = ["Offshore", "Onshore"];
 
@@ -70,22 +70,7 @@ function UserForm({ user: userProp, onSubmit, onCancel }) {
           />
         </Form.Item>
 
-        <Form.Item label="Title" error={errors.Title}>
-          <select
-            name="Title"
-            value={userConformance.js2html["Title"](user.Title)}
-            onChange={handleChange}
-          >
-            <option value="">Select Title</option>
-            {titleOptions.map((title) => (
-              <option key={title} value={title}>
-                {title}
-              </option>
-            ))}
-          </select>
-        </Form.Item>
-
-        <Form.Item label="Position" error={errors.Position}>
+        <Form.Item label="Job Title / Position" error={errors.Position}>
           <input
             type="text"
             name="Position"
@@ -111,7 +96,7 @@ function UserForm({ user: userProp, onSubmit, onCancel }) {
           </select>
         </Form.Item>
 
-        <Form.Item label="Partner/Guest Name">
+        <Form.Item label="Partner's Name">
           <input
             type="text"
             name="PartnerGuestName"
