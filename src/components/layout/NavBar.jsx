@@ -1,38 +1,46 @@
-import { useAuth } from "../../auth/useAuth";
+import { useUser } from "../../auth/UserContext";
 import { NavLink } from "react-router-dom";
 
 function NavBar() {
-  const { loggedInUser, logout } = useAuth();
+  const { loggedInUser, logout } = useUser();
 
   return (
     <nav>
-      {loggedInUser && (
+      <div className="navItem">
+        <NavLink to="/" end>
+          Home
+        </NavLink>
+      </div>
+      <div className="navItem">
+        <NavLink to="/events">Events</NavLink>
+      </div>
+      <div className="navItem">
+        <NavLink to="/users">Users</NavLink>
+      </div>
+      <div className="navItem">
+        <NavLink to="/eventInfo">Event Info</NavLink>
+      </div>
+      <div className="navItem">
+        <NavLink to="/profile">Profile</NavLink>
+      </div>
+      {!loggedInUser && (
         <>
           <div className="navItem">
-            <NavLink to="/events">Events</NavLink>
+            <NavLink to="/login">Login</NavLink>
           </div>
           <div className="navItem">
-            <NavLink to="/employees">Employees</NavLink>
+            <NavLink to="/register">Register</NavLink>
           </div>
-          <div className="navItem">
-            <NavLink to="/eventInfo">Event Info</NavLink>
-          </div>
-          <h1>Seat</h1>
-          {!loggedInUser ? (
-            <div className="navItem">
-              <NavLink to="/login">Login</NavLink>
-            </div>
-          ) : (
-            <div className="navItem">
-              <NavLink to="/" onClick={logout}>
-                Logout
-              </NavLink>
-            </div>
-          )}
         </>
+      )}
+      {loggedInUser && (
+        <div className="navItem">
+          <NavLink to="/" onClick={logout}>
+            Logout
+          </NavLink>
+        </div>
       )}
     </nav>
   );
 }
-
 export default NavBar;

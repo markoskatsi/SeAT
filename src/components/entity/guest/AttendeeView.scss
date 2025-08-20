@@ -1,0 +1,13 @@
+$BorderGrey: LightGrey;
+
+.attendeeView {
+  width: 100%;
+  padding: 20px;
+  border: 1px solid $BorderGrey;
+  color: white;
+  border-radius: 5px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

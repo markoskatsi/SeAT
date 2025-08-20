@@ -71,10 +71,9 @@ function useForm(
     setErrors({ ...errors });
   };
   // View -------------------------------------
-  return [record, errors, handleChange, handleSubmit];
+  return [record, errors, handleChange, handleSubmit, setRecord];
 }
 
-// Compose compound component -----------------
 Form.Item = Item;
 Form.useForm = useForm;
 

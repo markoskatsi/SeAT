@@ -1,11 +1,11 @@
-div.employeeList {
+div.attendeeList {
   display: flex;
   flex-direction: column;
   gap: 20px;
   position: relative;
 }
 
-div.employeeListItem {
+div.attendeeListItem {
   &.animate-push {
     margin-top: 10px;
     transition: margin-top 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -25,7 +25,7 @@ div.employeeListItem {
     background-color: #29423b;
     color: #fff;
   }
-  .employeeListTitle {
+  .attendeeListTitle {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -34,8 +34,8 @@ div.employeeListItem {
   }
 }
 
-.employeeListItem.selected,
-.employeeListItem.selected:hover {
+.attendeeListItem.selected,
+.attendeeListItem.selected:hover {
   border: 1px solid #fff !important;
   color: white;
   border-radius: 5px;
