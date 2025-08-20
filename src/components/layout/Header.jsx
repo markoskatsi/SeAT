@@ -17,6 +17,9 @@ function Header() {
           <NavLink className="navItem" to="/users">
             Manage CSV Data
           </NavLink>
+          <NavLink className="navItem" to="/seating">
+            Seating Arrangements
+          </NavLink>
         </div>
       )}
       <h1 className="titleNav">SeAT</h1>
