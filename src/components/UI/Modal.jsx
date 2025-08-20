@@ -12,7 +12,7 @@ export function Modal({ show, title, modalPaneClass, children }) {
         <header>
           <p>{title}</p>
         </header>
-        <main>{children}</main>
+        <main className="ModalMain">{children}</main>
       </div>
     </div>
   ) : null;

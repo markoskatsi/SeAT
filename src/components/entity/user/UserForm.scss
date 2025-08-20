@@ -1,9 +1,8 @@
 $BorderGrey: LightGrey;
 
-div.employeeForm {
+div.userForm {
   width: 100%;
   padding: 20px;
-  background: rgba(51, 51, 51, 0.67);
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -14,9 +13,9 @@ div.employeeForm {
     width: 100%;
     display: flex;
     justify-content: space-around;
-
-    .employeeLeft,
-    .employeeRight {
+    border: none;
+    .userLeft,
+    .userRight {
       width: 100%;
     }
 

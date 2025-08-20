@@ -1,15 +1,29 @@
-import { useAuth } from "../../auth/useAuth";
-import Login from "./Login";
+import React from "react";
 import "./Home.scss";
+import { useUser } from "../../auth/UserContext";
+import { NavLink } from "react-router-dom";
 
-function Home() {
-  const { loggedInUser } = useAuth();
+export default function Home() {
+  const { loggedInUser, loading } = useUser();
 
+  if (loading) return <div>Loading...</div>;
   return (
     <div className="home">
-      {loggedInUser ? <h1>Welcome to Seat</h1> : <Login />}
+      <h1>Welcome to SeAT!</h1>
+      {loggedInUser ? (
+        <div>
+          <p>Hello, {loggedInUser.user.name}!</p>
+        </div>
+      ) : (
+        <div>
+          <NavLink className="navItem" to="/login">
+            Login
+          </NavLink>
+          <NavLink className="navItem" to="/register">
+            Sign Up
+          </NavLink>
+        </div>
+      )}
     </div>
   );
 }
-
-export default Home;

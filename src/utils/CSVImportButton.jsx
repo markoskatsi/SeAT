@@ -1,44 +1,51 @@
 import Papa from "papaparse";
 import PropTypes from "prop-types";
-import { useState } from "react";
-import { useRef } from "react";
+import { useState, useRef } from "react";
+import "./CSVImportButton.scss";
 
-function CSVImportButton({ onImport, buttonText = "Import CSV" }) {
+function CSVImportButton({ onImport }) {
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
 
-  const handleButtonClick = () => {
-    fileInputRef.current.click();
+  const handleFileSelect = () => {
+    fileInputRef.current?.click();
   };
-  const handleImportCSV = (e) => {
-    const file = e.target.files[0];
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
     if (!file) return;
+
+    setError(null);
+
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
       complete: (results) => {
-        if (results.errors.length) {
-          setError("CSV parsing error.");
+        if (
+          !results.data ||
+          results.data.length === 0 ||
+          !results.data[0].Name ||
+          !results.data[0].Title
+        ) {
+          setError("Invalid CSV format");
           return;
         }
-        onImport(results.data);
-        setError(null);
+        onImport(results.data, file.name);
       },
-      error: () => setError("Failed to parse CSV."),
+      error: () => setError("Invalid CSV format"),
     });
   };
-
   return (
     <div>
       <input
         type="file"
         ref={fileInputRef}
         accept=".csv"
-        onChange={handleImportCSV}
+        onChange={handleFileChange}
         style={{ display: "none" }}
       />
-      <button type="button" onClick={handleButtonClick}>
-        {buttonText}
+      <button type="button" onClick={handleFileSelect}>
+        Import CSV
       </button>
       {error && <p style={{ color: "red" }}>{error}</p>}
     </div>

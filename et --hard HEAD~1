@@ -1,0 +1,76 @@
+[33me19c42c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: commit (merge): Merge branch 'feat/sorting-algorithm'
+[33mee0716d[m[33m ([m[1;31morigin/feature-add-table-layout[m[33m)[m HEAD@{1}: checkout: moving from feat/sorting-algorithm to main
+[33m3067c37[m[33m ([m[1;31morigin/feat/sorting-algorithm[m[33m, [m[1;32mfeat/sorting-algorithm[m[33m)[m HEAD@{2}: checkout: moving from main to feat/sorting-algorithm
+[33mee0716d[m[33m ([m[1;31morigin/feature-add-table-layout[m[33m)[m HEAD@{3}: checkout: moving from feat/sorting-algorithm to main
+[33m3067c37[m[33m ([m[1;31morigin/feat/sorting-algorithm[m[33m, [m[1;32mfeat/sorting-algorithm[m[33m)[m HEAD@{4}: checkout: moving from main to feat/sorting-algorithm
+[33mee0716d[m[33m ([m[1;31morigin/feature-add-table-layout[m[33m)[m HEAD@{5}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33m3955599[m HEAD@{6}: checkout: moving from feat/sorting-algorithm to main
+[33m3067c37[m[33m ([m[1;31morigin/feat/sorting-algorithm[m[33m, [m[1;32mfeat/sorting-algorithm[m[33m)[m HEAD@{7}: commit: structure adjustments
+[33mb6ef8c7[m HEAD@{8}: commit: naming convention change
+[33m8546361[m HEAD@{9}: commit: UI Testing
+[33m2f97527[m HEAD@{10}: commit: Rectangular Tables and Adjacency
+[33me828366[m HEAD@{11}: commit: seating arrangement, client criteria
+[33m1aa545f[m HEAD@{12}: checkout: moving from Feature-CRUDL to feat/sorting-algorithm
+[33m1aa545f[m HEAD@{13}: checkout: moving from feat/csv-import to Feature-CRUDL
+[33mfed2459[m[33m ([m[1;31morigin/feat/csv-import[m[33m, [m[1;32mfeat/csv-import[m[33m)[m HEAD@{14}: checkout: moving from feat/sorting-algorithm to feat/csv-import
+[33mcdccc49[m[33m ([m[1;31morigin/refactor/eventItem-and-attendeeItem[m[33m)[m HEAD@{15}: checkout: moving from main to feat/sorting-algorithm
+[33mcdccc49[m[33m ([m[1;31morigin/refactor/eventItem-and-attendeeItem[m[33m)[m HEAD@{16}: checkout: moving from feat/csv-import to main
+[33mfed2459[m[33m ([m[1;31morigin/feat/csv-import[m[33m, [m[1;32mfeat/csv-import[m[33m)[m HEAD@{17}: merge main: Merge made by the 'ort' strategy.
+[33m80218a0[m HEAD@{18}: commit: csv import
+[33m836ef8c[m[33m ([m[1;31morigin/refactoring-[m[33m, [m[1;31morigin/Reusable-form[m[33m)[m HEAD@{19}: checkout: moving from main to feat/csv-import
+[33mcdccc49[m[33m ([m[1;31morigin/refactor/eventItem-and-attendeeItem[m[33m)[m HEAD@{20}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33m836ef8c[m[33m ([m[1;31morigin/refactoring-[m[33m, [m[1;31morigin/Reusable-form[m[33m)[m HEAD@{21}: checkout: moving from feat/csv-import to main
+[33m836ef8c[m[33m ([m[1;31morigin/refactoring-[m[33m, [m[1;31morigin/Reusable-form[m[33m)[m HEAD@{22}: reset: moving to HEAD
+[33m836ef8c[m[33m ([m[1;31morigin/refactoring-[m[33m, [m[1;31morigin/Reusable-form[m[33m)[m HEAD@{23}: checkout: moving from main to feat/csv-import
+[33m836ef8c[m[33m ([m[1;31morigin/refactoring-[m[33m, [m[1;31morigin/Reusable-form[m[33m)[m HEAD@{24}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33m78f77f2[m HEAD@{25}: checkout: moving from feat/event-filtering to main
+[33m8d3a6b5[m[33m ([m[1;31morigin/feat/event-filtering[m[33m, [m[1;32mfeat/event-filtering[m[33m)[m HEAD@{26}: commit: fixing useState navbar
+[33mc576c81[m HEAD@{27}: commit: attendees filtering and searching
+[33m76daac1[m HEAD@{28}: commit: filtering and searching in events
+[33m3eeb9f6[m HEAD@{29}: checkout: moving from main to feat/event-filtering
+[33m3eeb9f6[m HEAD@{30}: checkout: moving from Add-Guest-and-Refactoring to main
+[33mf709ae1[m[33m ([m[1;31morigin/Add-Guest-and-Refactoring[m[33m, [m[1;32mAdd-Guest-and-Refactoring[m[33m)[m HEAD@{31}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33m3c16133[m HEAD@{32}: checkout: moving from main to Add-Guest-and-Refactoring
+[33m3eeb9f6[m HEAD@{33}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33m2e9d3a1[m HEAD@{34}: checkout: moving from Bugfix-UserUserType-in-form-dropdown to main
+[33m1f4ffe8[m[33m ([m[1;31morigin/Bugfix-UserUserType-in-form-dropdown[m[33m, [m[1;32mBugfix-UserUserType-in-form-dropdown[m[33m)[m HEAD@{35}: checkout: moving from main to Bugfix-UserUserType-in-form-dropdown
+[33mfbaa685[m HEAD@{36}: checkout: moving from Add-Guest-and-Refactoring to main
+[33m3c16133[m HEAD@{37}: commit: import fix
+[33m3b1a24c[m HEAD@{38}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33mff56a72[m HEAD@{39}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33m2f281ea[m HEAD@{40}: commit: some changes
+[33m2145ae2[m HEAD@{41}: commit: cheeky fix
+[33mb3c3ec3[m HEAD@{42}: commit: API folder implementation
+[33m6783943[m[33m ([m[1;31morigin/fix-styling-homepage[m[33m)[m HEAD@{43}: checkout: moving from main to Add-Guest-and-Refactoring
+[33m6783943[m[33m ([m[1;31morigin/fix-styling-homepage[m[33m)[m HEAD@{44}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33macdf1f8[m[33m ([m[1;31morigin/fix-styling[m[33m, [m[1;31morigin/Sorting-Algorithm-TESTING[m[33m, [m[1;32mSorting-Algorithm-TESTING[m[33m)[m HEAD@{45}: checkout: moving from Sorting-Algorithm-TESTING to main
+[33macdf1f8[m[33m ([m[1;31morigin/fix-styling[m[33m, [m[1;31morigin/Sorting-Algorithm-TESTING[m[33m, [m[1;32mSorting-Algorithm-TESTING[m[33m)[m HEAD@{46}: checkout: moving from main to Sorting-Algorithm-TESTING
+[33macdf1f8[m[33m ([m[1;31morigin/fix-styling[m[33m, [m[1;31morigin/Sorting-Algorithm-TESTING[m[33m, [m[1;32mSorting-Algorithm-TESTING[m[33m)[m HEAD@{47}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33m729ee1e[m HEAD@{48}: commit: Table Style Changes
+[33mba4afed[m HEAD@{49}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33me922541[m HEAD@{50}: checkout: moving from Refactoring to main
+[33m9c9d2ac[m HEAD@{51}: checkout: moving from main to Refactoring
+[33me922541[m HEAD@{52}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33mf1650bc[m HEAD@{53}: checkout: moving from general-styling to main
+[33m9358474[m[33m ([m[1;31morigin/general-styling[m[33m, [m[1;32mgeneral-styling[m[33m)[m HEAD@{54}: commit: Add employee form style
+[33m15aa562[m HEAD@{55}: checkout: moving from main to general-styling
+[33mf1650bc[m HEAD@{56}: checkout: moving from general-styling to main
+[33m15aa562[m HEAD@{57}: reset: moving to HEAD
+[33m15aa562[m HEAD@{58}: checkout: moving from Refactoring to general-styling
+[33m9c9d2ac[m HEAD@{59}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33mc788dd5[m HEAD@{60}: checkout: moving from main to Refactoring
+[33mf1650bc[m HEAD@{61}: checkout: moving from Refactoring to main
+[33mc788dd5[m HEAD@{62}: commit: WIP
+[33mf1650bc[m HEAD@{63}: checkout: moving from main to Refactoring
+[33mf1650bc[m HEAD@{64}: checkout: moving from Week-2-Fetch-API to main
+[33mb4ced14[m[33m ([m[1;31morigin/Week-2-Fetch-API[m[33m, [m[1;32mWeek-2-Fetch-API[m[33m)[m HEAD@{65}: checkout: moving from main to Week-2-Fetch-API
+[33mf1650bc[m HEAD@{66}: checkout: moving from Week-2-Fetch-API to main
+[33mb4ced14[m[33m ([m[1;31morigin/Week-2-Fetch-API[m[33m, [m[1;32mWeek-2-Fetch-API[m[33m)[m HEAD@{67}: checkout: moving from main to Week-2-Fetch-API
+[33mf1650bc[m HEAD@{68}: reset: moving to HEAD
+[33mf1650bc[m HEAD@{69}: commit: naming convention changes
+[33mf2d79de[m HEAD@{70}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33me50c902[m HEAD@{71}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33m947e867[m HEAD@{72}: checkout: moving from FilterAndSearch to main
+[33m30b06ea[m[33m ([m[1;31morigin/FilterAndSearch[m[33m, [m[1;32mFilterAndSearch[m[33m)[m HEAD@{73}: commit: Filter Functionality in Employees
+[33m947e867[m HEAD@{74}: checkout: moving from main to FilterAndSearch
+[

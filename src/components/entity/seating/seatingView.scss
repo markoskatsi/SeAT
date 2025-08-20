@@ -1,0 +1,57 @@
+.seatingViewContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 30px;
+  .tablesContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    gap: 20px;
+  }
+
+  form {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 30px;
+    padding-top: 30px;
+    border-top: #ffffff2f 1px solid;
+    div {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      select {
+        width: 288px;
+        height: 37px;
+        background-color: #333;
+        border: 1px solid #504d4dee;
+        border-radius: 10px;
+        padding-left: 10px;
+      }
+    }
+    button {
+      width: 154px;
+      height: 33px;
+    }
+  }
+}
+* {
+  color: #fff;
+}
+h1 {
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 400;
+  text-align: center;
+}
+
+p {
+  font-size: 16px;
+}

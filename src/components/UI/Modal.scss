@@ -15,7 +15,6 @@ div.ModalOverlay {
   div.ModalPane {
     // Appearance
     border-radius: 5px;
-    background-color: Pink;
 
     // Positioning
     position: fixed;
@@ -31,16 +30,17 @@ div.ModalOverlay {
       color: White;
       font-size: 110%;
       border-radius: 5px 5px 0 0;
-      background-color: LimeGreen;
+      background-color: #1a3c34;
+      font-weight: bolder;
     }
 
     main {
       // Appearance
       width: 100%;
-      padding: 20px;
-      border: 1px solid LightGrey;
+      padding: 20px 20px 5px 20px;
       border-top-width: 0;
       border-radius: 0 0 5px 5px;
+      height: fit-content;
     }
 
     header,
@@ -49,6 +49,10 @@ div.ModalOverlay {
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+    .ModalMain {
+      height: fit-content;
+      min-height: auto;
     }
   }
 }
