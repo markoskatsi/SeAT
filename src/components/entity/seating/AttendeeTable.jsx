@@ -14,7 +14,7 @@ export default function AttendeeTable({ attendees, tableNumber }) {
 
       {attendees.map((attendee) => (
         <div key={attendee.ID} className="attendeeItem">
-          <p>{attendee.AttendeeName || "N/A"}</p>
+          <p>{attendee.AttendeeName || attendee.AttendeeUserName|| "N/A"}</p>
         </div>
       ))}
     </Table>
