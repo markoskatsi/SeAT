@@ -50,9 +50,7 @@ const SeatingView = ({ eventId }) => {
       openError("No attendees found. Please import a CSV file first.");
       return;
     }
-
     const filtered = filterByAttendeeID(eventId);
-
     if (filtered.length === 0) {
       openError("No attendees found for the selected event.");
       return;
