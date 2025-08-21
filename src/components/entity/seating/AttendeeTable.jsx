@@ -12,9 +12,12 @@ export default function AttendeeTable({ attendees, tableNumber }) {
         <p>{tableNumber}</p>
       </HeaderTable>
 
-      {attendees.map((attendee) => (
+      {attendees.map((attendee, index) => (
         <div key={attendee.ID} className="attendeeItem">
-          <p>{attendee.AttendeeName || attendee.AttendeeUserName|| "N/A"}</p>
+          <p className="seatNumber">{attendee.AttendeeSeat || "N/A"}</p>
+          <p className="attendeeName">
+            {attendee.AttendeeName || attendee.AttendeeUserName || "N/A"}
+          </p>
         </div>
       ))}
     </Table>

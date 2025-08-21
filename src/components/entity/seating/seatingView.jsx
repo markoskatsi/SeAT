@@ -26,10 +26,30 @@ const SeatingView = ({ eventId }) => {
     return options;
   };
   const splitIntoTables = (attendees, size) => {
-    const tables = [];
-    for (let i = 0; i < attendees.length; i += size) {
-      tables.push(attendees.slice(i, i + size));
+    let tables = [];
+    if (attendees.length > 0) {
+      const tablesMap = attendees.reduce((acc, attendee) => {
+        const tableNumber = attendee.AttendeeTable;
+        if (!acc[tableNumber]) acc[tableNumber] = [];
+        acc[tableNumber].push(attendee);
+        return acc;
+      }, {});
+      for (const tableNumber in tablesMap) {
+        tablesMap[tableNumber].sort((a, b) => a.AttendeeSeat - b.AttendeeSeat);
+        tables.push({
+          tableNumber: Number(tableNumber),
+          attendees: tablesMap[tableNumber],
+        });
+      }
+    } else {
+      for (let i = 0; i < attendees.length; i += size) {
+        tables.push({
+          tableNumber: tables.length + 1,
+          attendees: attendees.slice(i, i + size),
+        });
+      }
     }
+    console.log("Tables split into:", tables);
     return tables;
   };
 
@@ -44,7 +64,6 @@ const SeatingView = ({ eventId }) => {
     );
   };
 
-  console.log("Attendees:", attendees);
   const handleUserDBImport = () => {
     if (!attendees || attendees.length === 0) {
       openError("No attendees found. Please import a CSV file first.");
@@ -114,7 +133,7 @@ const SeatingView = ({ eventId }) => {
       </Action.Tray>
 
       <div className="tablesContainer">
-        {tables.length > 0 ? (
+        {tables.length > 0 || tables ? (
           <>
             <form method="post" onSubmit={handleSubmit}>
               <div>
@@ -138,11 +157,12 @@ const SeatingView = ({ eventId }) => {
                 Apply
               </button>
             </form>
-            {tables.map((table, index) => (
+
+            {tables.map(({ tableNumber, attendees }) => (
               <AttendeeTable
-                key={index}
-                attendees={table}
-                tableNumber={index + 1}
+                key={tableNumber}
+                tableNumber={tableNumber}
+                attendees={attendees}
               />
             ))}
           </>
