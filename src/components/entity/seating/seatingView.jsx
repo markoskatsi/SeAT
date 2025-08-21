@@ -1,3 +1,4 @@
+import React from "react";
 import "./SeatingView.scss";
 import { useState } from "react";
 import { Alert, Confirm, Error } from "../../UI/Notifications.jsx";
@@ -15,6 +16,7 @@ const SeatingView = ({ eventId }) => {
   const [showAlert, alertContent, openAlert, closeAlert] = useModal(false);
   const [attendees, setAttendees, loadingAttendeesMessage, loadAttendees] =
     useLoad(apiEndpoints.ATTENDEES);
+  const [dbImportRequested, setDbImportRequested] = useState(false);
   const [showConfirm, ConfirmContent, openConfirm, closeConfirm] =
     useModal(false);
   const [showForm, formTitle, openForm, closeForm] = useModal(false);
@@ -25,9 +27,14 @@ const SeatingView = ({ eventId }) => {
     }
     return options;
   };
-  const splitIntoTables = (attendees, size) => {
+  const splitIntoTables = (attendees, size, randomize = false) => {
     let tables = [];
-    if (attendees.length > 0) {
+    // Always use backend table/seat assignments if available
+    if (
+      !randomize &&
+      attendees.length > 0 &&
+      attendees[0].AttendeeTable !== undefined
+    ) {
       const tablesMap = attendees.reduce((acc, attendee) => {
         const tableNumber = attendee.AttendeeTable;
         if (!acc[tableNumber]) acc[tableNumber] = [];
@@ -41,21 +48,38 @@ const SeatingView = ({ eventId }) => {
           attendees: tablesMap[tableNumber],
         });
       }
-    } else {
-      for (let i = 0; i < attendees.length; i += size) {
+    } else if (size > 0) {
+      // Randomly shuffle attendees for CSV import and assign table/seat numbers
+      const shuffled = [...attendees];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      for (let i = 0; i < shuffled.length; i += size) {
+        const tableAttendees = shuffled
+          .slice(i, i + size)
+          .map((attendee, idx) => ({
+            ...attendee,
+            AttendeeTable: tables.length + 1,
+            AttendeeSeat: idx + 1,
+          }));
         tables.push({
           tableNumber: tables.length + 1,
-          attendees: attendees.slice(i, i + size),
+          attendees: tableAttendees,
         });
       }
     }
-    console.log("Tables split into:", tables);
     return tables;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setTables(splitIntoTables(attendees, size));
+    // If attendees are from CSV, reshuffle on apply
+    if (attendees.length > 0 && attendees[0].AttendeeTable === undefined) {
+      setTables(splitIntoTables(attendees, size, true));
+    } else {
+      setTables(splitIntoTables(attendees, size));
+    }
   };
   const handleUserSave = () => {};
   const filterByAttendeeID = (attendeeEventId) => {
@@ -64,20 +88,33 @@ const SeatingView = ({ eventId }) => {
     );
   };
 
-  const handleUserDBImport = () => {
-    if (!attendees || attendees.length === 0) {
-      openError("No attendees found. Please import a CSV file first.");
-      return;
-    }
-    const filtered = filterByAttendeeID(eventId);
-    if (filtered.length === 0) {
-      openError("No attendees found for the selected event.");
-      return;
-    }
-
-    setFilteredAttendees(filtered);
-    setTables(splitIntoTables(filtered, size));
+  const handleUserDBImport = async () => {
+    setDbImportRequested(true);
+    await loadAttendees(apiEndpoints.ATTENDEES);
   };
+
+  // When dbImportRequested is true and attendees update, render backend tables
+  React.useEffect(() => {
+    if (dbImportRequested) {
+      if (!attendees || attendees.length === 0) {
+        openError("No attendees found in the database.");
+        setDbImportRequested(false);
+        return;
+      }
+      const filtered = attendees.filter(
+        (attendee) => Number(attendee.AttendeeEventID) === Number(eventId)
+      );
+      if (filtered.length === 0) {
+        openError("No attendees found for the selected event.");
+        setDbImportRequested(false);
+        return;
+      }
+      setAttendees(filtered);
+      setFilteredAttendees(filtered);
+      setTables(splitIntoTables(filtered, 0, false));
+      setDbImportRequested(false);
+    }
+  }, [attendees, dbImportRequested, eventId]);
 
   const handleUserImport = () => {
     if (!storedUsers || storedUsers.length === 0) {
@@ -108,7 +145,7 @@ const SeatingView = ({ eventId }) => {
       }));
 
       setAttendees(attendeesFromUsers);
-      setTables(splitIntoTables(attendeesFromUsers, size));
+      setTables(splitIntoTables(attendeesFromUsers, size, true));
       openAlert(`Imported ${attendeesFromUsers.length} entries as attendees.`);
     }
   };
