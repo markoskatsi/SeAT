@@ -4,14 +4,17 @@ import { Alert, Confirm, Error } from "../../UI/Notifications.jsx";
 import { Modal, useModal } from "../../UI/Modal.jsx";
 import Action from "../../UI/Actions.jsx";
 import AttendeeTable from "./AttendeeTable.jsx";
+import useLoad from "../../api/useLoad.js";
+import apiEndpoints from "../../api/apiEndpoints.js";
 const SeatingView = ({ eventId }) => {
-  const [attendees, setAttendees] = useState([]);
   const [size, setSize] = useState(6);
   const [tables, setTables] = useState([]);
+  const [filteredAttendees, setFilteredAttendees] = useState([]);
   const storedUsers = localStorage.getItem("users");
   const [showError, ErrorContent, openError, closeError] = useModal(false);
   const [showAlert, alertContent, openAlert, closeAlert] = useModal(false);
-
+  const [attendees, setAttendees, loadingAttendeesMessage, loadAttendees] =
+    useLoad(apiEndpoints.ATTENDEES);
   const [showConfirm, ConfirmContent, openConfirm, closeConfirm] =
     useModal(false);
   const [showForm, formTitle, openForm, closeForm] = useModal(false);
@@ -35,6 +38,30 @@ const SeatingView = ({ eventId }) => {
     setTables(splitIntoTables(attendees, size));
   };
   const handleUserSave = () => {};
+  const filterByAttendeeID = (attendeeEventId) => {
+    return attendees.filter(
+      (attendee) => Number(attendee.AttendeeEventID) === Number(attendeeEventId)
+    );
+  };
+
+  console.log("Attendees:", attendees);
+  const handleUserDBImport = () => {
+    if (!attendees || attendees.length === 0) {
+      openError("No attendees found. Please import a CSV file first.");
+      return;
+    }
+
+    const filtered = filterByAttendeeID(eventId);
+
+    if (filtered.length === 0) {
+      openError("No attendees found for the selected event.");
+      return;
+    }
+
+    setFilteredAttendees(filtered);
+    setTables(splitIntoTables(filtered, size));
+  };
+
   const handleUserImport = () => {
     if (!storedUsers || storedUsers.length === 0) {
       openError(
@@ -80,6 +107,11 @@ const SeatingView = ({ eventId }) => {
           showText
           buttonText={"Save Attendees"}
           onClick={handleUserSave}
+        />
+        <Action.Import
+          showText
+          buttonText={"Import From Database"}
+          onClick={handleUserDBImport}
         />
       </Action.Tray>
 
