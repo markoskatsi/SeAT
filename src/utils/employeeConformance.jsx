@@ -30,10 +30,6 @@ export function normaliseParticipants(rawData) {
     role: row.UserRoleName || row.role || "",
     ageCategory: row.AgeCategory || "",
     gender: row.Gender || "",
-    isVIP:
-      (row.UserRoleName && row.UserRoleName.toLowerCase().includes("vip")) ||
-      row.isVIP === true ||
-      row.isVIP === "true",
     guestOf: row.UserGuestofID || row.guestOf || null,
     previousNeighbors: row.PreviousNeighbors
       ? String(row.PreviousNeighbors)
