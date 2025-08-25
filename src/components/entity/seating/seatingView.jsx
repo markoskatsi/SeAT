@@ -81,7 +81,39 @@ const SeatingView = ({ eventId }) => {
       setTables(splitIntoTables(attendees, size));
     }
   };
-  const handleUserSave = () => {};
+  const handleUserSave = () => {
+    // Flatten all attendees from tables
+    const allAttendees = tables.flatMap((table) =>
+      table.attendees.map((att) => ({
+        name: att.AttendeeName || att.AttendeeUserName || "",
+        table: att.AttendeeTable || table.tableNumber,
+        seat: att.AttendeeSeat || "",
+      }))
+    );
+    // CSV header
+    const header = ["Name", "Table Number", "Seat Number"];
+    // CSV rows
+    const rows = allAttendees.map((a) => [a.name, a.table, a.seat]);
+    // Build CSV string
+    const csvContent = [header, ...rows]
+      .map((row) =>
+        row
+          .map(String)
+          .map((s) => `"${s.replace(/"/g, '""')}"`)
+          .join(",")
+      )
+      .join("\r\n");
+    // Download CSV
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "attendees.csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
   const filterByAttendeeID = (attendeeEventId) => {
     return attendees.filter(
       (attendee) => Number(attendee.AttendeeEventID) === Number(attendeeEventId)
