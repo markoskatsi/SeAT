@@ -196,7 +196,7 @@ const SeatingView = ({ eventId }) => {
   const handleArrange = () => {
     setErrorMsg(""); // Clear previous errors
     const grouped = groupParticipantsWithGuests(attendees);
-    const { tables: arrangedTables, errors } = assignSeatsWithErrors(
+    const { tables: arrangedTables, errors } = assignSeats(
       grouped,
       size,
       tableShape
@@ -297,7 +297,7 @@ const SeatingView = ({ eventId }) => {
   );
 };
 
-function assignSeatsWithErrors(
+function assignSeats(
   groupedAttendees,
   tableSize = 8,
   tableShape = "round"
