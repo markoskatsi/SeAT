@@ -36,7 +36,7 @@ function EventInfo() {
           <p>Location: {event.EventLocationName}</p>
         </div>
       </div>
-      <SeatingView eventId={event.eventId} />
+      <SeatingView eventId={eventId} />
     </div>
   );
 }
