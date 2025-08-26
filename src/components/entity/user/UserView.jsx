@@ -5,11 +5,10 @@ import "./UserView.scss";
 function UserView({ user, onModify, onDelete, onDismiss }) {
   const labels = {
     Name: "Full Name",
-    Title: "Title",
-    Position: "Position",
+    Position: "Job Title / Position",
     AgeGroup: "Age Group",
-    PartnerGuestName: "Partner/Guest Name",
     Location: "Location",
+    PartnerGuestName: "Partner's Name",
   };
 
   return (

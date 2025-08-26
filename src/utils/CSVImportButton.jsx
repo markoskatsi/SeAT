@@ -24,8 +24,7 @@ function CSVImportButton({ onImport }) {
         if (
           !results.data ||
           results.data.length === 0 ||
-          !results.data[0].Name ||
-          !results.data[0].Title
+          !results.data[0].Name
         ) {
           setError("Invalid CSV format");
           return;

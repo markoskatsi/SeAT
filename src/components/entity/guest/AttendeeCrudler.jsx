@@ -192,7 +192,6 @@ function AttendeeCrudler({ eventId }) {
         AttendeeEventID: eventId,
         AttendeeStatusID: 1,
         AttendeeUserName: user.Name || "",
-        AttendeeTitle: user.Title || "",
         AttendeePosition: user.Position || "",
         AttendeeLocation: user.Location || "",
         AttendeeAgeGroup: user.AgeGroup || "",

@@ -97,11 +97,10 @@ function UserCrudler() {
     const importedUsers = csvData.map((row, index) => ({
       ID: index + 1,
       Name: row.Name || "",
-      Title: row.Title || "",
-      Position: row.Position || "",
+      Position: row["Job Title / Postion"] || "",
       AgeGroup: row["Age Group"] || "",
-      PartnerGuestName: row["Partner/Guest Name"] || "",
-      Location: row.Location || "",
+      PartnerGuestName: row["Partner's Name"] || "",
+      Location: row["Location"] || row["Location "] || "",
     }));
 
     setUsers(importedUsers);
@@ -117,8 +116,6 @@ function UserCrudler() {
     switch (filterField) {
       case "position":
         return (user.Position || "").toLowerCase().includes(search);
-      case "title":
-        return (user.Title || "").toLowerCase().includes(search);
       case "name":
         return (user.Name || "").toLowerCase().includes(search);
       case "location":
@@ -128,7 +125,6 @@ function UserCrudler() {
       default:
         return (
           (user.Name || "").toLowerCase().includes(search) ||
-          (user.Title || "").toLowerCase().includes(search) ||
           (user.Position || "").toLowerCase().includes(search) ||
           (user.Location || "").toLowerCase().includes(search) ||
           (user.AgeGroup || "").toLowerCase().includes(search) ||
@@ -140,8 +136,7 @@ function UserCrudler() {
   const userFilterOptions = [
     { value: "", label: "All Fields" },
     { value: "name", label: "Name" },
-    { value: "position", label: "Position" },
-    { value: "title", label: "Title" },
+    { value: "position", label: "Job Title / Position" },
     { value: "location", label: "Location" },
     { value: "ageGroup", label: "Age Group" },
   ];
