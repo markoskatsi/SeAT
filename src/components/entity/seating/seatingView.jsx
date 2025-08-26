@@ -4,7 +4,7 @@ import { Alert, Confirm, Error } from "../../UI/Notifications.jsx";
 import { Modal, useModal } from "../../UI/Modal.jsx";
 import Action from "../../UI/Actions.jsx";
 import AttendeeTable from "./AttendeeTable.jsx";
-import { groupParticipantsWithGuests } from "../../utils/employeeConformance.jsx";
+import { groupParticipantsWithGuests } from "../../../utils/employeeConformance.jsx";
 
 const SeatingView = ({ eventId }) => {
   const [attendees, setAttendees] = useState([]);
@@ -14,6 +14,7 @@ const SeatingView = ({ eventId }) => {
   const storedUsers = localStorage.getItem("users");
   const [showError, ErrorContent, openError, closeError] = useModal(false);
   const [showAlert, alertContent, openAlert, closeAlert] = useModal(false);
+  const [errorMsg, setErrorMsg] = useState(""); // Add error message state
 
   const [showConfirm, ConfirmContent, openConfirm, closeConfirm] =
     useModal(false);
@@ -64,6 +65,12 @@ const SeatingView = ({ eventId }) => {
         AttendeeLocation: user["Location (Onshore or Offshore)"] || "",
         AttendeeAgeGroup: user["Age Group"] || "",
         AttendeePartnerGuestName: user["Partner's Name"] || "",
+        PreviousNeighbors: user.PreviousNeighbors
+          ? String(user.PreviousNeighbors)
+              .split(",")
+              .map((n) => n.trim())
+              .filter(Boolean)
+          : [],
       }));
 
       setAttendees(attendeesFromUsers);
@@ -71,10 +78,19 @@ const SeatingView = ({ eventId }) => {
       openAlert(`Imported ${attendeesFromUsers.length} entries as attendees.`);
     }
   };
+
   const handleArrange = () => {
+    setErrorMsg(""); // Clear previous errors
     const grouped = groupParticipantsWithGuests(attendees);
-    setTables(assignSeats(grouped, size, tableShape));
+    const { tables: arrangedTables, errors } = assignSeatsWithErrors(
+      grouped,
+      size,
+      tableShape
+    );
+    setTables(arrangedTables);
+    setErrorMsg(errors.join("\n"));
   };
+
   return (
     <div className="seatingViewContainer">
       <Action.Tray>
@@ -91,30 +107,56 @@ const SeatingView = ({ eventId }) => {
       </Action.Tray>
 
       <div className="tablesContainer">
+        <form method="post" onSubmit={handleSubmit}>
+          <div>
+            <p>Number Of People In Each Table:</p>
+            <select
+              value={size}
+              onChange={(e) => setSize(Number(e.target.value))}
+            >
+              {tableOptions().map((num) => (
+                <option key={num} value={num}>
+                  {num}
+                </option>
+              ))}
+            </select>
+            <span style={{ marginLeft: "16px" }}>
+              Table Shape:
+              <select
+                value={tableShape}
+                onChange={(e) => setTableShape(e.target.value)}
+                style={{ marginLeft: "8px" }}
+              >
+                <option value="round">Round</option>
+                <option value="rectangular">Rectangular</option>
+              </select>
+            </span>
+          </div>
+          <button
+            type="submit"
+            className="applyButton"
+            onClick={handleSubmit}
+          >
+            Apply
+          </button>
+          <button
+            type="button"
+            className="arrangeButton"
+            style={{ marginLeft: "16px" }}
+            onClick={handleArrange}
+          >
+            Arrange Seats
+          </button>
+        </form>
+        {errorMsg && (
+          <div className="errorMsg">
+            {errorMsg.split("\n").map((msg, idx) => (
+              <div key={idx}>{msg}</div>
+            ))}
+          </div>
+        )}
         {tables.length > 0 ? (
           <>
-            <form method="post" onSubmit={handleSubmit}>
-              <div>
-                <p>Number Of People In Each Table:</p>
-                <select
-                  value={size}
-                  onChange={(e) => setSize(Number(e.target.value))}
-                >
-                  {tableOptions().map((num) => (
-                    <option key={num} value={num}>
-                      {num}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <button
-                type="submit"
-                className="applyButton"
-                onClick={handleSubmit}
-              >
-                Apply
-              </button>
-            </form>
             {tables.map((table, index) => (
               <AttendeeTable
                 key={index}
@@ -136,11 +178,26 @@ const SeatingView = ({ eventId }) => {
   );
 };
 
-function assignSeats(groupedAttendees, tableSize = 8, tableShape = "round") {
+function assignSeatsWithErrors(
+  groupedAttendees,
+  tableSize = 8,
+  tableShape = "round"
+) {
   const tables = [];
   let tableNumber = 1;
+  const errors = [];
 
-  groupedAttendees.forEach((group) => {
+  for (const group of groupedAttendees) {
+    // A. Group larger than table size
+    if (group.length > tableSize) {
+      errors.push(
+        `Group (${group
+          .map((g) => g.AttendeeName)
+          .join(", ")}) is larger than table size (${tableSize}).`
+      );
+      continue; // Skip this group
+    }
+
     let placed = false;
     for (let tIdx = 0; tIdx < tables.length; tIdx++) {
       const candidateTable = tables[tIdx];
@@ -159,7 +216,15 @@ function assignSeats(groupedAttendees, tableSize = 8, tableShape = "round") {
         break;
       }
     }
+    // B. Constraints not satisfied
     if (!placed) {
+      if (tables.length > 0) {
+        errors.push(
+          `Could not satisfy adjacency constraints for group (${group
+            .map((g) => g.AttendeeName)
+            .join(", ")}). Placed at new table.`
+        );
+      }
       let table = [];
       let seatNumber = 1;
       group.forEach((a) => {
@@ -173,7 +238,7 @@ function assignSeats(groupedAttendees, tableSize = 8, tableShape = "round") {
       tables.push(table);
       tableNumber++;
     }
-  });
+  }
 
   // Remove tables smaller than 6
   for (let i = 0; i < tables.length - 1; i++) {
@@ -182,7 +247,7 @@ function assignSeats(groupedAttendees, tableSize = 8, tableShape = "round") {
       tables[i] = [];
     }
   }
-  return tables.filter((t) => t.length > 0);
+  return { tables: tables.filter((t) => t.length > 0), errors };
 }
 
 function hasAdjacencyConflict(table, group, tableShape) {
@@ -192,19 +257,19 @@ function hasAdjacencyConflict(table, group, tableShape) {
   const lastPerson = table[table.length - 1];
   const firstPerson = group[0];
   if (
-    lastPerson.previousNeighbors?.includes(firstPerson.id) ||
-    firstPerson.previousNeighbors?.includes(lastPerson.id)
+    lastPerson.PreviousNeighbors?.includes(firstPerson.AttendeeName) ||
+    firstPerson.PreviousNeighbors?.includes(lastPerson.AttendeeName)
   ) {
     return true;
   }
 
   // For round tables, check right adjacency (if table will be full after adding group)
-  if (tableShape === "round" && table.length + group.length === table.length) {
+  if (tableShape === "round" && table.length + group.length === tableSize) {
     const firstTablePerson = table[0];
     const lastGroupPerson = group[group.length - 1];
     if (
-      firstTablePerson.previousNeighbors?.includes(lastGroupPerson.id) ||
-      lastGroupPerson.previousNeighbors?.includes(firstTablePerson.id)
+      firstTablePerson.PreviousNeighbors?.includes(lastGroupPerson.AttendeeName) ||
+      lastGroupPerson.PreviousNeighbors?.includes(firstTablePerson.AttendeeName)
     ) {
       return true;
     }

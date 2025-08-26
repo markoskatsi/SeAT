@@ -9,8 +9,6 @@ import RegisterForm from "./auth/registerForm.jsx";
 import LoginForm from "./auth/LoginForm.jsx";
 import "./App.scss";
 import Login from "./components/views/Login.jsx";
-import { AuthProvider } from "./auth/useAuth.jsx";
-import SeatingArrangements from "./components/views/SeatingArrangements.jsx";
 
 function App() {
   return (
@@ -24,9 +22,7 @@ function App() {
             <Route path="/users" element={<Users />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/register" element={<RegisterForm />} />
-            <Route path="/employees" element={<Employees />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/seating" element={<SeatingArrangements />} />
           </Routes>
         </Layout>
       </BrowserRouter>
