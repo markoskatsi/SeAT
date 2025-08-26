@@ -200,9 +200,9 @@ const SeatingView = ({ eventId }) => {
           showText
           buttonText={"Import From Database"}
           onClick={() => {
-            handleUserDBImport(); setShowForm(false);
-          }
-          }
+            handleUserDBImport();
+            setShowForm(false);
+          }}
         />
       </Action.Tray>
 
