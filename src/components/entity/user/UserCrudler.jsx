@@ -96,12 +96,13 @@ function UserCrudler() {
   const handleCSVImport = (csvData, filename) => {
     const importedUsers = csvData.map((row, index) => ({
       ID: index + 1,
-      Name: row.Name || "",
-      position: row["Job Title / Position"],
-      location: row["Location (Onshore or Offshore)"],
+      Name: row["Name"] || "",
+      Position: row["Job Title/ Position"],
+      Location: row["Location (Onshore or Offshore)"],
       AgeGroup: row["Age Group"] || "",
       PartnerGuestName: row["Partner's Name"] || "",
     }));
+    console.log(importedUsers);
 
     setUsers(importedUsers);
     localStorage.setItem("users", JSON.stringify(importedUsers));
@@ -110,6 +111,7 @@ function UserCrudler() {
     localStorage.setItem("lastImportedFilename", JSON.stringify(filename));
     openAlert(`Imported ${importedUsers.length} users`);
   };
+
   // View -----------------------------------------------
 
   const userFilterFn = (user, search, filterField) => {
