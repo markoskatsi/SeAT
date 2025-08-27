@@ -7,9 +7,6 @@ import Action from "../../UI/Actions.jsx";
 import AttendeeTable from "./AttendeeTable.jsx";
 import useLoad from "../../api/useLoad.js";
 import apiEndpoints from "../../api/apiEndpoints.js";
-import { groupParticipantsWithGuests } from "../../../utils/employeeConformance.jsx";
-
-
 const SeatingView = ({ eventId }) => {
   const [size, setSize] = useState(6);
   const [tables, setTables] = useState([]);
@@ -21,6 +18,7 @@ const SeatingView = ({ eventId }) => {
   const [attendees, setAttendees, loadingAttendeesMessage, loadAttendees] =
     useLoad(apiEndpoints.ATTENDEES);
   const [dbImportRequested, setDbImportRequested] = useState(false);
+
   const tableOptions = () => {
     const options = [];
     for (let i = 6; i <= 20; i++) {
@@ -135,8 +133,12 @@ const SeatingView = ({ eventId }) => {
         return;
       }
       const filtered = attendees.filter(
-        (attendee) => Number(attendee.AttendeeEventID) === Number(eventId)
+        (attendee) =>
+          Number(attendee.AttendeeEventID) === Number(eventId) &&
+          (Number(attendee.AttendeeStatusID) === 2 ||
+            Number(attendee.AttendeeStatusID) === 5)
       );
+
       if (filtered.length === 0) {
         openError("No attendees found for the selected event.");
         setDbImportRequested(false);
@@ -165,22 +167,16 @@ const SeatingView = ({ eventId }) => {
       }
       // Convert users to attendees format
       const attendeesFromUsers = users.map((user, index) => ({
-        AttendeeID: index + 1,
+        AttendeeID: attendees.length + index + 1,
         AttendeeName: user.Name || "",
         AttendeeEventID: eventId,
         AttendeeStatusID: 1,
         AttendeeUserName: user.Name || "",
-        AttendeeTitle: user["Job Title/ Position"] || "N/A",
-        AttendeePosition: user["Job Title/ Position"] || "N/A",
-        AttendeeLocation: user["Location (Onshore or Offshore)"] || "N/A",
-        AttendeeAgeGroup: user["Age Group"] || "N/A",
-        AttendeePartnerGuestName: user["Partner's Name"] || "",
-        PreviousNeighbors: user["Previous Neighbours"]
-          ? user["Previous Neighbours"]
-              .split(",")
-              .map((n) => n.trim())
-              .filter(Boolean)
-          : [],
+        AttendeeTitle: user.Title || "",
+        AttendeePosition: user.Position || "",
+        AttendeeLocation: user.Location || "",
+        AttendeeAgeGroup: user.AgeGroup || "",
+        AttendeePartnerGuestName: user.PartnerGuestName || "",
       }));
 
       setAttendees(attendeesFromUsers);
@@ -188,19 +184,6 @@ const SeatingView = ({ eventId }) => {
       openAlert(`Imported ${attendeesFromUsers.length} entries as attendees.`);
     }
   };
-
-  const handleArrange = () => {
-    setErrorMsg(""); // Clear previous errors
-    const grouped = groupParticipantsWithGuests(attendees);
-    const { tables: arrangedTables, errors } = assignSeats(
-      grouped,
-      size,
-      tableShape
-    );
-    setTables(arrangedTables);
-    setErrorMsg(errors.join("\n"));
-  };
-
   return (
     <div className="seatingViewContainer">
       <Action.Tray>
@@ -277,108 +260,4 @@ const SeatingView = ({ eventId }) => {
     </div>
   );
 };
-
-function assignSeats(
-  groupedAttendees,
-  tableSize = 8,
-  tableShape = "round"
-) {
-  const tables = [];
-  let tableNumber = 1;
-  const errors = [];
-
-  for (const group of groupedAttendees) {
-    // A. Group larger than table size
-    if (group.length > tableSize) {
-      errors.push(
-        `Group (${group.map((g) => g.AttendeeName).join(", ")}) is larger than table size (${tableSize}).`
-      );
-      continue; // Skip this group
-    }
-
-    let placed = false;
-    for (let tIdx = 0; tIdx < tables.length; tIdx++) {
-      const candidateTable = tables[tIdx].attendees;
-      if (hasAdjacencyConflict(candidateTable, group, tableShape, tableSize)) {
-        continue;
-      }
-      if (candidateTable.length + group.length <= tableSize) {
-        group.forEach((a) => {
-          candidateTable.push({
-            ...a,
-            seat: candidateTable.length + 1,
-            table: tables[tIdx].tableNumber,
-          });
-        });
-        placed = true;
-        break;
-      }
-    }
-    // B. Constraints not satisfied
-    if (!placed) {
-      if (tables.length > 0) {
-        errors.push(
-          `Could not satisfy adjacency constraints for group (${group
-            .map((g) => g.AttendeeName)
-            .join(", ")}). Placed at new table.`
-        );
-      }
-      let attendees = [];
-      let seatNumber = 1;
-      group.forEach((a) => {
-        attendees.push({
-          ...a,
-          seat: seatNumber,
-          table: tableNumber,
-        });
-        seatNumber++;
-      });
-      tables.push({ tableNumber, attendees });
-      tableNumber++;
-    }
-  }
-
-  // Remove tables smaller than 6 (except last table if needed)
-  for (let i = 0; i < tables.length - 1; i++) {
-    if (tables[i].attendees.length < 6) {
-      tables[i + 1].attendees = [...tables[i].attendees, ...tables[i + 1].attendees];
-      tables[i].attendees = [];
-    }
-  }
-  if (errors.length > 0) {
-    console.warn(errors.join("\n"));
-  }
-  return { tables: tables.filter((t) => t.attendees.length > 0), errors };
-}
-
-function hasAdjacencyConflict(table, group, tableShape, tableSize) {
-  if (table.length === 0) return false;
-
-  // Check left adjacency (last person in table with first in group)
-  const lastPerson = table[table.length - 1];
-  const firstPerson = group[0];
-  if (
-    lastPerson.PreviousNeighbors?.includes(firstPerson.AttendeeName) ||
-    firstPerson.PreviousNeighbors?.includes(lastPerson.AttendeeName)
-  ) {
-    return true;
-  }
-
-  // For round tables, check right adjacency (if table will be full after adding group)
-  if (tableShape === "round" && table.length + group.length === tableSize) {
-    const firstTablePerson = table[0];
-    const lastGroupPerson = group[group.length - 1];
-    if (
-      firstTablePerson.PreviousNeighbors?.includes(lastGroupPerson.AttendeeName) ||
-      lastGroupPerson.PreviousNeighbors?.includes(firstTablePerson.AttendeeName)
-    ) {
-      return true;
-    }
-  }
-
-  // RECTANGULAR TABLE LOGIC
-
-  return false;
-}
-
 export default SeatingView;
