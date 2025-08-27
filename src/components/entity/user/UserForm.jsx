@@ -60,68 +60,64 @@ function UserForm({ user: userProp, onSubmit, onCancel }) {
         onChange={handleChange}
       />
 
-      <div className="userLeft">
-        <Form.Item label="Full Name" error={errors.Name}>
-          <input
-            type="text"
-            name="Name"
-            value={userConformance.js2html["Name"](user.Name)}
-            onChange={handleChange}
-          />
-        </Form.Item>
+      <Form.Item label="Full Name" error={errors.Name}>
+        <input
+          type="text"
+          name="Name"
+          value={userConformance.js2html["Name"](user.Name)}
+          onChange={handleChange}
+        />
+      </Form.Item>
 
-        <Form.Item label="Job Title / Position" error={errors.Position}>
-          <input
-            type="text"
-            name="Position"
-            value={userConformance.js2html["Position"](user.Position)}
-            onChange={handleChange}
-          />
-        </Form.Item>
-      </div>
+      <Form.Item label="Job Title / Position" error={errors.Position}>
+        <input
+          type="text"
+          name="Position"
+          value={userConformance.js2html["Position"](user.Position)}
+          onChange={handleChange}
+        />
+      </Form.Item>
 
-      <div className="userRight">
-        <Form.Item label="Age Group" error={errors.AgeGroup}>
-          <select
-            name="AgeGroup"
-            value={userConformance.js2html["AgeGroup"](user.AgeGroup)}
-            onChange={handleChange}
-          >
-            <option value="">Select Age Group</option>
-            {ageGroupOptions.map((age) => (
-              <option key={age} value={age}>
-                {age}
-              </option>
-            ))}
-          </select>
-        </Form.Item>
+      <Form.Item label="Age Group" error={errors.AgeGroup}>
+        <select
+          name="AgeGroup"
+          value={userConformance.js2html["AgeGroup"](user.AgeGroup)}
+          onChange={handleChange}
+        >
+          <option value="">Select Age Group</option>
+          {ageGroupOptions.map((age) => (
+            <option key={age} value={age}>
+              {age}
+            </option>
+          ))}
+        </select>
+      </Form.Item>
 
-        <Form.Item label="Partner's Name">
-          <input
-            type="text"
-            name="PartnerGuestName"
-            value={userConformance.js2html["PartnerGuestName"](
-              user.PartnerGuestName
-            )}
-            onChange={handleChange}
-          />
-        </Form.Item>
+      <Form.Item label="Partner's Name">
+        <input
+          type="text"
+          name="PartnerGuestName"
+          value={userConformance.js2html["PartnerGuestName"](
+            user.PartnerGuestName
+          )}
+          onChange={handleChange}
+        />
+      </Form.Item>
 
-        <Form.Item label="Location" error={errors.Location}>
-          <select
-            name="Location"
-            value={userConformance.js2html["Location"](user.Location)}
-            onChange={handleChange}
-          >
-            <option value="">Select Location</option>
-            {locationOptions.map((location) => (
-              <option key={location} value={location}>
-                {location}
-              </option>
-            ))}
-          </select>
-        </Form.Item>
-      </div>
+      <Form.Item label="Location" error={errors.Location}>
+        <select
+          name="Location"
+          value={userConformance.js2html["Location"](user.Location)}
+          onChange={handleChange}
+        >
+          <option value="">Select Location</option>
+          {locationOptions.map((location) => (
+            <option key={location} value={location}>
+              {location}
+            </option>
+          ))}
+        </select>
+      </Form.Item>
     </Form>
   );
 }

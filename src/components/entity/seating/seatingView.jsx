@@ -13,6 +13,7 @@ import { groupParticipantsWithGuests } from "../../../utils/employeeConformance.
 const SeatingView = ({ eventId }) => {
   const [size, setSize] = useState(6);
   const [tables, setTables] = useState([]);
+  const [showForm, setShowForm] = useState(false);
   const [filteredAttendees, setFilteredAttendees] = useState([]);
   const storedUsers = localStorage.getItem("users");
   const [showError, ErrorContent, openError, closeError] = useModal(false);
@@ -20,11 +21,6 @@ const SeatingView = ({ eventId }) => {
   const [attendees, setAttendees, loadingAttendeesMessage, loadAttendees] =
     useLoad(apiEndpoints.ATTENDEES);
   const [dbImportRequested, setDbImportRequested] = useState(false);
-  const [tableShape, setTableShape] = useState("round");
-  const [errorMsg, setErrorMsg] = useState("");
-  const [showConfirm, ConfirmContent, openConfirm, closeConfirm] =
-    useModal(false);
-  const [showForm, formTitle, openForm, closeForm] = useModal(false);
   const tableOptions = () => {
     const options = [];
     for (let i = 6; i <= 20; i++) {
@@ -211,65 +207,57 @@ const SeatingView = ({ eventId }) => {
         <Action.Import
           showText
           buttonText={"Import CSV Data"}
-          onClick={handleUserImport}
-        />
-        <Action.Save
-          showText
-          buttonText={"Save Attendees"}
-          onClick={handleUserSave}
+          onClick={() => {
+            handleUserImport();
+            setShowForm(true);
+          }}
         />
         <Action.Import
           showText
           buttonText={"Import From Database"}
-          onClick={handleUserDBImport}
+          onClick={() => {
+            handleUserDBImport();
+            setShowForm(false);
+          }}
         />
+        {tables.length > 0 && (
+          <Action.Save
+            showText
+            buttonText={"Save As CSV"}
+            onClick={handleUserSave}
+          />
+        )}
       </Action.Tray>
 
-    <div className="tablesContainer">
-      <form method="post" onSubmit={handleSubmit}>
-        <div>
-          <p>Number Of People In Each Table:</p>
-          <select
-            value={size}
-            onChange={(e) => setSize(Number(e.target.value))}
-          >
-            {tableOptions().map((num) => (
-              <option key={num} value={num}>
-                {num}
-              </option>
-            ))}
-          </select>
-          <span style={{ marginLeft: "16px" }}>
-            Table Shape:
-            <select
-              value={tableShape}
-              onChange={(e) => setTableShape(e.target.value)}
-              style={{ marginLeft: "8px" }}
-            >
-              <option value="round">Round</option>
-              <option value="rectangular">Rectangular</option>
-            </select>
-          </span>
-        </div>
-        <button
-          type="submit"
-          className="applyButton"
-          onClick={handleSubmit}
-        >
-          Apply
-        </button>
-        <button
-          type="button"
-          className="arrangeButton"
-          style={{ marginLeft: "16px" }}
-          onClick={handleArrange}
-        >
-          Arrange Seats
-        </button>
-      </form>
-      {tables && tables.length > 0 ? (
-        <>
-          {tables.map(({ tableNumber, attendees }) => (
+      <div className="tablesContainer">
+        {tables.length > 0 || tables ? (
+          <>
+            {showForm && (
+              <form method="post" onSubmit={handleSubmit}>
+                <div>
+                  <p>Number Of People In Each Table:</p>
+                  <select
+                    value={size}
+                    onChange={(e) => setSize(Number(e.target.value))}
+                  >
+                    {tableOptions().map((num) => (
+                      <option key={num} value={num}>
+                        {num}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <button
+                  type="submit"
+                  className="applyButton"
+                  onClick={handleSubmit}
+                >
+                  Apply
+                </button>
+              </form>
+            )}
+
+            {tables.map(({ tableNumber, attendees }) => (
               <AttendeeTable
                 key={tableNumber}
                 tableNumber={tableNumber}
