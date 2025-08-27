@@ -20,14 +20,13 @@ function CSVExportButton({ data, filename, fields = null }) {
       });
     }
 
-    exportData = exportData.map((row) => ({
-      ID: row.ID,
+    exportData = exportData.map((row, idx) => ({
+      "No.": idx + 1,
       Name: row.Name,
-      Title: row.Title,
-      Position: row.Position,
+      "Job Title/ Position": row.Position,
       "Age Group": row.AgeGroup,
-      "Partner/Guest Name": row.PartnerGuestName,
-      Location: row.Location,
+      "Location (Onshore or Offshore)": row.Location,
+      "Partner's Name": row.PartnerGuestName,
     }));
 
     const csv = Papa.unparse(exportData, {
