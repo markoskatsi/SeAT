@@ -174,13 +174,13 @@ const SeatingView = ({ eventId }) => {
         AttendeeEventID: eventId,
         AttendeeStatusID: 1,
         AttendeeUserName: user.Name || "",
-        AttendeeTitle: user["Job Title/ Position"] || "",
-        AttendeePosition: user["Job Title/ Position"] || "",
-        AttendeeLocation: user["Location (Onshore or Offshore)"] || "",
-        AttendeeAgeGroup: user["Age Group"] || "",
+        AttendeeTitle: user["Job Title/ Position"] || "N/A",
+        AttendeePosition: user["Job Title/ Position"] || "N/A",
+        AttendeeLocation: user["Location (Onshore or Offshore)"] || "N/A",
+        AttendeeAgeGroup: user["Age Group"] || "N/A",
         AttendeePartnerGuestName: user["Partner's Name"] || "",
-        PreviousNeighbors: user.PreviousNeighbors
-          ? String(user.PreviousNeighbors)
+        PreviousNeighbors: user["Previous Neighbours"]
+          ? user["Previous Neighbours"]
               .split(",")
               .map((n) => n.trim())
               .filter(Boolean)
@@ -267,13 +267,6 @@ const SeatingView = ({ eventId }) => {
           Arrange Seats
         </button>
       </form>
-      {errorMsg && (
-        <div className="errorMsg">
-          {errorMsg.split("\n").map((msg, idx) => (
-            <div key={idx}>{msg}</div>
-          ))}
-        </div>
-      )}
       {tables && tables.length > 0 ? (
         <>
           {tables.map(({ tableNumber, attendees }) => (
@@ -310,17 +303,15 @@ function assignSeats(
     // A. Group larger than table size
     if (group.length > tableSize) {
       errors.push(
-        `Group (${group
-          .map((g) => g.AttendeeName)
-          .join(", ")}) is larger than table size (${tableSize}).`
+        `Group (${group.map((g) => g.AttendeeName).join(", ")}) is larger than table size (${tableSize}).`
       );
       continue; // Skip this group
     }
 
     let placed = false;
     for (let tIdx = 0; tIdx < tables.length; tIdx++) {
-      const candidateTable = tables[tIdx];
-      if (hasAdjacencyConflict(candidateTable, group, tableShape)) {
+      const candidateTable = tables[tIdx].attendees;
+      if (hasAdjacencyConflict(candidateTable, group, tableShape, tableSize)) {
         continue;
       }
       if (candidateTable.length + group.length <= tableSize) {
@@ -328,7 +319,7 @@ function assignSeats(
           candidateTable.push({
             ...a,
             seat: candidateTable.length + 1,
-            table: tIdx + 1,
+            table: tables[tIdx].tableNumber,
           });
         });
         placed = true;
@@ -344,32 +335,35 @@ function assignSeats(
             .join(", ")}). Placed at new table.`
         );
       }
-      let table = [];
+      let attendees = [];
       let seatNumber = 1;
       group.forEach((a) => {
-        table.push({
+        attendees.push({
           ...a,
           seat: seatNumber,
           table: tableNumber,
         });
         seatNumber++;
       });
-      tables.push(table);
+      tables.push({ tableNumber, attendees });
       tableNumber++;
     }
   }
 
-  // Remove tables smaller than 6
+  // Remove tables smaller than 6 (except last table if needed)
   for (let i = 0; i < tables.length - 1; i++) {
-    if (tables[i].length < 6) {
-      tables[i + 1] = [...tables[i], ...tables[i + 1]];
-      tables[i] = [];
+    if (tables[i].attendees.length < 6) {
+      tables[i + 1].attendees = [...tables[i].attendees, ...tables[i + 1].attendees];
+      tables[i].attendees = [];
     }
   }
-  return { tables: tables.filter((t) => t.length > 0), errors };
+  if (errors.length > 0) {
+    console.warn(errors.join("\n"));
+  }
+  return { tables: tables.filter((t) => t.attendees.length > 0), errors };
 }
 
-function hasAdjacencyConflict(table, group, tableShape) {
+function hasAdjacencyConflict(table, group, tableShape, tableSize) {
   if (table.length === 0) return false;
 
   // Check left adjacency (last person in table with first in group)
