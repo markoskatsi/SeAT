@@ -191,11 +191,6 @@ const SeatingView = ({ eventId }) => {
             setShowForm(true);
           }}
         />
-        <Action.Save
-          showText
-          buttonText={"Save As CSV"}
-          onClick={handleUserSave}
-        />
         <Action.Import
           showText
           buttonText={"Import From Database"}
@@ -204,6 +199,13 @@ const SeatingView = ({ eventId }) => {
             setShowForm(false);
           }}
         />
+        {tables.length > 0 && (
+          <Action.Save
+            showText
+            buttonText={"Save As CSV"}
+            onClick={handleUserSave}
+          />
+        )}
       </Action.Tray>
 
       <div className="tablesContainer">
