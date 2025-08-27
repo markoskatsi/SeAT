@@ -97,10 +97,10 @@ function UserCrudler() {
     const importedUsers = csvData.map((row, index) => ({
       ID: index + 1,
       Name: row.Name || "",
-      Position: row["Job Title / Postion"] || "",
+      position: row["Job Title / Position"],
+      location: row["Location (Onshore or Offshore)"],
       AgeGroup: row["Age Group"] || "",
       PartnerGuestName: row["Partner's Name"] || "",
-      Location: row["Location"] || row["Location "] || "",
     }));
 
     setUsers(importedUsers);
