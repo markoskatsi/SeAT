@@ -9,7 +9,6 @@ import useLoad from "../../api/useLoad.js";
 import apiEndpoints from "../../api/apiEndpoints.js";
 import { groupParticipantsWithGuests } from "../../../utils/employeeConformance.jsx";
 
-
 const SeatingView = ({ eventId }) => {
   const [size, setSize] = useState(6);
   const [tables, setTables] = useState([]);
@@ -225,58 +224,54 @@ const SeatingView = ({ eventId }) => {
         />
       </Action.Tray>
 
-    <div className="tablesContainer">
-      <form method="post" onSubmit={handleSubmit}>
-        <div>
-          <p>Number Of People In Each Table:</p>
-          <select
-            value={size}
-            onChange={(e) => setSize(Number(e.target.value))}
-          >
-            {tableOptions().map((num) => (
-              <option key={num} value={num}>
-                {num}
-              </option>
-            ))}
-          </select>
-          <span style={{ marginLeft: "16px" }}>
-            Table Shape:
+      <div className="tablesContainer">
+        <form method="post" onSubmit={handleSubmit}>
+          <div>
+            <p>Number Of People In Each Table:</p>
             <select
-              value={tableShape}
-              onChange={(e) => setTableShape(e.target.value)}
-              style={{ marginLeft: "8px" }}
+              value={size}
+              onChange={(e) => setSize(Number(e.target.value))}
             >
-              <option value="round">Round</option>
-              <option value="rectangular">Rectangular</option>
+              {tableOptions().map((num) => (
+                <option key={num} value={num}>
+                  {num}
+                </option>
+              ))}
             </select>
-          </span>
-        </div>
-        <button
-          type="submit"
-          className="applyButton"
-          onClick={handleSubmit}
-        >
-          Apply
-        </button>
-        <button
-          type="button"
-          className="arrangeButton"
-          style={{ marginLeft: "16px" }}
-          onClick={handleArrange}
-        >
-          Arrange Seats
-        </button>
-      </form>
-      {errorMsg && (
-        <div className="errorMsg">
-          {errorMsg.split("\n").map((msg, idx) => (
-            <div key={idx}>{msg}</div>
-          ))}
-        </div>
-      )}
-      {tables && tables.length > 0 ? (
-        <>
-          {tables.map(({ tableNumber, attendees }) => (
+            <span style={{ marginLeft: "16px" }}>
+              Table Shape:
+              <select
+                value={tableShape}
+                onChange={(e) => setTableShape(e.target.value)}
+                style={{ marginLeft: "8px" }}
+              >
+                <option value="round">Round</option>
+                <option value="rectangular">Rectangular</option>
+              </select>
+            </span>
+          </div>
+          <button type="submit" className="applyButton" onClick={handleSubmit}>
+            Apply
+          </button>
+          <button
+            type="button"
+            className="arrangeButton"
+            style={{ marginLeft: "16px" }}
+            onClick={handleArrange}
+          >
+            Arrange Seats
+          </button>
+        </form>
+        {errorMsg && (
+          <div className="errorMsg">
+            {errorMsg.split("\n").map((msg, idx) => (
+              <div key={idx}>{msg}</div>
+            ))}
+          </div>
+        )}
+        {tables && tables.length > 0 ? (
+          <>
+            {tables.map(({ tableNumber, attendees }) => (
               <AttendeeTable
                 key={tableNumber}
                 tableNumber={tableNumber}
@@ -387,7 +382,9 @@ function hasAdjacencyConflict(table, group, tableShape) {
     const firstTablePerson = table[0];
     const lastGroupPerson = group[group.length - 1];
     if (
-      firstTablePerson.PreviousNeighbors?.includes(lastGroupPerson.AttendeeName) ||
+      firstTablePerson.PreviousNeighbors?.includes(
+        lastGroupPerson.AttendeeName
+      ) ||
       lastGroupPerson.PreviousNeighbors?.includes(firstTablePerson.AttendeeName)
     ) {
       return true;
