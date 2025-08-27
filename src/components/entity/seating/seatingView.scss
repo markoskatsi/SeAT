@@ -60,3 +60,26 @@ p {
   color: #c00;
   margin: 12px 0;
 }
+
+.dropdownContainer {
+  width: 400px;
+  display: flex;
+  flex-wrap: wrap;
+  div {
+    p {
+      width: 91px;
+    }
+  }
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.test {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}

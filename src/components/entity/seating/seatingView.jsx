@@ -9,7 +9,6 @@ import useLoad from "../../api/useLoad.js";
 import apiEndpoints from "../../api/apiEndpoints.js";
 import { groupParticipantsWithGuests } from "../../../utils/employeeConformance.jsx";
 
-
 const SeatingView = ({ eventId }) => {
   const [size, setSize] = useState(6);
   const [tables, setTables] = useState([]);
@@ -213,63 +212,67 @@ const SeatingView = ({ eventId }) => {
           buttonText={"Import CSV Data"}
           onClick={handleUserImport}
         />
+        <Action.Import
+          showText
+          buttonText={"Import From Database"}
+          onClick={handleUserDBImport}
+        />{" "}
         <Action.Save
           showText
           buttonText={"Save Attendees"}
           onClick={handleUserSave}
         />
-        <Action.Import
-          showText
-          buttonText={"Import From Database"}
-          onClick={handleUserDBImport}
-        />
       </Action.Tray>
 
-    <div className="tablesContainer">
-      <form method="post" onSubmit={handleSubmit}>
-        <div>
-          <p>Number Of People In Each Table:</p>
-          <select
-            value={size}
-            onChange={(e) => setSize(Number(e.target.value))}
-          >
-            {tableOptions().map((num) => (
-              <option key={num} value={num}>
-                {num}
-              </option>
-            ))}
-          </select>
-          <span style={{ marginLeft: "16px" }}>
-            Table Shape:
-            <select
-              value={tableShape}
-              onChange={(e) => setTableShape(e.target.value)}
-              style={{ marginLeft: "8px" }}
-            >
-              <option value="round">Round</option>
-              <option value="rectangular">Rectangular</option>
-            </select>
-          </span>
-        </div>
-        <button
-          type="submit"
-          className="applyButton"
-          onClick={handleSubmit}
-        >
-          Apply
-        </button>
-        <button
-          type="button"
-          className="arrangeButton"
-          style={{ marginLeft: "16px" }}
-          onClick={handleArrange}
-        >
-          Arrange Seats
-        </button>
-      </form>
-      {tables && tables.length > 0 ? (
-        <>
-          {tables.map(({ tableNumber, attendees }) => (
+      <div className="tablesContainer">
+        <form method="post" onSubmit={handleSubmit}>
+          <div className="test">
+            <div className="dropdownContainer">
+              <div>
+                <p>Table Size:</p>
+                <select
+                  value={size}
+                  onChange={(e) => setSize(Number(e.target.value))}
+                >
+                  {tableOptions().map((num) => (
+                    <option key={num} value={num}>
+                      {num}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <p>Table Shape:</p>
+                <select
+                  value={tableShape}
+                  onChange={(e) => setTableShape(e.target.value)}
+                >
+                  <option value="round">Round</option>
+                  <option value="rectangular">Rectangular</option>
+                </select>
+              </div>
+            </div>
+            <div className="button-container">
+              <button
+                type="submit"
+                className="applyButton"
+                onClick={handleSubmit}
+              >
+                Randomise Seats
+              </button>
+              <button
+                type="button"
+                className="arrangeButton"
+                onClick={handleArrange}
+              >
+                Assign Seats
+              </button>
+            </div>
+          </div>
+        </form>
+        {tables && tables.length > 0 ? (
+          <>
+            {tables.map(({ tableNumber, attendees }) => (
               <AttendeeTable
                 key={tableNumber}
                 tableNumber={tableNumber}
@@ -290,11 +293,7 @@ const SeatingView = ({ eventId }) => {
   );
 };
 
-function assignSeats(
-  groupedAttendees,
-  tableSize = 8,
-  tableShape = "round"
-) {
+function assignSeats(groupedAttendees, tableSize = 8, tableShape = "round") {
   const tables = [];
   let tableNumber = 1;
   const errors = [];
@@ -303,7 +302,9 @@ function assignSeats(
     // A. Group larger than table size
     if (group.length > tableSize) {
       errors.push(
-        `Group (${group.map((g) => g.AttendeeName).join(", ")}) is larger than table size (${tableSize}).`
+        `Group (${group
+          .map((g) => g.AttendeeName)
+          .join(", ")}) is larger than table size (${tableSize}).`
       );
       continue; // Skip this group
     }
@@ -353,7 +354,10 @@ function assignSeats(
   // Remove tables smaller than 6 (except last table if needed)
   for (let i = 0; i < tables.length - 1; i++) {
     if (tables[i].attendees.length < 6) {
-      tables[i + 1].attendees = [...tables[i].attendees, ...tables[i + 1].attendees];
+      tables[i + 1].attendees = [
+        ...tables[i].attendees,
+        ...tables[i + 1].attendees,
+      ];
       tables[i].attendees = [];
     }
   }
@@ -381,7 +385,9 @@ function hasAdjacencyConflict(table, group, tableShape, tableSize) {
     const firstTablePerson = table[0];
     const lastGroupPerson = group[group.length - 1];
     if (
-      firstTablePerson.PreviousNeighbors?.includes(lastGroupPerson.AttendeeName) ||
+      firstTablePerson.PreviousNeighbors?.includes(
+        lastGroupPerson.AttendeeName
+      ) ||
       lastGroupPerson.PreviousNeighbors?.includes(firstTablePerson.AttendeeName)
     ) {
       return true;
