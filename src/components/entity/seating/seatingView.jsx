@@ -193,7 +193,7 @@ const SeatingView = ({ eventId }) => {
         />
         <Action.Save
           showText
-          buttonText={"Save Attendees"}
+          buttonText={"Save As CSV"}
           onClick={handleUserSave}
         />
         <Action.Import

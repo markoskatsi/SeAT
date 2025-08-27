@@ -2,9 +2,15 @@ import React from "react";
 import "./registerForm.scss";
 import InputField from "./inputField";
 import { NavLink } from "react-router-dom";
+import { Modal, useModal } from "../components/UI/Modal";
+import { Alert, Error } from "../components/UI/Notifications.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterForm() {
   const [error, setError] = React.useState({});
+  const [showError, ErrorContent, openError, closeError] = useModal(false);
+  const [showAlert, alertContent, openAlert, closeAlert] = useModal(false);
+  const navigate = useNavigate();
   const [data, setData] = React.useState({
     username: "",
     email: "",
@@ -31,8 +37,10 @@ export default function RegisterForm() {
       if (d.error) {
         console.log("Login error:", d.error);
         setError(d.error);
+        openError(d.error.text);
       } else {
         console.log("Login successful:", d);
+        navigate("/login");
       }
     } catch (err) {
       console.log(err);
@@ -117,7 +125,9 @@ export default function RegisterForm() {
           <NavLink className="navItem" to="/login">
             Click Here
           </NavLink>
-        </p>
+        </p>{" "}
+        <Alert show={showAlert} message={alertContent} onDismiss={closeAlert} />
+        <Error show={showError} message={ErrorContent} onDismiss={closeError} />
       </div>
     </section>
   );
